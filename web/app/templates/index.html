@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport">
+        <link rel="stylesheet" href="../static/css/index-style.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Sansita&display=swap" rel="stylesheet">
+        <title>경쾌(임시)</title>
+    </head>
+    <body>
+        <header>
+            <h1>로고</h1>
+        </header>
+        <main>
+            <div class="quoto">
+                <p>대충 명언 12</p>
+            </div>
+            <div class="interaction">
+                <div id="login">
+                    <input id="username" type="text" required placeholder="ID">
+                    <input id="password" type="password" required placeholder="password">
+                </div>
+                <div id="buttons">
+                    <div id="login-button">
+                        <button id="login" onclick="login()">sign in</button>
+                        <button id="register" onclick="window.location.href='/register'">sign up</button>
+                    </div>
+                    <div id="session-button">
+                        <button id="into-session">Ask Questions Right now!</button>
+                        <button id="make-session">Create a Session</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer>
+            <div id="menu">
+                <p>대충 메뉴1</p>
+            </div>
+            <div id="mention">
+                <p>사용된 프로그램 출처표기</p>
+            </div>
+            <div id="info">
+                <p>만든사람 정보</p>
+            </div>
+        </footer>
+        <script src="../static/js/login.js"></script>
+    </body>
+</html>
