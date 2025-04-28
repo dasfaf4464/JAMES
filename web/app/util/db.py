@@ -3,12 +3,14 @@ import pymysql.cursors
 from pymysql.err import OperationalError
 from flask import jsonify
 
-def get_db_connection():
+DB_ADMIN = {'id':'root', 'pw':'admin'}
+
+def get_db_connection(id, pw):
     try:
         db_connection = pymysql.connect(
         host ='localhost',
-        user = 'root',
-        password = 'admin',
+        user = id,
+        password = pw,
         database = 'capstone',
         charset = 'utf8mb4',
         cursorclass=pymysql.cursors.DictCursor
@@ -19,8 +21,8 @@ def get_db_connection():
         print(f'db connection error {e}')
         return None
 
-def get_result(SQL):
-    connection = get_db_connection()
+def get_result(SQL, id, pw):
+    connection = get_db_connection(id, pw)
     try:
         with connection.cursor() as cursor:
             cursor.execute(SQL)
@@ -32,8 +34,8 @@ def get_result(SQL):
         if connection:
             connection.close()
 
-def get_result(SQL):
-    connection = get_db_connection()
+def put_sql(SQL, id, pw):
+    connection = get_db_connection(id, pw)
     try:
         with connection.cursor() as cursor:
             cursor.execute(SQL)
