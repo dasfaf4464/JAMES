@@ -4,6 +4,7 @@ from pymysql.err import OperationalError
 from flask import jsonify
 
 DB_ADMIN = {'id':'root', 'pw':'admin'}
+DB_USER = {'id':'user', 'pw':'user'}
 
 def get_db_connection(id, pw):
     try:
