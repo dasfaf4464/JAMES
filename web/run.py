@@ -80,12 +80,12 @@ def run_flask():
 if __name__ == "__main__":
     cloudflare_thread = threading.Thread(target=run_cloudflare, daemon=True)
     mariadb_thread = threading.Thread(target=run_mariadb, daemon=True)
-    #redis_thread = threading.Thread(target=run_redis, daemon=True)
+    redis_thread = threading.Thread(target=run_redis, daemon=True)
     flask_thread = threading.Thread(target=run_flask, daemon=True)
 
     flask_thread.start()
     cloudflare_thread.start()
     mariadb_thread.start()
-    #redis_thread.start()
+    redis_thread.start()
 
     flask_thread.join()
