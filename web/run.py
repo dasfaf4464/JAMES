@@ -1,71 +1,91 @@
 import subprocess
 import threading
 import re
-import signal
-import sys
 from app import create_app
 from waitress import serve
-from config import CLOUDFLARE_TUNNEL_COMMAND
+from config import CLOUDFLARE_TUNNEL_COMMAND, MARIADB_COMMAND, REDIS_COMMAND
 
 app = create_app()
 
-cloudflared_process = None
+cloudflare_process = None
+cloudflare_URL = None
+mariadb_process = None
+redis_process = None
 
 def start_cloudflare():
-    global cloudflared_process
-    cloudflared_process = subprocess.Popen(
+    global cloudflare_process
+    cloudflare_process = subprocess.Popen(
         CLOUDFLARE_TUNNEL_COMMAND,
         stdout=subprocess.PIPE,
-        stderr=subprocess.STDOUT,  # stdout+stderr 합치기
+        stderr=subprocess.STDOUT,
         text=True
     )
-
+    
+    global cloudflare_URL
     tunnel_url = None
 
-    # 주소를 찾을 때까지 읽기
-    for line in cloudflared_process.stdout:
-        #print("[cloudflared]", line.strip())  # 디버그용 출력
+    print("read URL... [up to 10s]")
+    for line in cloudflare_process.stdout:
         match = re.search(r'https://[a-z0-9-]+\.trycloudflare\.com', line)
         if match:
             tunnel_url = match.group()
-            print(f"Cloudflare Tunnel URL: {tunnel_url}")
             break
 
     if tunnel_url is None:
         print("Failed to retrieve Cloudflare Tunnel URL.")
-        cloudflared_process.terminate()
+        cloudflare_process.terminate()
         return None
+    else:
+        cloudflare_URL = tunnel_url
+        print(f"Tunnel running at {cloudflare_URL}")
 
-    # cloudflared가 살아있는 동안 대기
-    try:
-        cloudflared_process.wait()
-    except KeyboardInterrupt:
-        print("KeyboardInterrupt received. Terminating cloudflared...")
-        cloudflared_process.terminate()
+    cloudflare_process.wait()    
 
-    return tunnel_url
+def start_mariadb():
+    global mariadb_process
+    mariadb_process = subprocess.Popen(
+        MARIADB_COMMAND,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True
+    )
+    mariadb_process.wait()
 
+def start_redis():
+    global redis_process
+    redis_process = subprocess.Popen(
+        REDIS_COMMAND,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        text=True
+    )
+    redis_process.wait()
+      
 def run_cloudflare():
     print("Starting Cloudflare Tunnel...")
-    tunnel_url = start_cloudflare()
-    if tunnel_url:
-        print(f"Tunnel running at {tunnel_url}")
-    else:
-        print("Cloudflare tunnel failed.")
+    start_cloudflare()
 
-def signal_handler(sig, frame):
-    print("\n[!] Caught termination signal. Shutting down...")
-    if cloudflared_process:
-        cloudflared_process.terminate()
-    sys.exit(0)
+def run_mariadb():
+    print("Starting MariaDB...")
+    start_mariadb()
+
+def run_redis():
+    print("Starting Redis...")
+    start_redis()
+
+def run_flask():
+    print('Starting Waitress Server...')
+    serve(app, host='0.0.0.0', port=5000, threads=4)
 
 if __name__ == "__main__":
-    signal.signal(signal.SIGINT, signal_handler)
-    signal.signal(signal.SIGTERM, signal_handler)
-
-    # 클라우드플레어는 별도 스레드로
     cloudflare_thread = threading.Thread(target=run_cloudflare, daemon=True)
-    cloudflare_thread.start()
+    mariadb_thread = threading.Thread(target=run_mariadb, daemon=True)
+    #redis_thread = threading.Thread(target=run_redis, daemon=True)
+    flask_thread = threading.Thread(target=run_flask, daemon=True)
 
-    # 메인 스레드는 서버 실행
-    serve(app, host='0.0.0.0', port=5000, threads=8)
+    flask_thread.start()
+    cloudflare_thread.start()
+    mariadb_thread.start()
+    #redis_thread.start()
+
+    flask_thread.join()
