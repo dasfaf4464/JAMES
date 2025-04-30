@@ -1,5 +1,4 @@
 from flask import Blueprint, request, jsonify, url_for
-import pymysql
 
 login_bp = Blueprint('login', __name__)
 
