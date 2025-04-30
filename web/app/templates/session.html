@@ -1,17 +1,35 @@
 <!DOCTYPE html>
-<html>
-    <head>
+<html lang="en">
 
-    </head>
-    <body>
-        <header>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/session.css">
+</head>
 
-        </header>
-        <main>
-            <input type="text">
-        </main>
-        <footer>
-            
-        </footer>
-    </body>
+<body>
+<header>
+
+</header>
+<main>
+    <div id="questionList" class="container"></div>
+</main>
+<footer>
+    <!-- 입력창 영역 -->
+    <form id="chatForm">
+        <div class="inputBar">
+            <div class="questionBar input-group mb-3">
+                <input type="text" id="QBar" class="form-control rounded-pill" placeholder="질문을 입력하세요"
+                       aria-label="Recipient's username" aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2">button</button>
+            </div>
+        </div>
+    </form>
+</footer>
+<script src="session.js"></script>
+</body>
+
+
 </html>
