@@ -1,11 +1,21 @@
+"""
+프로세스 진입점입니다.
+플라스크 실행 이후 redis, mariadb, cloudflare를 개별 쓰레드에서 실행합니다.
+플라스크는 웹소켓 지원과 병렬적으로 페이지를 제공하기 위해 eventlet으로 실행됩니다.
+각 페이지는 route 모듈로 관리되며 chat:websocket 기능은 chat_manager에 등록되어있습니다.
+"""
+
 import subprocess
 import threading
 import re
 from app import create_app
-from waitress import serve
+from flask_socketio import SocketIO, Namespace
+#from app.manager.chat_manager import ChatManager
 from config import CLOUDFLARE_TUNNEL_COMMAND, MARIADB_COMMAND, REDIS_COMMAND
 
 app = create_app()
+socketio = SocketIO(app, async_mode="eventlet")
+#socketio.on_namespace(ChatManager)
 
 cloudflare_process = None
 cloudflare_URL = None
@@ -74,8 +84,8 @@ def run_redis():
     start_redis()
 
 def run_flask():
-    print('Starting Waitress Server...')
-    serve(app, host='0.0.0.0', port=5000, threads=4)
+    print('Starting Server...')
+    socketio.run(app, host='0.0.0.0', port=5000)
 
 if __name__ == "__main__":
     cloudflare_thread = threading.Thread(target=run_cloudflare, daemon=True)
