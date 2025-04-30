@@ -20,3 +20,19 @@ const quotos = [ //20개
     { Text: "어떤 질문도 답을 얻으려는 마음가짐을 갖고 해야 한다.", Author: "이순신" },
     { Text: "좋은 질문은 좋은 답을 낳는다.", Author: "세종대왕" }
 ]
+
+// ✅ 자동으로 명언을 표시하는 기능
+window.addEventListener("DOMContentLoaded", () => {
+    const quoteElement = document.querySelector(".quoto > p");
+
+    let index = 0;
+
+    function showQuote() {
+        const { Text, Author } = quotos[index];
+        quoteElement.innerText = `"${Text}" - ${Author}`;
+        index = (index + 1) % quotos.length;
+    }
+
+    showQuote(); // 초기 명언 출력
+    setInterval(showQuote, 10000); // 10초마다 변경
+});
