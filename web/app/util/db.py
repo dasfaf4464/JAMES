@@ -7,6 +7,7 @@ from flask import jsonify
 
 DB_ADMIN = {'id':'root', 'pw':'admin'}
 DB_USER = {'id':'user', 'pw':'user'}
+REDIS_DBNUM = {'before-llm':0, 'after-llm':1, 'all-q&a':2}
 
 def get_mariadb_connection(id:str, pw:str):
     try:
