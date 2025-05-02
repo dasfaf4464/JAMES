@@ -8,6 +8,6 @@ def register():
     return render_template('register.html')
 
 '''
-    회원 가입시 이름 중복 검사
+    회원 가입시 이름 선택
     인증 번호 발송
 '''

@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template
 from app.util import check_server_code_format
+from flask_socketio import SocketIO
 
 session_bp = Blueprint('session', __name__)
 

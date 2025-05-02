@@ -1,6 +1,6 @@
 import pymysql
 import pymysql.cursors
-from pymysql.err import OperationalError
+from pymysql.err import OperationalError, Error
 import redis
 from redis.exceptions import ConnectionError
 from flask import jsonify
@@ -34,9 +34,6 @@ def get_result(SQL:str, id:str, pw:str):
             return jsonify(result)
     except OperationalError as e:
         return jsonify({"error": "DB 연결 오류", "message": str(e)})
-    finally:
-        if connection:
-            connection.close()
 
 def put_sql(SQL:str, id:str, pw:str):
     connection = get_mariadb_connection(id, pw)
@@ -46,9 +43,12 @@ def put_sql(SQL:str, id:str, pw:str):
             connection.commit()
     except OperationalError as e:
         return jsonify({"error": "DB 연결 오류", "message": str(e)})
-    finally:
-        if connection:
-            connection.close()
+
+def disconnection_mariadb(connection:pymysql.Connection):
+    try:
+        connection.close()
+    except Error as e:
+        print('mariadb already disconnected')
 
 def get_redis_connection(dbnum:int):
     try:
@@ -59,6 +59,11 @@ def get_redis_connection(dbnum:int):
         print("Redis 연결 실패:", e)
         return None
 
+def disconnect_redis(redis:redis.Redis):
+    try:
+        redis.client_kill()
+    except ConnectionError as e:
+        print('redis already disconnected')
 
 '''
 SQL injection 대비
