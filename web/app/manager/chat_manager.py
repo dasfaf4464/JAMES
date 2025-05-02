@@ -5,16 +5,17 @@
 from flask_socketio import SocketIO, emit
 
 class ChatManager:
-    sessioncode = None
-    user = dict
-    admin = None
-    isOpen = False
-    isExpired = False
-
-    def __init__(self, sessioncode, admin_uuid, admin_name):
+    def __init__(self, sessioncode, session_name, admin_uuid, admin_name, temporary, isOpen):
         self.sessioncode = sessioncode
+        self.session_name = session_name
+        self.user = dict
         self.admin = admin_uuid
         self.user.update(admin_uuid, admin_name)
+        self.temporary = temporary
+        self.isOpen = isOpen
+        self.isExpired = False
+        self.start_time = None
+        self.end_time = None
 
     def join_new_user(self, uuid:str, name:str):
         self.user[uuid] = name
