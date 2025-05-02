@@ -42,27 +42,3 @@ user_question = "문장 형식에서 변항이 자유롭게 나타나도 실제 
 l1 = LLMManager(agent_id=AGENT_ID[0])
 l2 = LLMManager(agent_id=AGENT_ID[1])
 l3 = LLMManager(agent_id=AGENT_ID[2])
-
-"""
-def test1():
-    start = time.time()
-    l1.request_llm(user_question)
-    end = time.time()
-    print(f'l1 - {end-start}')
-
-def test2():
-    start = time.time()
-    l2.request_llm(user_question)
-    end = time.time()
-    print(f'l2 - {end-start}')
-
-def test3():
-    start = time.time()
-    l2.request_llm(user_question)
-    end = time.time()
-    print(f'l3 - {end-start}')
-
-t1 = threading.Thread(target=test1, daemon=True)
-t2 = threading.Thread(target=test2, daemon=True)
-t3 = threading.Thread(target=test3, daemon=True)
-"""
