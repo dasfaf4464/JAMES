@@ -1,120 +1,153 @@
+@import url(colorset.css);
+
 body {
     font-family: 'Sansita', sans-serif;
     margin: 0;
-    background-color: #f9f9f9;
+    background-color: var(--main-theme-background);
     color: #333;
 }
 
-/* 전체 레이아웃: 좌우 2열 */
 main {
     display: flex;
-    height: 80vh;
-    padding: 30px;
-    gap: 30px;
+    flex-direction: row;
 }
 
-/* 왼쪽 세션 리스트 영역 */
 .session-list {
-    flex: 1;
-    background-color: #e9f4ff;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    flex: 3;
     display: flex;
     flex-direction: column;
-    height: 100%;
-    overflow: hidden; /* 내부 ul에만 스크롤 적용 */
+    background-color: var(--main-theme-background);
+}
+
+.session-list img {
+    width: 100px;
+    height: auto;
 }
 
 .session-list ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch; /* 항목 너비 꽉 차게 */
-    gap: 10px;
-    overflow-y: auto;        /* 세로 스크롤 가능 */
-    height: 100%;
-    scroll-behavior: smooth; /* 부드러운 스크롤 */
+    list-style: none;
 }
 
-.session-list li {
-    font-size: 1.2rem;
-    font-weight: 600;
-    min-height: 60px;
-    padding: 15px;
+.session-list ul li {
+    display: flex;
+    flex-direction: row;
     background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    margin: 10px;
+}
+
+#session-title {
+    flex: 3;
+    color: var(--main-sessiontitle-font);
+}
+
+#session-info {
+    flex: 1;
+}
+
+#session-icon {
+    width: auto;
+    height: 50px;
+}
+
+.side-panel {
+    background-color: #ffffff;
+    flex: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
 }
 
-/* 오른쪽 전체 공간 */
-.right-panel {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-}
-
-/* 오른쪽 상단: greeting */
 .greeting {
-    align-self: flex-end;
-    font-size: 0.9rem;
-    padding: 10px;
-}
-
-/* 오른쪽 중간: 버튼 */
-.interaction {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-grow: 1;
-}
-
-#session-button {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    align-items: center;
 }
 
-#session-button button {
-    padding: 10px 20px;
-    font-size: 1rem;
-    border: none;
-    border-radius: 8px;
-    background-color: #007bff;
+.history ul {
+    list-style: none;
+}
+
+.side-panel form {
+    display: flex;
+    flex-direction: column;
+}
+
+#create-session-button {
+    background-color: var(--main-button-normal);
     color: white;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-}
-
-#session-button button:hover {
-    background-color: #0056b3;
-}
-
-/* 오른쪽 하단: history */
-.history {
-    background-color: #fff;
-    padding: 20px;
+    height: auto;
+    width: 100%;
     border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    border: none;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
 }
 
-.history ol {
-    padding-left: 20px;
-    margin: 0;
+#create-session-button:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
 }
 
-/* 푸터 정리 */
+#into-session-button {
+    background-color: var(--main-button-normal);
+    color: white;
+    height: auto;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+#into-session-button:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+#session-code::placeholder {
+    text-align: center;
+}
+
+#session-discription {
+    word-break: keep-all;
+}
+
+#join-session {
+    background-color: var(--main-button-normal);
+    color: white;
+    height: auto;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+#join-session:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+#exit-session {
+    background-color: var(--main-button-emphasize);
+    color: white;
+    height: auto;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+#exit-session:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
 footer {
     display: flex;
     justify-content: space-between;
-    padding: 20px 40px;
-    background-color: #f0f0f0;
-    border-top: 1px solid #ccc;
-    margin-top: 20px;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    font-size: 0.9rem;
 }

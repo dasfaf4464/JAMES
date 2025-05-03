@@ -3,105 +3,126 @@
 body {
     margin: 0;
     font-family: 'Sansita', sans-serif;
-    background: linear-gradient(200deg, var(--kgu-red), var(--kgu-orange));
+    background: var(--main-theme-background);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    color: #fff;
-}
-
-header {
-    padding: 1rem;
-    background-color: var(--kgu-red);
 }
 
 main {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    flex-grow: 1;
-    padding: 2rem;
-    gap: 2rem;
+    display: flex;
+    padding: 0;
+    gap: 0;
 }
 
-.quoto {
-    grid-column: 1 / 2;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 1rem;
-    border-radius: 1rem;
-    font-size: 1.2rem;
+.main-image {
+    flex: 3;
+}
+
+.main-image img {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
 }
 
 .interaction {
-    grid-column: 3 / 4;
-    background-color: rgba(255, 255, 255, 0.1);
-    padding: 1rem;
-    border-radius: 1rem;
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    margin: 20px;
+    align-items: center;
+}
+
+.interaction img {
+    width: 100%;
+    height: auto;
+    max-width: 150px;
 }
 
 #login {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
 }
 
-#login input {
-    padding: 0.5rem;
-    border: none;
-    border-radius: 0.5rem;
-}
-
-#buttons {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+#login input{
+    padding-left: 20px;
 }
 
 #login-button {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+    background-color: var(--main-button-normal);
+    color: white;
+    height: auto;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
 }
 
-#session-button {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+#login-button:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
 }
 
 #register {
-    background-color: var(--kgu-blue); /* 파란색 배경 */
-    color: #fff; /* 텍스트 색상 */
+    display: flex;
+    flex-direction: column;
 }
 
-button {
-    background-color: var(--kgu-green);
-    color: #fff;
-    border: none;
-    border-radius: 0.5rem;
-    padding: 0.75rem 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+#register span {
+    color: var(--main-theme-emphasize);
 }
 
-button:hover {
-    background-color: #2e8b57;
+#register-button {
+    background-color: #ffffff;
+    color: var(--main-theme-emphasize);
 }
 
-
-/* 버튼 너비 규칙 */
-#login-button button {
-    flex: 1;
-}
-
-#session-button button {
+#create-session-button {
+    background-color: var(--main-button-normal);
+    color: white;
+    height: auto;
     width: 100%;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
 }
 
-/* 푸터 */
+#create-session-button:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+#session {
+    display: flex;
+    flex-direction: column;
+}
+
+#into-session-button {
+    background-color: var(--main-button-normal);
+    color: white;
+    height: auto;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+#session button:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+#session input {
+    padding-left: 20px;
+}
+
+#session input::placeholder {
+    text-align: center;
+}
+
 footer {
     display: flex;
     justify-content: space-between;
