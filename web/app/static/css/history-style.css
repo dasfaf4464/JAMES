@@ -1,0 +1,117 @@
+@import url('colorset.css');
+
+/* 기본 초기화 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 바디 영역 */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: var(--kgu-light-gray);
+    color: var(--kgu-dark-gray);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 헤더 영역 */
+header {
+    background-color: var(--kgu-blue);
+    color: white;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+header div p {
+    font-size: 1.1rem;
+}
+
+/* 메인 영역 */
+main {
+    flex: 1;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
+}
+
+/* 버튼 영역 */
+#buttons {
+    display: flex;
+    justify-content: flex-start; /* 버튼을 왼쪽에 정렬 */
+    gap: 15px;
+    width: 100%;
+}
+
+/* 버튼 스타일 */
+button {
+    padding: 12px 20px;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.2s;
+    width: 200px;
+}
+
+/* 각 버튼 색상 */
+#button-1 {
+    background-color: var(--kgu-red);
+}
+
+#button-2 {
+    background-color: var(--kgu-green);
+}
+
+#button-3 {
+    background-color: var(--kgu-blue);
+}
+
+/* 버튼 hover 색상 */
+button:hover {
+    opacity: 0.8;
+}
+
+/* 버튼 클릭 시 색상 변경 */
+button:focus {
+    outline: none;
+}
+
+/* 내용 출력 박스 */
+#content-output {
+    width: 100%;
+    min-height: 200px;
+    background-color: white; /* 기본 배경 색상 */
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    padding: 20px;
+    text-align: center;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease; /* 배경 색상 전환 */
+}
+
+/* 푸터 */
+footer {
+    background-color: var(--kgu-blue);
+    padding: 15px;
+    text-align: center;
+    font-size: 0.9rem;
+    color: white;
+}
+
+footer p {
+    margin: 5px 0;
+}
