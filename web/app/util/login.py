@@ -1,7 +1,9 @@
 from flask import Blueprint, request, jsonify, url_for, make_response
+from app.util.naming import create_user_name
 from app.manager.db_manager import mariadb_user_manager
 
 login_bp = Blueprint('login', __name__)
+makename_bp = Blueprint('make_name', __name__)
 
 @login_bp.route('/login', methods=['POST'])
 def login():
@@ -29,3 +31,9 @@ def login():
         return jsonify(return_data)
 
     return jsonify(return_data), 401
+
+
+@makename_bp.route('/generate-name', methods=['GET'])
+def generate_name():
+    generated_name = create_user_name()
+    return jsonify({'name': generated_name})

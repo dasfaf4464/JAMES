@@ -26,4 +26,4 @@ def check_server_code_format(code):
 def create_user_name():
     adj = NAME_ADJ[random.randint(0, len(NAME_ADJ)-1)]
     noun = NAME_NOUN[random.randint(0, len(NAME_NOUN)-1)]
-    return adj+noun
+    return adj+' '+noun

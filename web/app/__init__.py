@@ -1,10 +1,10 @@
 from flask import Flask
 from app.views.index import index_bp
-from app.views.register import register_bp
+from app.views.register import register_bp, signup_bp
 from app.views.home import home_bp
 from app.views.history import history_bp
 from app.views.session import session_bp
-from app.util.login import login_bp
+from app.util.login import login_bp, makename_bp
 
 def create_app():
     app = Flask(__name__)
@@ -14,8 +14,7 @@ def create_app():
     app.register_blueprint(history_bp)
     app.register_blueprint(session_bp)
     app.register_blueprint(login_bp)
-
-    with app.app_context():
-        print(app.url_map)
+    app.register_blueprint(makename_bp)
+    app.register_blueprint(signup_bp)
 
     return app
