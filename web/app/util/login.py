@@ -1,20 +1,31 @@
-from flask import Blueprint, request, jsonify, url_for
+from flask import Blueprint, request, jsonify, url_for, make_response
+from app.manager.db_manager import mariadb_user_manager
 
 login_bp = Blueprint('login', __name__)
-
-mock = {"user":"1234"}
 
 @login_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
+    return_data = {
+        'success': 'False',
+        'redirect_url': '',
+        'message': '로그인에 실패하였습니다.'
+    }
 
-    if username in mock and mock[username] == password:
-        return jsonify(success=True, redirect_url=url_for('home.home'))
-    return jsonify(success=False, message="Login failed"), 401
+    sql_query = "SELECT id, pw, random_key FROM userinfo WHERE id = %s"
+    in_db_list = mariadb_user_manager.put_sql_result(sql_query, (username,))
 
-'''
-아이디 이메일형식 정규식 검사, 비밀번호 정규식 검사
-db에서 연동
-'''
+    if not in_db_list:
+        return jsonify(return_data)
+
+    in_db = in_db_list[0]
+
+    if in_db.get('pw') == password:
+        return_data['success'] = 'True'
+        return_data['redirect_url'] = url_for('home.home')
+        return_data['message'] = '로그인에 성공하였습니다.'
+        return jsonify(return_data)
+
+    return jsonify(return_data), 401

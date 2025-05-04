@@ -21,16 +21,16 @@
                 <form id="login" action="/login" method="POST">
                     <input id="username" type="text" required placeholder="아이디 입력">
                     <input id="password" type="password" required placeholder="비밀번호 입력">
-                    <button id="login-button" onclick="login()">로그인</button>
+                    <button id="login-button" type="button" onclick="login()">로그인</button>
                 </form>
                 <div id="register">
                     <p>혹시 <span>회원</span>이 아닙니까?</p>
                     <button id="register-button">회원가입</button>
                 </div>
                 <p>로그인 없이 사용하기</p>
-                <button id='create-session-button'>세션 생성하기</button>
+                <button id='create-session-button' type="button">세션 생성하기</button>
                 <form id="session" action="/session-without-login" method="POST">
-                    <button id="into-session-button">코드로 세션 입장</button>
+                    <button id="into-session-button" type="button">코드로 세션 입장</button>
                     <input id="session-code" type="text" required placeholder="세션 코드 입력">
                 </form>
             </div>

@@ -102,7 +102,7 @@ def run_flask():
     socketio.run(app, host='0.0.0.0', port=5000)
 
 if __name__ == "__main__":
-    cloudflare_thread = threading.Thread(target=run_cloudflare, daemon=True)
+    #cloudflare_thread = threading.Thread(target=run_cloudflare, daemon=True)
     mariadb_thread = threading.Thread(target=run_mariadb, daemon=True)
     redis_thread = threading.Thread(target=run_redis, daemon=True)
     flask_thread = threading.Thread(target=run_flask, daemon=True)
@@ -110,9 +110,9 @@ if __name__ == "__main__":
     mariadb_thread.start()
     redis_thread.start()
     flask_thread.start()
-    cloudflare_thread.start()
+    #cloudflare_thread.start()
 
     flask_thread.join()
     mariadb_thread.join()
     redis_thread.join()
-    cloudflare_thread.join()
+    #cloudflare_thread.join()
