@@ -42,47 +42,4 @@ footer {
     display: flex;
     justify-content: center;
     z-index: 10;
-}.inputBar {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 20px;
-}
-
-.questionBar {
-    width: 800px;
-}
-
-body {
-    margin: 0;
-    font-family: 'Sansita', sans-serif;
-    background: linear-gradient(200deg, var(--kgu-red), var(--kgu-orange));
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-    color: #fff;
-}
-
-header {
-    padding: 1rem;
-    background-color: var(--kgu-red);
-}
-
-main {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    flex-grow: 1;
-    padding: 2rem;
-    gap: 2rem;
-}
-
-footer {
-    position: sticky;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 1rem;
-    font-size: 0.9rem;
-    display: flex;
-    justify-content: center;
-    z-index: 10;
 }

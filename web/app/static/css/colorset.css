@@ -1,9 +1,10 @@
 :root {
-    --kgu-orange: #F29601;
-    --kgu-red: #E95504;
-    --kgu-green: #00A051;
-    --kgu-blue: #004EA2;
-    --kgu-light-gray: #f7f9fc;
-    --kgu-dark-gray: #333;
-    --kgu-light-blue: #66a3e3;
+    --main-theme-background: #FFF5EF;
+    --main-theme-emphasize: #ff9f1a;
+    --main-theme-font: #6a6a6a;
+    --main-sessiontitle-font: #ffA221;
+    --main-button-normal: #FFA323;
+    --main-button-emphasize: #f0801F;
+    --history-button-1: #d08721;
+    --history-button-2: #bd7a1e;
 }

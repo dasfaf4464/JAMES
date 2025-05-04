@@ -7,36 +7,37 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Sansita&display=swap" rel="stylesheet">
-        <title>경쾌(임시)</title>
+        <title>UnMute</title>
     </head>
     <body>
         <header>
-            <h1>로고</h1>
         </header>
         <main>
-            <div class="quoto">
-                <p></p>
+            <div class="main-image">
+                <img src="../static/image/main.png">
             </div>
             <div class="interaction">
-                <div id="login">
-                    <input id="username" type="text" required placeholder="ID">
-                    <input id="password" type="password" required placeholder="password">
+                <img src="../static/image/logo.png">
+                <form id="login" action="/login" method="POST">
+                    <input id="username" type="text" required placeholder="아이디 입력">
+                    <input id="password" type="password" required placeholder="비밀번호 입력">
+                    <button id="login-button" onclick="login()">로그인</button>
+                </form>
+                <div id="register">
+                    <p>혹시 <span>회원</span>이 아닙니까?</p>
+                    <button id="register-button">회원가입</button>
                 </div>
-                <div id="buttons">
-                    <div id="login-button">
-                        <button id="login" onclick="login()">sign in</button>
-                        <button id="register" onclick="window.location.href='/register'">sign up</button>
-                    </div>
-                    <div id="session-button">
-                        <button id="into-session">Ask Questions Right now!</button>
-                        <button id="make-session">Create a Session</button>
-                    </div>
-                </div>
+                <p>로그인 없이 사용하기</p>
+                <button id='create-session-button'>세션 생성하기</button>
+                <form id="session" action="/session-without-login" method="POST">
+                    <button id="into-session-button">코드로 세션 입장</button>
+                    <input id="session-code" type="text" required placeholder="세션 코드 입력">
+                </form>
             </div>
         </main>
         <footer>
             <div id="menu">
-                <p>대충 메뉴1</p>
+                <p><a href="">사이트 이용 정보</a></p>
             </div>
             <div id="mention">
                 <p>powerd by Mistral AI</p>
@@ -48,6 +49,5 @@
             </div>
         </footer>
         <script src="../static/js/login.js"></script>
-        <script src="../static/js/quoto.js"></script>
     </body>
 </html>

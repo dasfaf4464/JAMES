@@ -6,39 +6,50 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Sansita&display=swap" rel="stylesheet">
-        <title>경쾌(임시)</title>
+        <title>UnMute</title>
     </head>
     <body>
         <header>
-            <h1>로고</h1>
         </header>
         <main>
             <div class="session-list">
+                <img src="../static/image/logo.png">
                 <ul>
-                    <li>session1</li>
-                    <li>session2</li>
-                    <li>session3</li>
+                    <li>
+                        <p id="session-title">세션 제목</p>
+                        <p id="session-info">현재 입장 인원: / 질문 수:</p>
+                        <p id="session-period">임시</p>
+                        <img id="session-icon" src="../static/image/computer.svg">
+                    </li>
+                    <li>
+                        <p id="session-title">세션 제목</p>
+                        <p id="session-info">현재 입장 인원: / 질문 수:</p>
+                        <p id="session-period">영구</p>
+                    </li>
                 </ul>
-            </div>
-            <div class="panel">
-                <div class="greeting">
-                    <p1>{{name}}, 안녕하세요!</p1>
+                <div class="page-num">
+                    <button>◀</button>
+                    <p>1/2</p>
+                    <button>▶</button>
                 </div>
-                <div class="interaction">
-                    <div id="buttons">
-                        <div id="session-button">
-                            <button id="into-session">Ask Questions Right now!</button>
-                            <button id="make-session">Create a Session</button>
-                        </div>
-                    </div>
+            </div>
+            <div class="side-panel">
+                <div class="greeting">
+                    <p>{{name}}, 안녕하세요!</p>
+                    <canvas></canvas>
                 </div>
                 <div class="history">
-                    <ol>
-                        <li>질문한 횟수 1</li>
-                        <li>대답한 횟수 1</li>
-                        <li>저장한? 좋아요? 공감? 1</li>
-                    </oi>
+                    <ul>
+                        <li>질문한 횟수 : {{list.question}}</li>
+                        <li>대답한 횟수 : {{list.answer}}</li>
+                        <li>저장한 질문 갯수 : {{list.saving}}</li>
+                    </ul>
                 </div>
+                <button id="create-session-button">세션 만들기</button>
+                <form>
+                    <button id="into-session-button">코드로 세션 입장</button>
+                    <input id="session-code" type="text" required placeholder="세션 코드 입력">
+                </form>
             </div>
         </main>
         <footer>
@@ -52,6 +63,6 @@
                 <p>만든사람 정보</p>
             </div>
         </footer>
+        <script src="../static/js/home.js"></script>
     </body>
-
 </html>
