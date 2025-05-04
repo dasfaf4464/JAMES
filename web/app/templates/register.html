@@ -7,23 +7,29 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Sansita&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="../static/css/register-style.css">
+        <title>UnMute-register</title>
     </head>
     <body>
         <header>
-            <h1>로고</h1>
+            <img src="../static/image/logo.png">
         </header>
         <main>
-            <p>사용할 이름</p>
-            <input type="text">
-            <p>ID(사용가능한 이메일)</p>
-            <input type="text">@<input type="text">
-            <p>비밀번호</p>
-            <input type="text">
-            <p>인증번호</p>
-            <input type="number"> <button>Sign up</button>
+            <form>
+                <p>아이디는 영문과 숫자로 5글자 이상 조합해주세요</p>
+                <input id="uid" type="text" required placeholder="아이디">
+                <p>비밀번호는 영문과 숫자로 7글자 이상 조합해주세요</p>
+                <input id="pw" type="text" required placeholder="비밀번호">
+                <input id="email" type="email" required placeholder="이메일 example@mail.com">
+                <p>사용할 이름</p>
+                <input type="text" value="" readonly>
+                <button id="create-name-button">이름 생성하기</button>
+
+                <label>경고:</label>
+                <button id="register-button">계정 생성하기</button>
+            </form>
         </main>
         <footer>
-
+            <p>asdfasdf</p>
         </footer>
     </body>
 </html>
