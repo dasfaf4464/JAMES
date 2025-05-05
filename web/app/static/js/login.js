@@ -10,7 +10,6 @@ function login() {
     .then(res => res.json())
     .then(data => {
       if (data.success) {
-        // 로그인 성공 시 홈 페이지로 이동
         window.location.href = data.redirect_url;
       } else {
         alert(data.message);
