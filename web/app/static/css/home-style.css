@@ -5,11 +5,35 @@ body {
     margin: 0;
     background-color: var(--main-theme-background);
     color: #333;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+header {
+    flex: 0 0 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+header img {
+    height: 8%;
+    width: 8%;
+    height: auto;
+    object-fit: contain;
 }
 
 main {
+    flex: 1;
     display: flex;
     flex-direction: row;
+}
+
+.session-group-item {
+    border-radius: 10px;
+    padding: 10px;
 }
 
 .session-list {
@@ -54,13 +78,44 @@ main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    gap: 20px; /* 구간 사이 간격 */
+    font-size: 0.95rem;
+}
+
+
+/* 인사말 영역 */
+.greeting h1 {
+    font-size: 1.5rem;
+    color: var(--main-button-normal);
+    margin-bottom: 5px;
 }
 
 .greeting {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    padding: 15px;
+}
+
+/* 히스토리 박스 */
+.history ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+.history li {
+    background-color: #f0f0f0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #333;
 }
 
 .history ul {
@@ -79,6 +134,8 @@ main {
     width: 100%;
     border-radius: 10px;
     border: none;
+    padding: 8px;
+    margin-top: 5px;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
 }
@@ -95,6 +152,8 @@ main {
     width: 100%;
     border-radius: 10px;
     border: none;
+    padding: 8px;
+    margin-top: 5px;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
 }
@@ -104,12 +163,52 @@ main {
     transform: translateY(2px);
 }
 
+#session-code {
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
 #session-code::placeholder {
     text-align: center;
 }
 
 #session-discription {
     word-break: keep-all;
+}
+
+/* 세션 폼 */
+.side-panel form label {
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #444;
+}
+
+.side-panel form input,
+.side-panel form button {
+    font-size: 0.9rem;
+}
+
+
+.page-num {
+    display: inline-block;
+}
+
+.page-num button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    margin: 0 5px;
+    cursor: pointer;
+}
+
+#frontB {
+float: left;
+}
+
+#backB {
+    float: right;
 }
 
 #join-session {
@@ -144,7 +243,25 @@ main {
     transform: translateY(2px);
 }
 
+.session-panel-wrapper {
+    position: relative;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+#exit-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    z-index: 10;
+}
+
 footer {
+    flex: 0 0 10%;
     display: flex;
     justify-content: space-between;
     background-color: rgba(0, 0, 0, 0.2);

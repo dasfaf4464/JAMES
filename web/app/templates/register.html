@@ -1,35 +1,52 @@
 <!DOCTYPE html>
 <html lang="ko">
-    <head>
-        <meta charset="UTF-8">
-        <link rel="stylesheet" href="">
-        <link rel="preconnect" href="https://fonts.googleapis.com">
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Sansita&display=swap" rel="stylesheet">
-        <link rel="stylesheet" href="../static/css/register-style.css">
-        <title>UnMute-register</title>
-    </head>
-    <body>
-        <header>
-            <img src="../static/image/logo.png">
-        </header>
-        <main>
-            <form>
-                <p>아이디는 영문과 숫자로 5글자 이상 조합해주세요</p>
-                <input id="uid" type="text" required placeholder="아이디">
-                <p>비밀번호는 영문과 숫자로 7글자 이상 조합해주세요</p>
-                <input id="pw" type="text" required placeholder="비밀번호">
-                <input id="email" type="email" required placeholder="이메일 example@mail.com">
-                <p>사용할 이름</p>
-                <input type="text" value="" readonly>
-                <button id="create-name-button">이름 생성하기</button>
 
-                <label>경고:</label>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sansita&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/register-style.css">
+    <title>UnMute-register</title>
+</head>
+
+<body>
+    <header>
+        <img src="../static/image/logo.png">
+    </header>
+    <main>
+        <form>
+            <div>
+                <div class="idEx">
+                <h4>회원가입</h4>
+                <input id="uid" type="text" class="form-control rounded" required placeholder="아이디"
+                    aria-label="Recipient's username">
+                <p>아이디는 영문과 숫자로 5글자 이상 조합해주세요</p>
+                <input id="pw" type="text" class="form-control rounded" required placeholder="비밀번호">
+                <p>비밀번호는 영문과 숫자로 7글자 이상 조합해주세요</p>
+                </div>
+                <input id="email" type="email" class="form-control rounded" required placeholder="이메일 example@mail.com">
+                <br><label>사용할 이름</label>
+                <input type="text" class="form-control rounded" value="" readonly>
+                <button id="create-name-button">이름 생성하기</button>
                 <button id="register-button">계정 생성하기</button>
-            </form>
-        </main>
-        <footer>
-            <p>asdfasdf</p>
-        </footer>
-    </body>
+            </div>
+        </form>
+    </main>
+    <footer>
+        <div id="menu">
+            <p><a href="">사이트 이용 정보</a></p>
+        </div>
+        <div id="mention">
+            <p>powerd by Mistral AI</p>
+            <a href="https://mistral.ai/"><img src="https://upload.wikimedia.org/wikipedia/de/1/1c/Mistral_AI_logo.svg" width="60"></a>
+        </div>
+        <div id="info">
+            <p>경기대학교 team JAMES</p>
+            <p>github @ <a href="https://www.github.com/dasfaf4464/JAMES" target="_blank">dasfaf4464/JAMES</a></p>
+        </div>
+    </footer>
+</body>
 </html>

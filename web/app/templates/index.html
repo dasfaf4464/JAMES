@@ -7,6 +7,7 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Sansita&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
         <title>UnMute</title>
     </head>
     <body>
@@ -19,19 +20,19 @@
             <div class="interaction">
                 <img src="../static/image/logo.png">
                 <form id="login" action="/login" method="POST">
-                    <input id="username" type="text" required placeholder="아이디 입력">
-                    <input id="password" type="password" required placeholder="비밀번호 입력">
-                    <button id="login-button" onclick="login()">로그인</button>
+                    <input id="username" type="text" class="form-control rounded" required placeholder="아이디">
+                    <input id="password" type="password" class="form-control rounded" required placeholder="비밀번호">
+                    <button id="login-button" class="button-unified" onclick="login()">로그인</button>
                 </form>
                 <div id="register">
-                    <p>혹시 <span>회원</span>이 아닙니까?</p>
-                    <button id="register-button">회원가입</button>
+                    <label>혹시 <span>회원</span>이 아닙니까?</label>
+                    <button id="register-button" class="button-unified">회원가입</button>
                 </div>
-                <p>로그인 없이 사용하기</p>
-                <button id='create-session-button'>세션 생성하기</button>
+                <br><label>로그인 없이 사용하기</lab>
+                <button id='create-session-button' class="button-unified">세션 생성하기</button>
                 <form id="session" action="/session-without-login" method="POST">
-                    <button id="into-session-button">코드로 세션 입장</button>
-                    <input id="session-code" type="text" required placeholder="세션 코드 입력">
+                    <button id="into-session-button" class="button-unified">코드로 세션 입장</button>
+                    <input id="session-code" class="form-control rounded" type="text" required placeholder="세션 코드 입력">
                 </form>
             </div>
         </main>

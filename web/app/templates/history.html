@@ -2,23 +2,23 @@
 <html lang="ko">
     <head>
         <meta charset="UTF-8">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="../static/css/history-style.css">
     </head>
     <body>
         <header>
-            <div>
-                <p>{{name}}로 {{action}}지 {{day}} 일 째</p>
-                <button>메인화면</button>
-                <img src="../static/image/logo.png">
-            </div>
+            <img src="../static/image/logo.png">
         </header>
         <main>
+            <p>{{name}}로 {{action}}지 {{day}} 일 째</p>
+            <button>메인화면</button>
+            <div class="history-box">
             <div id="button-box">
                 <button id="my-question" onclick="myQuestion()">나의 질문 보기</button>
                 <button id="my-answer" onclick="myAnswer()">나의 대답 보기</button>
                 <button id="saving" onclick="saving()">저장한 질의응답</button>
                 <button id="my-profile" onclick="myProfile()">나의 프로필</button>
-                <input type="text" placeholder="검색하기">
+                <input class="form-control rounded" type="text" placeholder="검색하기">
             </div>
             <div id="content-box">
                 <div id="content-output">
@@ -33,6 +33,7 @@
                     </ol>
                 </div>
             </div>
+        </div>
         </main>
         <footer>
             <p>주의사항 설명</p>
