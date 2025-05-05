@@ -44,3 +44,10 @@ form.addEventListener("submit", (e) => {
   addQuestion();
 });
 
+function chooseSummary() {
+  const sentence = input.value.trim();
+  if (!sentence) return;
+
+  const words = sentence.split(/\s+/);
+  const randomWord = words[Math.floor(Math.random() * words.length)];
+}

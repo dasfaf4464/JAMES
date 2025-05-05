@@ -1,29 +1,41 @@
-@import url('colorset.css');
-
-* {
+@import url('colorset.css');body {
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
     margin: 0;
     padding: 0;
     background-color: var(--main-theme-background);
 }
 
-body {
-    font-family: 'Arial', sans-serif;
+header{
+    flex: 0 0 10%;
     display: flex;
-    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
 }
 
-header div{
-    display: flex;
-    flex-direction: row;
+header img {
+    height: 8%;
+    width: 8%;
+    height: auto;
+    object-fit: contain;
 }
 
 main {
+    flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: flex-end; 
 }
 
 #button-box {
     display: flex;
+}
+
+.history-box {
+    margin-top: auto; /* 위 공간을 밀어내 하단 정렬 효과 */
 }
 
 #button-box button {
@@ -61,7 +73,14 @@ main {
     list-style: none;
 }
 
+.form-control {
+    display: flex;
+    width: 100%;
+    max-width: 400px;
+}
+
 footer {
+    flex: 0 0 10%;
     padding: 15px;
     text-align: center;
     font-size: 0.9rem;

@@ -2,27 +2,54 @@
 
 body {
     margin: 0;
-    font-family: 'Sansita', sans-serif;
+    font-family: "Gill Sans", sans-serif;
     background-color: var(--main-theme-background);
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    height: 100vh;
 }
 
 header {
-    width: auto;
+    flex: 0 0 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+header img {
+    height: 8%;
+    width: 8%;
+    height: auto;
+    object-fit: contain;
 }
 
 main {
+    flex: 1;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
+}
+
+header, main, footer {
+    flex-shrink: 0;
 }
 
 form {
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 80%;
+    max-width: 400px;
+}
+
+.idEx {
+    font-size: 14px;
+}
+
+p {
+ text-align: left;
+ color: lightgray;
 }
 
 #create-name-button {
@@ -32,6 +59,8 @@ form {
     width: 100%;
     border-radius: 10px;
     border: none;
+    padding: 10px;
+    margin-top: 15px;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
 }
@@ -48,6 +77,8 @@ form {
     width: 100%;
     border-radius: 10px;
     border: none;
+    padding: 10px;
+    margin-top: 5px;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
 }
@@ -58,10 +89,10 @@ form {
 }
 
 footer {
-    width: auto;
-    margin-top: 40px;
-    padding: 20px;
-    background-color: #f1f1f1;
-    text-align: center;
-    color: #666;
+    flex: 0 0 10%;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
+    font-size: 0.9rem;
 }
