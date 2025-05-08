@@ -9,12 +9,12 @@ content = {'error':'True'}
 @session_bp.route('/session/<sessioncode>')
 def session(sessioncode):
     if not sessioncode:
-        return render_template('session.html', **content) #잘못된 세션 주소
+        return render_template('session.html', **content) #세션 주소가 없을때
     elif sessioncode:
-        if not check_server_code_format(sessioncode):
+        if not check_server_code_format(sessioncode): #세션 포맷이 잘못되었을 때
             return render_template('session.html', **content)
         '''
-        elif session is not existed in DB:
+        elif session is not existed in DB: #세션이 생성된 상태가 아닐때
             return reder_template('session.html', **content)
         else:
             return reder_template('session.html', **content)

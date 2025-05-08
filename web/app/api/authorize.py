@@ -6,10 +6,10 @@ from flask import Blueprint, request, jsonify, url_for, make_response
 from app.util.naming import create_user_name
 from app.manager.db_manager import mariadb_user_manager
 
-login_bp = Blueprint('login', __name__)
-makename_bp = Blueprint('make_name', __name__)
-tempkey_bp = Blueprint('check-key', __name__)
-signup_bp = Blueprint('signup', __name__)
+login_bp = Blueprint('login', __name__, url_prefix='/auth')
+makename_bp = Blueprint('make_name', __name__, url_prefix='/auth')
+tempkey_bp = Blueprint('check-key', __name__, url_prefix='/auth')
+signup_bp = Blueprint('signup', __name__, url_prefix='/auth')
 
 @login_bp.route('/login', methods=['POST'])
 def login():
