@@ -28,13 +28,13 @@ def handle_redirection():
     """
     로그인 여부 및 임시 사용자 상태에 따라 리디렉션을 처리합니다.
     - 로그인한 사용자가 '/'로 접근하려 할 때 /home으로 리디렉션
-    - 로그인하지 않은 사용자(임시 사용자)가 /home으로 접근하려 할 때 /로 리디렉션
+    - 로그인하지 않은 사용자(임시 사용자)가 /home, /history 으로 접근하려 할 때 /로 리디렉션
     """
     client_cookie = request.cookies
     is_temporary = client_cookie.get("is_temporary")
 
     if is_temporary == "True":
-        if request.path == "/home":
+        if request.path == "/home" or request.path == '/history':
             return redirect(url_for("index.index"))
     else:
         if request.path == "/":
@@ -70,9 +70,9 @@ def check_tempkey():
     user_name = client_cookie.get("user_name")
     response_data = {"message": "", "redirect_url": ""}
 
-    if not user_key:
+    if not user_key:  # 쿠키가 없으면 임시유저로 처리
         response_data["message"] = "임시유저 키 발급 성공"
-        response_data["redirect_url"] = "/"
+        response_data["redirect_url"] = "/"  # 로그인이 되어있지 않으면 홈으로 리디렉션
         response = make_response(jsonify(response_data))
 
         response.set_cookie(
@@ -131,7 +131,7 @@ def check_tempkey():
         )
         return response
 
-    else:
+    else:  # 로그인한 유저의 경우
         response_data["message"] = "회원 시간 갱신 성공"
         response = make_response(jsonify(response_data))
 
@@ -247,7 +247,7 @@ def login():
         return response, 500
 
 
-@logout_bp.route("/logout")
+@logout_bp.route("/logout", methods=["POST"])
 def logout():
     """
     사용자 메뉴에서 로그아웃하는 api입니다.
@@ -267,7 +267,21 @@ def logout():
         message (str): 로그아웃 처리 메세지
         redirect_url (url): index 페이지 주소
     """
-    return
+    response = make_response()
+    
+    response_data = {"isSuccess":"", "message":"", "redirect_url":""}
+    try:
+        response_data["isSuccess"] = True
+        response_data["message"] = "로그아웃"
+        response_data["redirect_url"] = url_for('index.index')
+        response = make_response(jsonify(response_data))
+        
+        response.delete_cookie("user_key")
+        response.delete_cookie("is_temporary")
+        response.delete_cookie("user_name")
+        return response
+    except Exception as e:
+        return make_response(jsonify({"message":"로그아웃 실패"})), e
 
 
 @makename_bp.route("/generate_name", methods=["GET"])
