@@ -1,46 +1,40 @@
 @import url('colorset.css');
 
 body {
-    margin: 0;
     font-family: 'Gill Sans', sans-serif;
+    margin: 0;
     background: var(--main-theme-background);
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100vh;
 }
 
 main {
     flex: 1;
     display: flex;
-    padding: 0;
-    gap: 0;
-
-}
-
-header, main, footer {
-    flex-shrink: 0;
+    flex-direction: row;
+    background-color: var(--main-theme-background);
 }
 
 .main-image {
-    display: flex;  /* flexbox를 사용하여 자식 요소를 중앙 정렬 */
-    justify-content: center; /* 수평 중앙 정렬 */
-    align-items: center; /* 수직 중앙 정렬 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
     flex: 3;
 }
 
 .main-image img {
     width: 100%;
     height: auto;
-    max-width: 800px;
+    max-width: 600px;
 }
 
 .interaction {
-    flex: 1;
     display: flex;
+    flex: 1.5;
     flex-direction: column;
     margin: 20px;
     align-items: center;
-    transform: translateX(-40px);
 }
 
 .interaction img {
@@ -58,13 +52,12 @@ header, main, footer {
     margin-top: 5px;
 }
 
-#login input{
+#login input, button{
     padding-left: 20px;
 }
 
 .button-unified {
     width: 100%;
-    max-width: 300px; /* 최대 너비 제한 */
     padding: 10px;
     border-radius: 10px;
     border: none;
@@ -169,8 +162,58 @@ footer {
     flex: 0 0 10%;
     display: flex;
     justify-content: space-between;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color:#FFEBE0;
     padding: 1rem;
     font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        gap: 20px;
+    }
+
+    .interaction {
+        transform: none; 
+        flex: unset;
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .interaction img {
+        width: 40%;
+    }
+
+    .main-image {
+        display: none;
+    }
+
+    .interaction {
+        transform: none;
+        padding: 0 10px;
+        align-items: stretch;
+    }
+
+    .interaction img {
+        margin: 0 auto;
+    }
+
+    form, #register, #session {
+        width: 100%;
+    }
+
+    footer {
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.8rem;
+        text-align: center;
+        gap: 10px;
+    }
+
+    #register-button, #login-button, #create-session-button, #into-session-button {
+        font-size: 0.9rem;
+    }
 }
 

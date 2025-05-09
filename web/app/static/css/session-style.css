@@ -1,45 +1,66 @@
-.inputBar {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    padding-bottom: 20px;
-}
-
-.questionBar {
-    width: 90%;
-    max-width: 500px;
-}
+@import url('colorset.css');
 
 body {
     margin: 0;
     font-family: 'Sansita', sans-serif;
-    background: linear-gradient(200deg, var(--kgu-red), var(--kgu-orange));
+    background-color: var(--main-theme-background);
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
-    color: #fff;
+    height: 100vh;
 }
 
 header {
-    padding: 1rem;
-    background-color: var(--kgu-red);
+    flex: 0 0 10%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+}
+
+header img {
+    height: 8%;
+    width: 8%;
+    height: auto;
+    object-fit: contain;
 }
 
 main {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    flex-grow: 1;
-    padding: 2rem;
-    gap: 2rem;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+}
+
+.chat-form {
+    padding: 1rem;
+}
+
+.questionBar {
+    display: flex;
+    gap: 5px; 
+    padding: 10px; 
+    width: 90%;
+    max-width: 800px;
+    margin-left: 0;
+}
+
+#QBar {
+    flex: 1;
+    min-width: 200px;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+}
+
+
+.questionButton {
+    background-color: var(--main-button-normal);
+    border: none;
+    border-radius: 5px; 
+    color: white; 
+    padding: 0.5rem 1rem;
 }
 
 footer {
-    position: sticky;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.2);
-    padding: 1rem;
-    font-size: 0.9rem;
+    flex: 0 0 0;
     display: flex;
-    justify-content: center;
-    z-index: 10;
 }
