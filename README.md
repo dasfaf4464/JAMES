@@ -2,9 +2,9 @@
 ## <b>JAMES(Junchul and Miracle Extreme Students)
 
 ## 팀원
-|이름|문준서|이상훈|이지연|
+|조해천|문준서|이상훈|이지연|
 |:---:|:---:|:---:|:---:|
-|Server, DB|LLM|DB|Web Front|
+|팀장|LLM|DB|Web Front|
 |컴퓨터공학부 4학년|컴퓨터공학전공 3학년|수학과 4학년|컴퓨터공학전공 3학년|
 |[@github](https://www.github.com/dasfaf4464)|[@github](https://www.github.com/odpd09091)|[@github](https://www.github.com/KGU-LSH)|[@github](https://www.github.com/leejiyeoniya)|
 
@@ -19,8 +19,8 @@
 
 ### 개발 환경
 - Frontend : HTML, CSS, JS
-- Backend : Python Flask
-- Database : MariaDB
+- Backend : Python Flask, Cloudflare Tunnel
+- Database : MariaDB, Redis
 
 ### 주요 기능
 
@@ -45,7 +45,8 @@
 ### 주요 화면
 ||||||||||||
 |:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-|index 사진|→ 로그인 →|main 화면|→ 기록 보기 →|기록 화면1|→ 기록 전환 →|기록 화면2|||||
+||→ 회원 가입 →|<img src="https://github.com/user-attachments/assets/0c8177d2-e7d4-4971-aa14-541bcda3c5ec" width="auto" height="120"><img src="https://github.com/user-attachments/assets/9b179607-2cc9-4fb8-bf1b-123ff58ab0f0" width="auto" height="120">|||||||||
+|<img src="https://github.com/user-attachments/assets/076cc23a-f52a-4a93-b92b-87ac4229a904" width="auto" height="120"><img src="https://github.com/user-attachments/assets/53500ba6-a1cd-4a7b-8084-bc698d5c1064" width="auto" height="120">|→ 로그인 →|main 화면|→ 기록 보기 →|기록 화면1|→ 기록 전환 →|기록 화면2|||||
 |||↳세션 선택→|→|⤵|||||||
 ||→ 세션 생성→|→|→|⤵|||||||
 ||→ 세션 입장 →|index 에서 입장 선택|→ 입장 →|세션 사진|→관리자 기능→|관리자 기능 사진|||||
