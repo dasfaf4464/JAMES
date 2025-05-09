@@ -1,10 +1,9 @@
 @import url(colorset.css);
 
 body {
-    font-family: 'Sansita', sans-serif;
+    font-family: 'Gill Sans', sans-serif;
     margin: 0;
     background-color: var(--main-theme-background);
-    color: #333;
     display: flex;
     flex-direction: column;
     height: 100vh;
@@ -28,7 +27,6 @@ header img {
 main {
     flex: 1;
     display: flex;
-    flex-direction: row;
 }
 
 .session-group-item {
@@ -86,7 +84,6 @@ main {
     font-size: 0.95rem;
 }
 
-
 /* 인사말 영역 */
 .greeting h1 {
     font-size: 1.5rem;
@@ -100,7 +97,6 @@ main {
     padding: 15px;
 }
 
-/* 히스토리 박스 */
 .history ul {
     list-style: none;
     padding: 0;
@@ -154,6 +150,7 @@ main {
     border: none;
     padding: 8px;
     margin-top: 5px;
+    margin-bottom: 5px;
     box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
     transition: all 0.2s ease;
 }
@@ -267,4 +264,34 @@ footer {
     background-color: rgba(0, 0, 0, 0.2);
     padding: 1rem;
     font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+    }
+
+    .session-list, .side-panel {
+        flex: unset;
+        width: 100%;
+    }
+
+    header img {
+        width: 40%;
+    }
+
+    .session-group-item {
+        flex-direction: column;
+    }
+
+    form {
+        width: 95%;
+    }
+
+    footer {
+        flex-direction: column;
+        font-size: 0.8rem;
+        align-items: center;
+        text-align: center;
+    }
 }

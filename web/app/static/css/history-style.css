@@ -1,11 +1,11 @@
-@import url('colorset.css');body {
+@import url('colorset.css');
+
+body {
     font-family: 'Arial', sans-serif;
+    background-color: var(--main-theme-background);
     display: flex;
     flex-direction: column;
     height: 100vh;
-    margin: 0;
-    padding: 0;
-    background-color: var(--main-theme-background);
 }
 
 header{
@@ -13,7 +13,7 @@ header{
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: white;
+    background-color: var(--main-theme-background);
 }
 
 header img {
@@ -27,7 +27,26 @@ main {
     flex: 1;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end; 
+    overflow: hidden;
+}
+
+.status-bar {
+    display: flex;
+    flex: 0 0 auto; /* 고정 높이 */
+    align-items: center;        /* 수직 정렬 */
+    justify-content: space-between; /* 또는 flex-start, center 등 원하는 정렬 */
+    gap: 10px;                  /* 요소 사이 간격 */
+    padding: 10px;
+    font-size: large;
+}
+
+.status-bar button{
+    background-color: var(--main-button-normal);
+    border: none;
+    padding: 10px 22px;
+    font-size: 16px;
+    border-radius: 5px; 
+    color: white;  
 }
 
 #button-box {
@@ -35,7 +54,10 @@ main {
 }
 
 .history-box {
-    margin-top: auto; /* 위 공간을 밀어내 하단 정렬 효과 */
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 #button-box button {
@@ -61,16 +83,25 @@ main {
 }
 
 #content-box {
+    flex: 1;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     padding: 15px;
     background-color: var(--main-button-normal);
 }
 
 #content-output{
+    flex: 1;
+    overflow-y: auto;
     background-color: #ffffff;
 }
 
 #content-output ol{
     list-style: none;
+    height: 100%;  /* 부모 높이만큼 차지하게 */
+    margin: 0;
+    padding: 0;
 }
 
 .form-control {
@@ -81,11 +112,14 @@ main {
 
 footer {
     flex: 0 0 10%;
-    padding: 15px;
-    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 1rem;
     font-size: 0.9rem;
 }
 
 footer p {
-    margin: 5px 0;
-}
+    text-align: left;
+    color: lightgray;
+   }
