@@ -7,5 +7,24 @@ class RedisManager:
         self.redis = db.get_redis_connection(redis_db_num)
 
 class MariadbManager:
-    def __init__(self, admin):
-        self.admin = admin
+    def __init__(self, id, pw):
+        self.account = db.get_mariadb_connection(id, pw)
+    
+    def put_sql(self, SQL: str):
+        if self.account is not None:
+            return db.put_sql(self.account, SQL)
+        else:
+            print('연결된 db가 없습니다.')
+
+    def put_sql_result(self, SQL: str, params: tuple):
+        if self.account is not None:
+            return db.get_result(self.account, SQL, params)
+        else:
+            print('연결된 db가 없습니다.')
+        
+    def disconnect(self):
+        db.disconnection_mariadb(self.account)
+
+
+mariadb_admin_manager = MariadbManager(db.DB_ADMIN.get('id'), db.DB_ADMIN.get('pw'))
+mariadb_user_manager = MariadbManager(db.DB_USER.get('id'), db.DB_USER.get('pw'))

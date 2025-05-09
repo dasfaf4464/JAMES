@@ -1,9 +1,11 @@
 import pymysql
 import pymysql.cursors
+from pymysql.connections import Connection
 from pymysql.err import OperationalError, Error
 import redis
 from redis.exceptions import ConnectionError
 from flask import jsonify
+from typing import cast
 
 DB_ADMIN = {'id':'root', 'pw':'admin'}
 DB_USER = {'id':'user', 'pw':'user'}
@@ -25,24 +27,33 @@ def get_mariadb_connection(id:str, pw:str):
         print(f'db connection error {e}')
         return None
 
-def get_result(SQL:str, id:str, pw:str):
-    connection = get_mariadb_connection(id, pw)
+def get_result(connection, SQL, params=None):
     try:
-        with connection.cursor() as cursor:
-            cursor.execute(SQL)
+        with connection.cursor(pymysql.cursors.DictCursor) as cursor:
+            if params:
+                cursor.execute(SQL, params)  # 파라미터화된 쿼리 사용
+            else:
+                cursor.execute(SQL)  # 파라미터가 없을 경우 그냥 실행
             result = cursor.fetchall()
-            return jsonify(result)
-    except OperationalError as e:
-        return jsonify({"error": "DB 연결 오류", "message": str(e)})
+            return result
+    except Exception as e:
+        print(f"Error: {e}")
+        return []
 
-def put_sql(SQL:str, id:str, pw:str):
-    connection = get_mariadb_connection(id, pw)
+
+def put_sql(connection: Connection, SQL: str):
     try:
-        with connection.cursor() as cursor:
+        if connection is None:
+            raise ValueError("Connection 객체가 None입니다.")
+
+        with cast(pymysql.cursors.DictCursor, connection.cursor()) as cursor:
             cursor.execute(SQL)
             connection.commit()
-    except OperationalError as e:
-        return jsonify({"error": "DB 연결 오류", "message": str(e)})
+        return True
+
+    except (OperationalError, Error, ValueError) as e:
+        print(f"DB 실행 오류: {e}")
+        return False
 
 def disconnection_mariadb(connection:pymysql.Connection):
     try:
