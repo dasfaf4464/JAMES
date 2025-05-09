@@ -22,13 +22,13 @@
                 <form id="login" action="/login" method="POST">
                     <input id="username" type="text" class="form-control rounded" required placeholder="아이디">
                     <input id="password" type="password" class="form-control rounded" required placeholder="비밀번호">
-                    <button id="login-button" class="button-unified" onclick="login()">로그인</button>
+                    <button id="login-button" class="button-unified">로그인</button>
                 </form>
                 <div id="register">
-                    <label>혹시 <span>회원</span>이 아닙니까?</label>
+                    <p>혹시 <span>회원</span>이 아닙니까?</p>
                     <button id="register-button" class="button-unified">회원가입</button>
                 </div>
-                <br><label>로그인 없이 사용하기</lab>
+                <br><p>로그인 없이 사용하기</p>
                 <button id='create-session-button' class="button-unified">세션 생성하기</button>
                 <form id="session" action="/session-without-login" method="POST">
                     <button id="into-session-button" class="button-unified">코드로 세션 입장</button>

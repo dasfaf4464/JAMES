@@ -4,7 +4,7 @@ from config import NAME_ADJ, NAME_NOUN
 
 def create_user_key():
     charset = list(string.ascii_lowercase)
-    return ''.join(random.sample(charset,10))
+    return ''.join(random.sample(charset,12))
 
 def create_server_code():
     charset = list(string.ascii_uppercase + string.digits)

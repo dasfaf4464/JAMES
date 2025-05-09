@@ -19,7 +19,7 @@ function sessionPanel() {
 var sessionList = document.querySelectorAll('.session-list ul li');
 
 for (var i = 0; i < sessionList.length; i++) {
-    sessionList[i].addEventListener('click', function() {
+    sessionList[i].addEventListener('click', function () {
         sessionPanel();
     });
 }
@@ -27,3 +27,29 @@ for (var i = 0; i < sessionList.length; i++) {
 function returnMyPanel() {
     panel.innerHTML = myPanel;
 }
+
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/auth/check_key')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답 오류');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("사용자 인증 응답:", data);
+
+            if (data.redirect_url) {
+                if (window.location.origin != data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            }
+
+            if (data.message) {
+                console.log("서버 메시지:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("인증 확인 실패:", error);
+        });
+});

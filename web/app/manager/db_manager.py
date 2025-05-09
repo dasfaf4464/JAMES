@@ -1,30 +1,36 @@
 """
 사용자가 입력한 채팅 데이터를 관리하고 사용자 정보, 세션 정보를 관리합니다.
 """
+
 import app.util.db as db
+import atexit
+
+
 class RedisManager:
     def __init__(self, redis_db_num):
         self.redis = db.get_redis_connection(redis_db_num)
 
+
 class MariadbManager:
     def __init__(self, id, pw):
         self.account = db.get_mariadb_connection(id, pw)
-    
-    def put_sql(self, SQL: str):
+        atexit.register(self.disconnect)
+
+    def put_sql(self, SQL: str, params: tuple):
         if self.account is not None:
-            return db.put_sql(self.account, SQL)
+            return db.put_sql(self.account, SQL, params)
         else:
-            print('연결된 db가 없습니다.')
+            print("연결된 db가 없습니다.")
 
     def put_sql_result(self, SQL: str, params: tuple):
         if self.account is not None:
             return db.get_result(self.account, SQL, params)
         else:
-            print('연결된 db가 없습니다.')
-        
+            print("연결된 db가 없습니다.")
+
     def disconnect(self):
         db.disconnection_mariadb(self.account)
 
 
-mariadb_admin_manager = MariadbManager(db.DB_ADMIN.get('id'), db.DB_ADMIN.get('pw'))
-mariadb_user_manager = MariadbManager(db.DB_USER.get('id'), db.DB_USER.get('pw'))
+mariadb_admin_manager = MariadbManager(db.DB_ADMIN.get("id"), db.DB_ADMIN.get("pw"))
+mariadb_user_manager = MariadbManager(db.DB_USER.get("id"), db.DB_USER.get("pw"))
