@@ -36,6 +36,7 @@ def get_result(connection, SQL: str, params=None):
                 cursor.execute(SQL, params)  # 파라미터화된 쿼리 사용
             else:
                 cursor.execute(SQL)  # 파라미터가 없을 경우 그냥 실행
+            connection.commit()
             result = cursor.fetchall()
             return result
     except Exception as e:
@@ -69,7 +70,7 @@ def get_redis_connection(dbnum: int):
         redis_connection = redis.Redis(
             host="localhost", port=6379, db=dbnum, decode_responses=True
         )
-        print("redis 서버 연결 성공:", redis_connection.ping())  # 서버 연결 확인
+        print("redis 서버 연결 성공:", redis_connection.ping())
         return redis_connection
     except ConnectionError as e:
         print("Redis 연결 실패:", e)
