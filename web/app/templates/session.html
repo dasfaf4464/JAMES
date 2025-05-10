@@ -12,48 +12,50 @@
 <body>
     <header>
         <img src="../static/image/logo.png">
+        <h1>방 이름</h1>
+        <h5>시작 시간</h5>
     </header>
 
     <main>
 
-        <div class="left-panel">
-            <div class="categories">
-                <div class="category-box">카테고리1</div>
-                <div class="category-box">카테고리2</div>
-                <div class="category-box">카테고리2</div>
-            </div>
-
-            <div class="middle-content">
-                <!-- 여기에 세부 내용 삽입 가능 -->
+        <div id="board">
+            <div id="categories">
+                <p id="categorie">대분류/중분류/소분류</p>
             </div>
 
             <div class="bottom-controls">
-                <div>입력 옵션 선택 버튼들</div>
-                <div>나가기 관련 설정 버튼</div>
-                <div style="flex: 2;">텍스트 입력 칸</div>
-                <div>텍스트 입력 버튼</div>
+                <div id="options">
+                    <div id="question-options">
+                        <lable>원본 같이 보내기<input type="checkbox"></lable>
+                        <label>LLM 이용하기<input type="checkbox"></label>
+                    </div>
+                    <div class="session-option">
+                        <button>나가기</button>
+                    </div>
+                </div>
+                <form id="chatForm">
+                    <div class="questionBar">
+                        <input type="text" id="QBar" class="form-control rounded-pill" placeholder="질문을 입력하세요">
+                        <button class=questionButton type="button">Enter</button>
+                    </div>
+                </form>
             </div>
         </div>
 
-        <div class="right-panel">
-            <div class="box">카테고리</div>
-            <div class="box">요약된 질문</div>
-            <div class="box">요약된 질문</div>
-            <div class="box">요약된 질문</div>
-            <div class="box">전달받은 lm 리스트</div>
-            <div class="box">전달받은 lm 리스트</div>
-            <div class="box">전달받은 lm 리스트</div>
-        </div>
-        <!-- 입력창 영역 -->
-        <form id="chatForm">
-            <div class="questionBar">
-                <input type="text" id="QBar" class="form-control rounded-pill" placeholder="질문을 입력하세요">
-                <button class=questionButton type="button">button</button>
+        <div id="right-panel">
+            <div id="categorie-questions">
+                <p id="title">선택된 카테고리</p>
+                <ul>
+                    <li>질문 리스트</li>
+                </ul>
             </div>
-        </form>
+            <div id="through-llm">
+                <ul>
+                    <li>전달받은 문장</li>
+                </ul>
+            </div>
+        </div>
     </main>
-    <footer>
-    </footer>
     <script src="../static/js/session.js"></script>
 </body>
 

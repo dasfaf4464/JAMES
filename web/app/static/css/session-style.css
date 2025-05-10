@@ -18,27 +18,40 @@ header {
 }
 
 header img {
-    height: 8%;
-    width: 8%;
+    width: 7%;
     height: auto;
     object-fit: contain;
 }
 
 main {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     flex: 1;
     position: relative;
+    justify-content: stretch;
 }
 
-.chat-form {
+#board {
+    display: flex;
+    flex-direction: column;
+    background-color: lightblue;
+    justify-content: space-between;
+}
+
+#options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#chat-form {
     padding: 1rem;
 }
 
 .questionBar {
     display: flex;
-    gap: 5px; 
-    padding: 10px; 
+    gap: 5px;
+    padding: 10px;
     width: 90%;
     max-width: 800px;
     margin-left: 0;
@@ -51,16 +64,18 @@ main {
     font-size: 1rem;
 }
 
-
 .questionButton {
     background-color: var(--main-button-normal);
     border: none;
-    border-radius: 5px; 
-    color: white; 
+    border-radius: 5px;
+    color: white;
     padding: 0.5rem 1rem;
 }
 
-footer {
-    flex: 0 0 0;
+#right-panel {
+    float: right;
+    background-color: var(--main-theme-background);
     display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
