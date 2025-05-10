@@ -34,7 +34,7 @@ def handle_redirection():
     is_temporary = client_cookie.get("is_temporary")
 
     if is_temporary == "True":
-        if request.path == "/home" or request.path == '/history':
+        if request.path == "/home" or request.path == "/history":
             return redirect(url_for("index.index"))
     else:
         if request.path == "/":
@@ -268,20 +268,20 @@ def logout():
         redirect_url (url): index 페이지 주소
     """
     response = make_response()
-    
-    response_data = {"isSuccess":"", "message":"", "redirect_url":""}
+
+    response_data = {"isSuccess": "", "message": "", "redirect_url": ""}
     try:
         response_data["isSuccess"] = True
         response_data["message"] = "로그아웃"
-        response_data["redirect_url"] = url_for('index.index')
+        response_data["redirect_url"] = url_for("index.index")
         response = make_response(jsonify(response_data))
-        
+
         response.delete_cookie("user_key")
         response.delete_cookie("is_temporary")
         response.delete_cookie("user_name")
         return response
     except Exception as e:
-        return make_response(jsonify({"message":"로그아웃 실패"})), e
+        return make_response(jsonify({"message": "로그아웃 실패"})), e
 
 
 @makename_bp.route("/generate_name", methods=["GET"])
