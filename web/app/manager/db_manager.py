@@ -8,7 +8,11 @@ import atexit
 
 class RedisManager:
     def __init__(self, redis_db_num):
-        self.redis = db.get_redis_connection(redis_db_num)
+        self.redis_client = db.get_redis_connection(redis_db_num)
+        atexit.register(self.disconnect)
+
+    def disconnect(self):
+        db.disconnect_redis(self.redis_client)
 
 
 class MariadbManager:
