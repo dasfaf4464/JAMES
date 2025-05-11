@@ -38,3 +38,4 @@ class MariadbManager:
 
 mariadb_admin_manager = MariadbManager(db.DB_ADMIN.get("id"), db.DB_ADMIN.get("pw"))
 mariadb_user_manager = MariadbManager(db.DB_USER.get("id"), db.DB_USER.get("pw"))
+redis_manager = RedisManager(0)
