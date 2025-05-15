@@ -1,11 +1,8 @@
 import pymysql
 import pymysql.cursors
-from pymysql.connections import Connection
 from pymysql.err import OperationalError, Error
 import redis
 from redis.exceptions import ConnectionError
-from flask import jsonify
-from typing import cast
 
 DB_ADMIN = {"id": "root", "pw": "admin"}
 DB_USER = {"id": "user", "pw": "user"}

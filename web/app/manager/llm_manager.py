@@ -7,37 +7,129 @@ LLMManager의 인트턴스는 agent와 1:1로 대응됩니다.
 from mistralai import Mistral
 from config import API_KEY, AGENT_ID
 from concurrent.futures import ThreadPoolExecutor, TimeoutError
+import re
+import json
+
+"""
+부정 사용및 입력 전처리 함수
+"""
+RE_KOREAN = re.compile(r'^[ㄱ-하-ㅣ]+$')
+
+MEANINGLESS_KOR_PATTERNS = {
+    "ㄱㄱ", "ㄴㄴ", "ㅇㅇ", "ㅈㅈ", "ㅇㄹ", "ㄹㅇ", "ㅁㅊ", "ㅅㅂ", "ㅈㅂ",
+    "ㅋㅋ", "ㅎㅎ", "ㅠㅠ", "ㅜㅜ", "ㄷㄷ", "ㅌㅌ", "ㅇㄷ", "ㅇㅈ", "ㅇㅉ", "ㄹㅈㄷ"
+}
+
+def is_token_meaningless(token):
+    token = token.strip()
+    if len(set(token)) == 1 and len(token) > 1:
+        return True
+    if RE_KOREAN.fullmatch(token):
+        return True
+    return False
+
+def is_fully_meaningless_string(text):
+    tokens = text.strip().split()
+    if not tokens:
+        return False
+    for token in tokens:
+        if not is_token_meaningless(token):
+            return False
+    if token in MEANINGLESS_KOR_PATTERNS:
+        return True
+    return False
+
+"""
+형식 검증 및 파이썬 데이터화 함수
+"""
+
+def extract_json_blocks(text):
+    stack = []
+    blocks = []
+    start_idx = None
+
+    for i, ch in enumerate(text):
+        if ch == '{':
+            if not stack:  # 새 JSON 블록의 시작
+                start_idx = i
+            stack.append('{')
+        elif ch == '}':
+            if stack:
+                stack.pop()
+                if not stack and start_idx is not None:
+                    block = text[start_idx:i+1]
+                    blocks.append(block)
+                    start_idx = None
+
+    return blocks
+
+def parse_valid_json_blocks(blocks):
+    valid_jsons = []
+    for block in blocks:
+        try:
+            parsed = json.loads(block)
+            valid_jsons.append(parsed)
+        except json.JSONDecodeError:
+            continue 
+    return valid_jsons
+
+ERRORCODE_NORMAL = 0
+ERRORCODE_INJECTION = 1
+ERRORCODE_ABNORMAL = 2
 class LLMManager:
-    batch_queue = None
-    llm_thread = ThreadPoolExecutor(max_workers=4)
     api_key = API_KEY
     
     def __init__(self, agent_id):
         self.agent_id = agent_id
         self.client = Mistral(api_key=self.api_key)
 
-    def send_llm(self, prompt:str):#redis에서 가져오는거로
-        try:
-            LLMManager.llm_thread.submit(self._request_llm, prompt)
-        except TimeoutError as e:
-            print(f'요청 시간 초과 {e}')
+    def _preprocess(self, user_input:str):
+        """
+        사용자 입력 전처리기 입니다.
+        1. 사용자의 입력이 너무 짧거나 너무 긴 경우 -> False
+        2. 의미없는 문자가 나열될 때 -> errorcode = 2
+        3. 정상 입력인 경우 error_code = 0
+        """
+        if len(user_input) < 1 or  len(user_input) > 500:
+            return False
+        if is_fully_meaningless_string(user_input):
+            return ERRORCODE_ABNORMAL
+        return ERRORCODE_NORMAL
+    
+    def _postprocess(self, llm_string):
+        """
+        llm에서 반환받은 문자열 후처리기입니다.
+        1. 문자열에서 JSON을 찾아냅니다.
+        2. JSON의 형식이 일치하지 않는 경우 오류
+        3. JSON의 내용이 비정상인 경우 오류
+        4. 정상 결과인 경우 사용자에게 전달합니다.
+        """ 
+        blocks = extract_json_blocks(llm_string)
+        valid_json = parse_valid_json_blocks(blocks)
+        
+        noraml_items = [item for item in valid_json if item['error'] == 0]
+        injection_items = [item for item in valid_json if item['error'] == 1]
+        abnormal_items = [item for item in valid_json if item['error'] == 2]
+        return noraml_items, injection_items, abnormal_items
 
     def _request_llm(self, prompt:str):
-        request_prompt = LLMManager._create_prompt(self, prompt)
+        predict_error = self._preprocess(prompt)
+        if predict_error is not False:
+            request_prompt = f'{{"content": "{prompt}", "predict_errorcode": {predict_error}}}'
+        else:
+            return False
+        
         try:
             agent_response = self.client.agents.complete(
                 agent_id=self.agent_id,
                 messages=[
                     {"role": "user", "content": request_prompt}
-                ]
+                ],
+                response_format={"type": "text"}
             )
-            print(agent_response.choices[0].message.content)
+            response_prompt =  agent_response.choices[0].message.content
+            return self._postprocess(response_prompt)
         except Exception as e:
             print(f"오류 발생: {e}")
-
-    def _create_prompt(self, user_input:str):
-        prompt = "다음 질문을 한국어로 정제해줘, 정제는 맞춤법, 오타, 맥락에 맞는 단어 수정이고 고등학생이 알아들을 수 있도록 해줘," \
-        "정제할 때 첫 번째로 생각해야할건 입력된 질문의 의도를 파악해서 그 의도를 표현하기 제일 적합한 것으로 바꾼거야:"
-        return prompt + user_input
 
 llmManager = [LLMManager(AGENT_ID[0]), LLMManager(AGENT_ID[1]), LLMManager(AGENT_ID[2]), LLMManager(AGENT_ID[3])]
