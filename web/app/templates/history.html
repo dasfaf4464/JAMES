@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/css/history-style.css">
-    <title>Unmute-myProfile</title>
 </head>
 
 <body>
@@ -15,42 +14,50 @@
     </header>
     <main>
         <div class="status-bar">
-            <p><b><span id="action-text"></span></b> {{day}} 일 째</p>
+            <p>{{name}}로 <span id="action-text">{{action}}</span> {{day}} 일 째</p>
             <button>메인화면</button>
-            <button>로그아웃</button>
         </div>
+        <!--
         <div class="history-box">
             <div id="button-box">
-                <button id="my-question" class="tab-button selected">나의 질문 보기</button>
-                <label>리스트 레이아웃<input type="radio" name="layout" value="list-layout" checked></label>
-                <label>그리드 레이아웃<input type="radio" name="layout" value="card-layout"></label>
-                <button>이전</button>
-                <button>다음</button>
+                <button id="my-question" class="tab-button selected" onclick="myQuestion()">나의 질문 보기</button>
+                <button id="my-answer" class="tab-button" onclick="myAnswer()">나의 대답 보기</button>
+                <button id="saving" class="tab-button" onclick="saving()">저장한 질의응답</button>
+                <button id="my-profile" class="tab-button" onclick="myProfile()">나의 프로필</button>
+                <input class="form-control rounded" type="text" placeholder="검색하기">
             </div>
             <div id="content-box">
                 <div id="content-output">
-                    
+                    <ol>
+                        <li>
+                            <p>질문 내용 답변 개수 : </p>
+                        <li>
+                            <p>질문 내용1</p>
+                            <p>질문 내용2</p>
+                        </li>
+                        </li>
+                    </ol>
                 </div>
             </div>
         </div>
-        <div class="my-profile">
-            <p>{{name}}</p>
-            <div class="my-category">
-                <p>내가 가장 많이 질문한 분야</p>
-                <ul>
-                    <li>카테고리1</li>
-                    <li>카테고리2</li>
-                    <li>카테고리1</li>
-                    <li>카테고리2</li>
-                    <li>카테고리1</li>
-                    <li>카테고리2</li>
-                </ul>
-            </div>
-            <div class="my-question">
-                <p>나의 질문 개수</p>
-                <p>해결한 개수</p>
-                <p>저장한 질문 개수</p>
-            </div>
+        -->
+        <div class="myQuestionContainer">
+            <ul>
+                <p>나의 질문 보기</p>
+                <li>질문 답변 개수 : </li>
+                <li>질문1</li>
+                <li>질문2</li>
+                <li>질문3</li>
+                <li>질문4</li>
+                <li>질문1</li>
+                <li>질문2</li>
+                <li>질문3</li>
+                <li>질문4</li>
+                <li>질문1</li>
+                <li>질문2</li>
+                <li>질문3</li>
+                <li>질문4</li>
+            </ul>
         </div>
     </main>
     <footer>

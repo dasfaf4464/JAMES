@@ -26,5 +26,6 @@ def create_app():
     app.register_blueprint(myQuestion_bp)
     app.register_blueprint(myAnswer_bp)
     app.register_blueprint(myPick_bp)
+    #session
 
     return app

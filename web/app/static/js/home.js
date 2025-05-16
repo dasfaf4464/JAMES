@@ -8,16 +8,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const sessionPanel = () => {
         panel.innerHTML = `
-      <div class="session-panel-wrapper">
-        <button id="exit-button"><img src="../static/image/cancle.svg"></button>
-        <p>session title</p>
-        <p id="session-discription">diasdasdasdasdasdscription</p>
-        <p>현재 참여 인원수 : </p>
-        <p>올라온 질문 수 : </p>
-        <button id="join-session">세션 입장하기</button>
-        <button id="exit-session">세션 나가기</button>
-        <p>세션 생성일: </p>
-      </div>
+        <div class="session-panel-wrapper">
+            <button id="exit-button" onclick="returnMyPanel()"><img src="../static/image/cancle.svg"></button>
+            <br><br><h3>session title</h3>
+
+            <p id="session-create-day">세션 생성일: </p>
+
+            <div class="session-info-box">
+                <p id="session-discription">설명이 깁니다. 설명이 깁니다. 설명이 깁니다. 설명이 깁니다. 설명이 깁니다.</p>
+            </div>
+
+            <div class="session-info-box">
+                <p>현재 참여 인원수 : </p>
+            </div>
+
+            <div class="session-info-box">
+                <p>올라온 질문 수 : </p>
+            </div>
+
+            <button id="join-session">세션 입장하기</button>
+            <button id="exit-session">세션 나가기</button>
+        </div>
     `;
 
         document.getElementById('exit-button').addEventListener('click', returnMyPanel);
@@ -78,4 +89,57 @@ document.addEventListener('DOMContentLoaded', () => {
         .catch(error => {
             console.error("인증 확인 실패:", error);
         });
+});
+
+var sessionList = document.querySelectorAll('.session-list ul li');
+
+for (var i = 0; i < sessionList.length; i++) {
+    sessionList[i].addEventListener('click', function () {
+        sessionPanel();
+    });
+}
+
+function returnMyPanel() {
+    panel.innerHTML = myPanel;
+}
+
+document.getElementById("toggle-panel-button").addEventListener("click", function () {
+    document.querySelector(".side-panel").classList.toggle("active");
+});
+
+
+document.getElementById("nav-toggle").addEventListener("click", () => {
+  document.getElementById("nav-menu").classList.toggle("active");
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("sessionModal");
+  const openBtn = document.getElementById("create-session-button");
+  const closeBtn = document.getElementById("closeModal");
+
+  openBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    modal.style.display = "block";
+  });
+
+  closeBtn.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  document.getElementById("submitSessionBtn").addEventListener("click", () => {
+    const title = document.getElementById("sessionTitleInput").value.trim();
+    if (title) {
+      alert(`새 세션 제목: "${title}"`);
+      modal.style.display = "none";
+      document.getElementById("sessionTitleInput").value = "";
+      // TODO: 서버에 세션 생성 요청 보내기
+    }
+  });
 });
