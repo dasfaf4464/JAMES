@@ -4,12 +4,24 @@
 
 import app.util.db as db
 import atexit
+import json
 
 
 class RedisManager:
     def __init__(self, redis_db_num):
-        self.redis = db.get_redis_connection(redis_db_num)
+        self.redis_client = db.get_redis_connection(redis_db_num)
+        atexit.register(self.disconnect)
 
+    def disconnect(self):
+        db.disconnect_redis(self.redis_client)
+        self.redis_client = None
+
+    def push_dict_to_list(self, name :str, data: dict):
+        seriealize_data = json.dumps(data)
+        try:
+            self.redis_client.lpush(name, seriealize_data)
+        except Exception as e:
+            print(e)
 
 class MariadbManager:
     def __init__(self, id, pw):
@@ -34,3 +46,4 @@ class MariadbManager:
 
 mariadb_admin_manager = MariadbManager(db.DB_ADMIN.get("id"), db.DB_ADMIN.get("pw"))
 mariadb_user_manager = MariadbManager(db.DB_USER.get("id"), db.DB_USER.get("pw"))
+redis_manager = RedisManager(0)

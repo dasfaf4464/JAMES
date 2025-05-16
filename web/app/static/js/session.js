@@ -11,9 +11,11 @@ document.addEventListener("DOMContentLoaded", function () {
     })
       .then(res => res.json())
       .then(data => {
-        if (data.isSuccess) {
-          window.location.href = data.redirect_url;
+        if (data.error == 1) {
+          alert("시스템 조작을 시도하였습니다. 다시는 그러지 마세요")
         } else {
+          var count = data.count
+          data.text[1]
           alert(data.message);
         }
       })
@@ -42,7 +44,6 @@ document.addEventListener("DOMContentLoaded", function () {
     summaryButton.addEventListener('click', (e) => {
         e.preventDefault();
 
-        // 선택된 요약 질문 찾기 (중요)
         const selectedBox = document.querySelector('.LLM-list-panel .box.selected');
         if (!selectedBox) {
             alert("요약된 질문을 먼저 선택해주세요.");

@@ -4,7 +4,7 @@
 ## 팀원
 |조해천|문준서|이상훈|이지연|
 |:---:|:---:|:---:|:---:|
-|팀장|LLM|DB|Web Front|
+|팀장, Back, DB|LLM 설정|논문|Web Front|
 |컴퓨터공학부 4학년|컴퓨터공학전공 3학년|수학과 4학년|컴퓨터공학전공 3학년|
 |[@github](https://www.github.com/dasfaf4464)|[@github](https://www.github.com/odpd09091)|[@github](https://www.github.com/KGU-LSH)|[@github](https://www.github.com/leejiyeoniya)|
 
@@ -62,5 +62,5 @@
 2. 최종 보고서 제출(2025-06-05)
 3. 캡스톤 디자인 발표(2025-06-11)
 #### 한국정보기술학회 대학생논문경진대회
-1. 논문 모집(2025-05-15)
+1. 논문 모집(완)
 2. 경진 대회(2025-06-12~13)

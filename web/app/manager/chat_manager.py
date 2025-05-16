@@ -2,23 +2,47 @@
 세션을 관리하는 클래스입니다.
 """
 
-from flask_socketio import SocketIO, emit
+from flask import jsonify
+from flask_socketio import SocketIO, emit, rooms
+from datetime import datetime, timedelta, timezone
+from app.util.naming import create_server_code
+from app.manager.db_manager import redis_manager
+
+active_sessions = dict()
+
+def isActivated(session_code: str):
+    return session_code in active_sessions
 
 class ChatManager:
-    def __init__(self, sessioncode, session_name, admin_uuid, admin_name, temporary, isOpen):
+    def __init__(self, sessioncode, admin_key, temporary):
         self.sessioncode = sessioncode
-        self.session_name = session_name
-        self.user = dict
-        self.admin = admin_uuid
-        self.user.update(admin_uuid, admin_name)
-        self.temporary = temporary
-        self.isOpen = isOpen
-        self.isExpired = False
-        self.start_time = None
-        self.end_time = None
+        self.session_name = None
+        self.room = None
+        self.admin_key = admin_key
+        self.isTemporary = True
+        self.isOpen = False
+        self.password = None
+        self.start_time = datetime.now(timezone.utc)
 
-    def join_new_user(self, uuid:str, name:str):
-        self.user[uuid] = name
+    def create_room(self, admin_key, set_temporary):
+        new_session_code = create_server_code()
+        while new_session_code in active_sessions:
+            new_session_code = create_server_code()
 
-    def change_admin(self, uuid:str):
-        self.admin = uuid
+        new_session = ChatManager(new_session_code, admin_key, set_temporary)
+        active_sessions.update({new_session_code:new_session})
+
+    def get_text_fromuser(user_key ,text: str):
+        redis_manager.push_dict_to_list("user_text", {user_key:text})
+
+    def push_text_touser(user_key, text_set: set):
+        return
+
+    def change_admin(self, new_admin_key):
+        self.admin_key = new_admin_key
+
+    def update_options(self, name, temporary: bool, open: bool, password):
+        self.session_name = name
+        self.isTemporary = temporary
+        self.isOpen = open
+        self.password = password
