@@ -10,6 +10,8 @@ from app.manager.db_manager import redis_manager
 
 active_sessions = dict()
 
+def isActivated(session_code: str):
+    return session_code in active_sessions
 
 class ChatManager:
     def __init__(self, sessioncode, admin_key, temporary):
@@ -22,22 +24,19 @@ class ChatManager:
         self.password = None
         self.start_time = datetime.now(timezone.utc)
 
-    def isActivated(session_code):
-        return session_code in active_sessions
-
     def create_room(self, admin_key, set_temporary):
         new_session_code = create_server_code()
         while new_session_code in active_sessions:
             new_session_code = create_server_code()
 
         new_session = ChatManager(new_session_code, admin_key, set_temporary)
-        active_sessions.update(new_session_code, new_session)
+        active_sessions.update({new_session_code:new_session})
 
-    def get_text_fromuser(user_key: str ,text: str):
-        redis_manager.push_dict_to_list("user_text")
+    def get_text_fromuser(user_key ,text: str):
+        redis_manager.push_dict_to_list("user_text", {user_key:text})
 
-    def push_text_touser(user_key: str, text_set: set):
-        redis_manager
+    def push_text_touser(user_key, text_set: set):
+        return
 
     def change_admin(self, new_admin_key):
         self.admin_key = new_admin_key

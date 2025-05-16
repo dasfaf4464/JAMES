@@ -10,52 +10,64 @@
 </head>
 
 <body>
+    <script>
+        let socket = new WebSocket("ws://localhost:5501");
+    </script>
+
     <header>
-        <img src="../static/image/logo.png">
-        <h1>방 이름</h1>
-        <h5>시작 시간</h5>
     </header>
-
     <main>
-
-        <div id="board">
-            <div id="categories">
-                <p id="categorie">대분류/중분류/소분류</p>
-            </div>
-
-            <div class="bottom-controls">
-                <div id="options">
-                    <div id="question-options">
-                        <lable>원본 같이 보내기<input type="checkbox"></lable>
-                        <label>LLM 이용하기<input type="checkbox"></label>
-                    </div>
-                    <div class="session-option">
-                        <button>나가기</button>
-                    </div>
+        <div class="category-panel">
+            <div class="categories">
+                <div class="category-box">
+                    <p>카테고리original</p>
                 </div>
-                <form id="chatForm">
-                    <div class="questionBar">
-                        <input type="text" id="QBar" class="form-control rounded-pill" placeholder="질문을 입력하세요">
-                        <button class=questionButton type="button">Enter</button>
-                    </div>
-                </form>
+            </div>
+            <!--입력창 영역 -->
+            <form id="chatForm" class="chat-form">
+                <div class="questionBar">
+                    <input type="text" id="originaltext" class="form-control rounded-pill" placeholder="질문을 입력하세요">
+                    <button class=questionButton id="questionButton" type="button">submit</button>
+                </div>
+                <div class="summary-wrapper">
+                    <button class="summaryButton">summary</button>
+                </div>
+                <!--
+                <button>입력 옵션 선택 버튼들</button>
+                <button>나가기 권한 설정 버튼</button>
+                -->
+            </form>
+        </div>
+        <div class="right-panel">
+            <div class="cartegory-list-panel">
+                <div class="category-title">#카테고리</div>
+                <div class="box">요약된 질문</div>
+                <div class="box">요약된 질문</div>
+                <div class="box">요약된 질문</div>
+                <div class="box">요약된 질문</div>
+                <div class="box">요약된 질문</div>
+                <div class="box">요약된 질문</div>
+                <div class="box">요약된 질문</div>
+                <div class="box">요약된 질문</div>
+                <div class="box">요약된 질문</div>
+            </div>
+            <div class="LLM-list-panel">
+                <div class="box">전달받은 llm 리스트 AI</div>
+                <div class="box">전달받은 llm 리스트 운영체제</div>
+                <div class="box">전달받은 llm 리스트 네트워크</div>
+                <div class="box">전달받은 llm 리스트 프론트엔드</div>
             </div>
         </div>
-
-        <div id="right-panel">
-            <div id="categorie-questions">
-                <p id="title">선택된 카테고리</p>
-                <ul>
-                    <li>질문 리스트</li>
-                </ul>
-            </div>
-            <div id="through-llm">
-                <ul>
-                    <li>전달받은 문장</li>
-                </ul>
+        <div id="questionModal" class="modal-overlay" style="display: none;">
+            <div class="modal-content">
+                <span class="close-button">&times;</span>
+                <h5>질문 리스트</h5>
+                <ul id="modal-question-list"></ul>
             </div>
         </div>
     </main>
+    <footer>
+    </footer>
     <script src="../static/js/session.js"></script>
 </body>
 

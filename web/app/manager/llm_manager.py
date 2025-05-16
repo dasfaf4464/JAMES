@@ -6,7 +6,6 @@ LLMManager의 인트턴스는 agent와 1:1로 대응됩니다.
 
 from mistralai import Mistral
 from config import API_KEY, AGENT_ID
-from concurrent.futures import ThreadPoolExecutor, TimeoutError
 import re
 import json
 
@@ -90,7 +89,7 @@ class LLMManager:
         2. 의미없는 문자가 나열될 때 -> errorcode = 2
         3. 정상 입력인 경우 error_code = 0
         """
-        if len(user_input) < 1 or  len(user_input) > 500:
+        if len(user_input) < 2 or  len(user_input) > 500:
             return False
         if is_fully_meaningless_string(user_input):
             return ERRORCODE_ABNORMAL

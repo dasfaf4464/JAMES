@@ -29,7 +29,7 @@ def user_join_room():
     data = request.get_json()
     return
 
-@sendtoLLM_bp.route('/llm', method=["POST"])
+@sendtoLLM_bp.route('/llm', method=["POST", "GET"])
 def send_to_llm():
     """
     사용자가 보내려 하는 메세지를 가공하여 llm로 보냅니다.
@@ -41,6 +41,10 @@ def send_to_llm():
     """
     request_data = request.get_data(as_text=True)
     from_llm = llmManager[0]._request_llm(request_data)
+    
+    if from_llm is False:
+        response_data = {"error-content":"length error"}
+        return make_response(response_data)
     
     count = len(from_llm[0]) + len(from_llm[1]) + len(from_llm[2])
 
