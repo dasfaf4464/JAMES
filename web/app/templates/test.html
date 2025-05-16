@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Div 생성기</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    #container {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .box {
+      width: 100px;
+      height: 100px;
+      background-color: skyblue;
+      border: 2px solid #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="addBox()">박스 추가</button>
+  <div id="container"></div>
+
+  <script>
+    let count = 1;
+
+    function addBox() {
+      const container = document.getElementById('container');
+      const newBox = document.createElement('div');
+      newBox.className = 'box';
+      newBox.textContent = `Box ${count++}`;
+      container.appendChild(newBox);
+    }
+  </script>
+</body>
+</html>

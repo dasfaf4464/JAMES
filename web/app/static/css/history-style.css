@@ -28,6 +28,49 @@ main {
     display: flex;
     flex-direction: column;
     overflow: hidden;
+        overflow-y: auto;      /* ✅ 넘칠 경우 스크롤 */
+    max-height: 100vh;
+        scrollbar-width: none;          /* Firefox */
+    -ms-overflow-style: none;  
+}
+
+main::-webkit-scrollbar {
+    display: none;                  /* Chrome, Safari */
+}
+
+.myQuestionContainer {
+    display: flex;
+    flex-direction: column;
+    height: 300px;
+    width: 100%;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.myQuestionContainer ul {
+        flex: 1;
+            overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+    padding: 10px;
+    margin: 10px;
+    gap: 8px;
+    border-radius: 10px;
+    box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+    -ms-overflow-style: none;
+}
+
+.myQuestionContainer li {
+    background-color: #f0f0f0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    color: #333;
+}
+
+.myQuestionContainer ul::-webkit-scrollbar {
+    display: none;
 }
 
 .status-bar {
@@ -49,6 +92,7 @@ main {
     color: white;  
 }
 
+/*
 #button-box {
     display: flex;
 }
@@ -99,7 +143,7 @@ main {
 
 #content-output ol{
     list-style: none;
-    height: 100%;  /* 부모 높이만큼 차지하게 */
+    height: 100%;
     margin: 0;
     padding: 0;
 }
@@ -109,17 +153,13 @@ main {
     width: 100%;
     max-width: 400px;
 }
+    */
 
 footer {
     flex: 0 0 10%;
     display: flex;
     justify-content: space-between;
-    background-color: rgba(0, 0, 0, 0.2);
+    background-color: #FFEBE0;
     padding: 1rem;
     font-size: 0.9rem;
 }
-
-footer p {
-    text-align: left;
-    color: lightgray;
-   }
