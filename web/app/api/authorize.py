@@ -36,7 +36,7 @@ def handle_redirection():
     if is_temporary == "True":
         if request.path == "/home" or request.path == "/history":
             return redirect(url_for("index.index"))
-    else:
+    elif is_temporary == "False":
         if request.path == "/":
             return redirect(url_for("home.home"))
     return None
