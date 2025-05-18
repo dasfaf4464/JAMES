@@ -50,7 +50,7 @@ def send_to_llm():
         JSON { "count": int, "text": str or null, "error": int }
     """
     request_data = request.get_data(as_text=True)
-    from_llm = llmManager[2]._request_llm(request_data)
+    from_llm = llmManager[0]._request_llm(request_data)
 
     if from_llm is False:
         return jsonify({"error_content": "length error"}), 400
