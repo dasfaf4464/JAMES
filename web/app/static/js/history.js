@@ -19,22 +19,29 @@ rotateActionText();
 
 setInterval(rotateActionText, 10000);
 
-function myQuestion() {
-    const button_color = window.getComputedStyle(document.getElementById("my-question")).backgroundColor;
-    document.getElementById('content-box').style.backgroundColor = button_color;
-}
-  
-function myAnswer() {
-    const button_color = window.getComputedStyle(document.getElementById("my-answer")).backgroundColor;
-    document.getElementById("content-box").style.backgroundColor = button_color;
-}
+document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById('home-button').addEventListener('click', (event) => {
+        event.preventDefault();
+        window.location.href = '/home';
+    });
+});
 
-function saving() {
-    const button_color = window.getComputedStyle(document.getElementById("saving")).backgroundColor;
-    document.getElementById("content-box").style.backgroundColor = button_color;
-}
+document.addEventListener("DOMContentLoaded", function () {
+    const layoutButton = document.getElementById("layout-button");
+    const container = document.querySelector(".myQuestionContainer");
 
-function myProfile() {
-    const button_color = window.getComputedStyle(document.getElementById("my-profile")).backgroundColor;
-    document.getElementById("content-box").style.backgroundColor = button_color;
-}
+
+    container.classList.add("list-view");
+
+    layoutButton.addEventListener("click", () => {
+        if (container.classList.contains("list-view")) {
+            container.classList.remove("list-view");
+            container.classList.add("grid-view");
+            layoutButton.textContent = "리스트 레이아웃";
+        } else {
+            container.classList.remove("grid-view");
+            container.classList.add("list-view");
+            layoutButton.textContent = "그리드 레이아웃";
+        }
+    });
+});

@@ -1,3 +1,10 @@
+document.addEventListener("DOMContentLoaded", function () {
+  document.getElementById('history-button').addEventListener('click', (event) => {
+    event.preventDefault();
+    window.location.href = '/history';
+});
+});
+
 document.addEventListener("DOMContentLoaded", () => {
     const panel = document.getElementsByClassName("side-panel")[0];
     const myPanel = panel.innerHTML;
@@ -28,6 +35,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             <button id="join-session">세션 입장하기</button>
             <button id="exit-session">세션 나가기</button>
+
+            <div class="session-info-box">
+                <p>세션 입장 시간 : </p>
+            </div>
+                        <div class="session-info-box">
+                <p>세션 생성 시간 : </p>
+            </div>
         </div>
     `;
 
@@ -141,5 +155,51 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("sessionTitleInput").value = "";
       // TODO: 서버에 세션 생성 요청 보내기
     }
+  });
+
+});document.addEventListener("DOMContentLoaded", () => {
+  const sessionItems = document.querySelectorAll(".session-group-item");
+
+  // 화면 크기에 따라 한 페이지에 보여줄 개수를 설정
+  function getItemsPerPage() {
+    return window.matchMedia("(max-width: 768px)").matches ? 4 : 6;
+  }
+
+  let itemsPerPage = getItemsPerPage();
+  let currentPage = 0;
+
+  function showPage(page) {
+    itemsPerPage = getItemsPerPage(); // 현재 화면 크기에 따라 업데이트
+    const start = page * itemsPerPage;
+    const end = start + itemsPerPage;
+
+    sessionItems.forEach((item, index) => {
+      item.style.display = (index >= start && index < end) ? "flex" : "none";
+    });
+
+    document.getElementById("frontB").disabled = (page === 0);
+    document.getElementById("backB").disabled = (end >= sessionItems.length);
+  }
+
+  showPage(currentPage);
+
+  document.getElementById("frontB").addEventListener("click", () => {
+    if (currentPage > 0) {
+      currentPage--;
+      showPage(currentPage);
+    }
+  });
+
+  document.getElementById("backB").addEventListener("click", () => {
+    if ((currentPage + 1) * getItemsPerPage() < sessionItems.length) {
+      currentPage++;
+      showPage(currentPage);
+    }
+  });
+
+  // 창 크기 변경 시 자동 업데이트 (선택사항)
+  window.addEventListener("resize", () => {
+    currentPage = 0;
+    showPage(currentPage);
   });
 });

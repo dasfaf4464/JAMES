@@ -8,7 +8,7 @@ body {
     height: 100vh;
 }
 
-header{
+header {
     flex: 0 0 10%;
     display: flex;
     align-items: center;
@@ -28,28 +28,84 @@ main {
     display: flex;
     flex-direction: column;
     overflow: hidden;
-        overflow-y: auto;      /* ✅ 넘칠 경우 스크롤 */
     max-height: 100vh;
-        scrollbar-width: none;          /* Firefox */
-    -ms-overflow-style: none;  
 }
 
-main::-webkit-scrollbar {
-    display: none;                  /* Chrome, Safari */
+.status-bar {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    font-size: large;
+}
+
+.status-bar button {
+    background-color: var(--main-button-normal);
+    border: none;
+    padding: 10px 22px;
+    font-size: 16px;
+    border-radius: 5px;
+    color: white;
+}
+
+#check-myquestion {
+    padding: 0px;
+    margin-left: 10px;
+    font-size: 20px;
+}
+
+#layout-button {
+    background-color: var(--main-button-normal);
+    border: none;
+    padding: 10px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    color: white;
+    width: 140px;
+}
+
+.myQuestionContainer.list-view ul {
+    display: block;
+}
+
+.myQuestionContainer.list-view li {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.myQuestionContainer.grid-view ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
+    gap: 12px;
+}
+
+.myQuestionContainer.grid-view li {
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f0f0f0;
 }
 
 .myQuestionContainer {
     display: flex;
     flex-direction: column;
-    height: 300px;
     width: 100%;
-    padding: 1rem;
+    padding: 0px;
     box-sizing: border-box;
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.myQuestionContainer::-webkit-scrollbar {
+    display: none;
 }
 
 .myQuestionContainer ul {
-        flex: 1;
-            overflow-y: auto;
+    flex: 1;
     display: flex;
     flex-direction: column;
     list-style: none;
@@ -58,102 +114,20 @@ main::-webkit-scrollbar {
     gap: 8px;
     border-radius: 10px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-    -ms-overflow-style: none;
 }
 
 .myQuestionContainer li {
     background-color: #f0f0f0;
-    padding: 8px 12px;
+    padding: 15px 20px;
     border-radius: 10px;
     font-size: 0.9rem;
+    border: 1px solid #ccc;
     color: #333;
 }
 
 .myQuestionContainer ul::-webkit-scrollbar {
     display: none;
 }
-
-.status-bar {
-    display: flex;
-    flex: 0 0 auto; /* 고정 높이 */
-    align-items: center;        /* 수직 정렬 */
-    justify-content: space-between; /* 또는 flex-start, center 등 원하는 정렬 */
-    gap: 10px;                  /* 요소 사이 간격 */
-    padding: 10px;
-    font-size: large;
-}
-
-.status-bar button{
-    background-color: var(--main-button-normal);
-    border: none;
-    padding: 10px 22px;
-    font-size: 16px;
-    border-radius: 5px; 
-    color: white;  
-}
-
-/*
-#button-box {
-    display: flex;
-}
-
-.history-box {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-#button-box button {
-    border-radius: 10px 10px 0px 0px;
-    border: none;
-    box-shadow: inset 0px 0px 0px 0px;
-}
-
-#my-question {
-    background-color: var(--main-button-normal);
-}
-
-#my-answer {
-    background-color: var(--history-button-1);
-}
-
-#saving {
-    background-color: var(--history-button-2);
-}
-
-#my-profile {
-    background-color: salmon;
-}
-
-#content-box {
-    flex: 1;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    padding: 15px;
-    background-color: var(--main-button-normal);
-}
-
-#content-output{
-    flex: 1;
-    overflow-y: auto;
-    background-color: #ffffff;
-}
-
-#content-output ol{
-    list-style: none;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-}
-
-.form-control {
-    display: flex;
-    width: 100%;
-    max-width: 400px;
-}
-    */
 
 footer {
     flex: 0 0 10%;
@@ -162,4 +136,28 @@ footer {
     background-color: #FFEBE0;
     padding: 1rem;
     font-size: 0.9rem;
+}
+@media (max-width: 768px) {
+
+    header img {
+        width: 30%;
+    }
+
+    main {
+        flex-direction: column;
+    }
+
+    footer {
+        flex-direction: column;
+        font-size: 0.8rem;
+        align-items: center;
+        text-align: center;
+    }
+
+.myQuestionContainer.grid-view ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 12px;
+}
+
 }
