@@ -26,40 +26,52 @@ header img {
 }
 
 .modal {
-  display: none; 
-  position: fixed;
-  z-index: 2000;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5); 
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
-  background-color: #fff;
-  margin: 15% auto;
-  padding: 20px 30px;
-  border-radius: 12px;
-  width: 80%;
-  max-width: 400px;
-  position: relative;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px 30px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 }
 
 .close-button {
-  color: #aaa;
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  font-size: 24px;
-  font-weight: bold;
-  cursor: pointer;
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .close-button:hover {
-  color: #333;
+    color: #333;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .create-session {
@@ -74,7 +86,6 @@ header img {
     background-color: var(--main-button-emphasize);
 }
 
-
 #nav-toggle {
     position: absolute;
     right: 20px;
@@ -87,7 +98,7 @@ header img {
 }
 
 #nav-menu.active {
-  display: flex;
+    display: flex;
 }
 
 .nav-buttons {
@@ -120,6 +131,11 @@ main {
     background-color: var(--main-theme-background);
 }
 
+#sessionexplain {
+    height: 100px;
+    margin-top: 10px;
+}
+
 #toggle-panel-button {
     display: none;
     position: absolute;
@@ -134,7 +150,7 @@ main {
 
 .session-group-item {
     border-radius: 10px;
-    padding: 10px;
+    padding: 13px;
 }
 
 .session-list {
@@ -318,8 +334,8 @@ main {
 .session-info-box {
     background-color: #ffffff;
     border-radius: 10px;
-    padding: 12px;
-    margin-bottom: 10px;
+    padding: 10px;
+    margin-top: 10px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid #eee;
 }
@@ -393,7 +409,7 @@ footer {
 @media (max-width: 768px) {
 
     header img {
-        width: 40%;
+        width: 30%;
     }
 
     #nav-toggle {
@@ -401,28 +417,28 @@ footer {
     }
 
     .nav-buttons {
-    display: none;
-    flex-direction: column;
-    position: absolute;
-    top: 125px;
-    right: 20px;
-    background-color: white;
-    padding: 10px;
-    gap: 8px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    z-index: 1001
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 125px;
+        right: 20px;
+        background-color: white;
+        padding: 10px;
+        gap: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        z-index: 1001
     }
 
-      #nav-buttons.active {
-    display: flex;
-  }
+    #nav-buttons.active {
+        display: flex;
+    }
 
-  #nav-buttons button {
-    width: 100%;
-    padding: 10px;
-    font-size: 1rem;
-  }
+    #nav-buttons button {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+    }
 
     .myhistory-panel {
         justify-content: center;
@@ -479,7 +495,14 @@ footer {
         font-size: 0.95rem;
         line-height: 1.5;
         border-radius: 0;
+        overflow-y: auto;
+        max-height: 90vh;
     }
+
+    .session-group-item {
+        padding: 10px;
+    }
+
 
     .session-info-box {
         margin-bottom: 12px;
@@ -498,11 +521,6 @@ footer {
         top: 0.5rem;
         right: 0.5rem;
         font-size: 1.5rem;
-    }
-
-    .session-panel-wrapper {
-        overflow-y: auto;
-        max-height: 90vh;
     }
 
     footer {

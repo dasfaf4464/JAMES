@@ -15,7 +15,8 @@ header {
 }
 
 header img {
-    width: 7%;
+    height: 8%;
+    width: 8%;
     height: auto;
     object-fit: contain;
 }
@@ -146,6 +147,7 @@ main {
     padding: 0.5rem 1rem;
     font-size: 1rem;
 }
+
 
 .questionButton {
     background-color: var(--main-button-normal);

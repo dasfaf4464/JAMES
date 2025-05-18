@@ -15,6 +15,7 @@ def isActivated(session_code: str):
 
 class ChatManager:
     def __init__(self, sessioncode, admin_key, temporary):
+        self.user = list()
         self.sessioncode = sessioncode
         self.session_name = None
         self.room = None
@@ -30,9 +31,10 @@ class ChatManager:
             new_session_code = create_server_code()
 
         new_session = ChatManager(new_session_code, admin_key, set_temporary)
+        new_session.user.append(admin_key)
         active_sessions.update({new_session_code:new_session})
 
-    def get_text_fromuser(user_key ,text: str):
+    def get_text_fromuser(user_key ,text: str, category: dict):
         redis_manager.push_dict_to_list("user_text", {user_key:text})
 
     def push_text_touser(user_key, text_set: set):

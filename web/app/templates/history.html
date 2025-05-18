@@ -15,35 +15,11 @@
     <main>
         <div class="status-bar">
             <p>{{name}}로 <span id="action-text">{{action}}</span> {{day}} 일 째</p>
-            <button>메인화면</button>
+            <button id="home-button">메인화면</button>
         </div>
-        <!--
-        <div class="history-box">
-            <div id="button-box">
-                <button id="my-question" class="tab-button selected" onclick="myQuestion()">나의 질문 보기</button>
-                <button id="my-answer" class="tab-button" onclick="myAnswer()">나의 대답 보기</button>
-                <button id="saving" class="tab-button" onclick="saving()">저장한 질의응답</button>
-                <button id="my-profile" class="tab-button" onclick="myProfile()">나의 프로필</button>
-                <input class="form-control rounded" type="text" placeholder="검색하기">
-            </div>
-            <div id="content-box">
-                <div id="content-output">
-                    <ol>
-                        <li>
-                            <p>질문 내용 답변 개수 : </p>
-                        <li>
-                            <p>질문 내용1</p>
-                            <p>질문 내용2</p>
-                        </li>
-                        </li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-        -->
+        <div id="check-myquestion"> 나의 질문 보기 <button id="layout-button">레이아웃 선택</button></div>
         <div class="myQuestionContainer">
             <ul>
-                <p>나의 질문 보기</p>
                 <li>질문 답변 개수 : </li>
                 <li>질문1</li>
                 <li>질문2</li>

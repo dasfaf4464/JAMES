@@ -74,9 +74,9 @@ def get_redis_connection(dbnum: int):
         return None
 
 
-def disconnect_redis(redis: redis.Redis):
+def disconnect_redis(redis: redis.Redis.client):
     try:
-        redis.client_kill()
+        redis.client_kill(redis)
     except ConnectionError as e:
         print("redis already disconnected")
 

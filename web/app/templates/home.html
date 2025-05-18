@@ -18,8 +18,7 @@
         <img src="../static/image/logo.png">
         <button id="nav-toggle">☰</button>
         <div class="nav-buttons" id="nav-menu">
-            <button onclick="location.href='index.html'">메인 화면</button>
-            <button onclick="location.href='history.html'">기록 화면</button>
+            <button id="history-button">기록 화면</button>
             <button id="logout-button">로그아웃</button>
         </div>
     </header>
@@ -37,6 +36,43 @@
                     <p id="session-title">세션 제목</p>
                     <p id="session-info">현재 입장 인원: <br>질문 수:</p>
                     <p id="session-period">영구</p>
+                    <img id="session-icon" src="../static/image/computer.svg">
+                </li>
+                <li class="session-group-item">
+                    <p id="session-title">세션 제목</p>
+                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
+                    <p id="session-period">임시</p>
+                    <img id="session-icon" src="../static/image/computer.svg">
+                </li>
+                <li class="session-group-item">
+                    <p id="session-title">세션 제목</p>
+                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
+                    <p id="session-period">영구</p>
+                    <img id="session-icon" src="../static/image/computer.svg">
+                </li>
+                <li class="session-group-item">
+                    <p id="session-title">세션 제목</p>
+                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
+                    <p id="session-period">임시</p>
+                    <img id="session-icon" src="../static/image/computer.svg">
+                </li>
+                <li class="session-group-item">
+                    <p id="session-title">세션 제목</p>
+                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
+                    <p id="session-period">영구</p>
+                    <img id="session-icon" src="../static/image/computer.svg">
+                </li>
+                                <li class="session-group-item">
+                    <p id="session-title">세션 제목</p>
+                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
+                    <p id="session-period">임시</p>
+                    <img id="session-icon" src="../static/image/computer.svg">
+                </li>
+                <li class="session-group-item">
+                    <p id="session-title">세션 제목</p>
+                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
+                    <p id="session-period">영구</p>
+                    <img id="session-icon" src="../static/image/computer.svg">
                 </li>
             </ul>
             <div class="page-num">
@@ -54,7 +90,6 @@
                 <ul>
                     <li>질문한 횟수 : {{list.question}}</li>
                     <li>대답한 횟수 : {{list.answer}}</li>
-                    <li>저장한 질문 갯수 : {{list.saving}}</li>
                 </ul>
             </div>
             <form>
@@ -70,10 +105,15 @@
                 <span class="close-button" id="closeModal">&times;</span>
                 <h2>새 세션 만들기</h2>
                 <input type="text" id="sessionTitleInput" class="form-control rounded" placeholder="세션 제목을 입력하세요">
+                <input type="text" id="sessionexplain" class="form-control rounded" placeholder="세션 설명을 입력하세요">
+                <br>
+                <div class="radio-group">
+                <label><input type="radio" name="chk_info" value="임시">임시</label>
+                <label><input type="radio" name="chk_info" value="영구">영구</label>
+                </div>
                 <button id="submitSessionBtn" class="create-session rounded">생성하기</button>
             </div>
         </div>
-
     </main>
     <footer>
         <div id="menu">
