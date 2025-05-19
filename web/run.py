@@ -17,7 +17,7 @@ from config import CLOUDFLARE_TUNNEL_COMMAND, MARIADB_COMMAND, REDIS_COMMAND
 
 app = create_app()
 
-socketio = SocketIO(app, async_mode="eventlet")
+socketio = SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
 init_socketio(socketio=socketio)
 
 cloudflare_process = None

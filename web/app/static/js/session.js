@@ -1,4 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
+  /**
+   * 웹소켓 연결
+   */
+  const path = window.location.pathname;
+  const parts = path.split('/');
+  const sessionCode = parts[parts.length - 1];
+  console.log(sessionCode);
+
+  const socket = io("http://localhost:5000", {
+    query: {
+      session_code: sessionCode
+    }
+  });
+
+  /**
+   * 연속 클릭 방지
+   */
   const questionButton = document.getElementById('questionButton');
   let canClick = true;
 
@@ -10,6 +27,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
     canClick = false
 
+    /**
+     * http 서버에 llm 연결 요청
+     */
     const originaltext = document.getElementById('originaltext').value.trim();
 
     fetch('/room/llm', {
@@ -28,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function () {
           data.text.forEach(summary => {
             const box = document.createElement('div');
             box.className = 'box';
+            box.dataset.originaltext = summary.original
             box.textContent = summary.content;
 
             box.dataset.main = summary.category.main;
@@ -38,6 +59,7 @@ document.addEventListener("DOMContentLoaded", function () {
               document.querySelectorAll('.LLM-list-panel .box').forEach(b => b.classList.remove('selected'));
               box.classList.add('selected');
 
+              console.log(`Original: ${box.dataset.originaltext}`)
               console.log(`Main: ${box.dataset.main}`);
               console.log(`Sub: ${box.dataset.sub}`);
               console.log(`Minor: ${box.dataset.minor}`);

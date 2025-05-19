@@ -69,7 +69,7 @@ def send_to_llm():
     response_data = {
         "count": len(combined),
         "text": [
-            {"content": item["content"], "category": item["category"]}
+            {"original":request_data, "content": item["content"], "category": item["category"]}
             for item in combined
         ],
         "error": error,
@@ -79,7 +79,7 @@ def send_to_llm():
 
 def init_socketio(socketio):
     @socketio.on("connect")
-    def handle_connect():
+    def handle_connect(data):
         session_code = request.args.get("session_code")
 
         if session_code:
@@ -95,7 +95,7 @@ def init_socketio(socketio):
             emit("error", "세션 코드가 제공되지 않았습니다.", room=request.sid)
 
     @socketio.on("disconnect")
-    def handle_disconnect():
+    def handle_disconnect(data):
         """
         사용자의 소켓 연결이 끊겼을 때 실행됩니다.
         어떤 방에 속해 있었는지는 이 시점에서 직접 알 수는 없지만,
@@ -104,8 +104,14 @@ def init_socketio(socketio):
         print(f"[DISCONNECT] {request.sid} disconnected.")
 
     @socketio.on("error")
-    def handle_error():
+    def handle_error(data):
         """ """
+
+    @socketio.on("test")
+    def test(data: str):
+        print(data)
+
+
 
     @socketio.on("select_llm", namespace="/")
     def handle_select_llm(data):
