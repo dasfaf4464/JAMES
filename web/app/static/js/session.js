@@ -1,34 +1,68 @@
 document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById('questionButton').addEventListener('click', (event) => {
+  //websocket link start
+  const path = window.location.pathname;
+  const parts = path.split('/');
+  const sessionCode = parts[parts.length - 1];
+  console.log(sessionCode);
+
+  const socket = io("http://localhost:5000", {
+    query: {
+      session_code: sessionCode
+    }
+  });
+  //websocket link end
+
+  //question-button start
+  const questionButton = document.getElementById('questionButton');
+  let canClick = true;
+
+  /**
+   * 연속 클릭 방지
+   */
+  questionButton.addEventListener('click', (event) => {
     event.preventDefault();
 
+    if (!canClick) {
+      return;
+    }
+    canClick = false
+
+    /**
+     * http 서버에 llm 연결 요청
+     */
     const originaltext = document.getElementById('originaltext').value.trim();
 
-    fetch('/auth/post_question', {
+    fetch('/room/llm', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ originaltext })
+      headers: { 'Content-Type': 'text/plain' },
+      body: originaltext
     })
       .then(res => res.json())
       .then(data => {
         if (data.error == 1) {
           alert("시스템 조작을 시도하였습니다. 질문을 다시 입력하세요.");
         } else {
-          alert(`총 ${data.count}개의 요약을 받았습니다.`);
-
           const llmPanel = document.querySelector('.LLM-list-panel');
           llmPanel.innerHTML = ''; // 기존 요약 박스 초기화
 
-          // text_list 순회하며 박스 추가
           data.text.forEach(summary => {
             const box = document.createElement('div');
             box.className = 'box';
-            box.textContent = summary;
+            box.dataset.originaltext = summary.original
+            box.textContent = summary.content;
 
-            // 선택 이벤트 연결
+            box.dataset.main = summary.category.main;
+            box.dataset.sub = summary.category.sub;
+            box.dataset.minor = summary.category.minor;
+
             box.addEventListener('click', () => {
               document.querySelectorAll('.LLM-list-panel .box').forEach(b => b.classList.remove('selected'));
               box.classList.add('selected');
+
+              console.log(`Original: ${box.dataset.originaltext}`)
+              console.log(`Main: ${box.dataset.main}`);
+              console.log(`Sub: ${box.dataset.sub}`);
+              console.log(`Minor: ${box.dataset.minor}`);
             });
 
             llmPanel.appendChild(box);
@@ -37,11 +71,16 @@ document.addEventListener("DOMContentLoaded", function () {
       })
       .catch(err => {
         console.error('error:', err);
+      })
+      .finally(() => {
+        setTimeout(() => {
+          canClick = true;
+        }, 2000);
       });
   });
-});
+  //question-button end
 
-document.addEventListener('DOMContentLoaded', function () {
+  //LLM list start
   const boxes = document.querySelectorAll('.LLM-list-panel .box');
 
   boxes.forEach(box => {
@@ -50,6 +89,9 @@ document.addEventListener('DOMContentLoaded', function () {
       box.classList.add('selected');
     });
   });
+  //LLM list end
+
+
 });
 
 /*
@@ -96,64 +138,9 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 });
+재작성 필요
 */
-
-// 질문 전송 후 요약 리스트 받아오기
-document.addEventListener("DOMContentLoaded", function () {
-  document.getElementById('questionButton').addEventListener('click', (event) => {
-    event.preventDefault();
-
-    const originaltext = document.getElementById('originaltext').value.trim();
-
-    fetch('/auth/post_question', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ originaltext })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.error == 1) {
-          alert("시스템 조작을 시도하였습니다. 질문을 다시 입력하세요.");
-        } else {
-          alert(`총 ${data.count}개의 요약을 받았습니다.`);
-
-          const llmPanel = document.querySelector('.LLM-list-panel');
-          llmPanel.innerHTML = ''; // 기존 요약 박스 초기화
-
-          // 요약 리스트 박스 생성
-          data.text.forEach(summary => {
-            const box = document.createElement('div');
-            box.className = 'box';
-            box.textContent = summary;
-
-            box.addEventListener('click', () => {
-              document.querySelectorAll('.LLM-list-panel .box').forEach(b => b.classList.remove('selected'));
-              box.classList.add('selected');
-            });
-
-            llmPanel.appendChild(box);
-          });
-        }
-      })
-      .catch(err => {
-        console.error('error:', err);
-      });
-  });
-});
-
-// 선택 이벤트 (기본 박스용)
-document.addEventListener('DOMContentLoaded', function () {
-  const boxes = document.querySelectorAll('.LLM-list-panel .box');
-
-  boxes.forEach(box => {
-    box.addEventListener('click', () => {
-      boxes.forEach(b => b.classList.remove('selected'));
-      box.classList.add('selected');
-    });
-  });
-});
-
-// 📌 요약을 바탕으로 카테고리 생성 및 카운팅
+/*
 document.addEventListener("DOMContentLoaded", function () {
   const summaryButton = document.querySelector('.summaryButton');
   const categoriesContainer = document.querySelector('.categories');
@@ -161,60 +148,30 @@ document.addEventListener("DOMContentLoaded", function () {
   summaryButton.addEventListener('click', (e) => {
     e.preventDefault();
 
+    // 선택된 요약 질문 찾기 (테스트용이지만 실제 구조 유지)
     const selectedBox = document.querySelector('.LLM-list-panel .box.selected');
     if (!selectedBox) {
       alert("요약된 질문을 먼저 선택해주세요.");
       return;
     }
 
-document.querySelectorAll('.category-box').forEach(box => {
-  box.style.transform = "scale(5)";
-});
-
     const selectedSummary = selectedBox.textContent;
+
+    // 🧪 임시 카테고리 (선택된 요약에 따라 임의 생성)
     const fakeCategory = generateFakeCategory(selectedSummary);
 
-    // 기존 카테고리 박스가 있는지 확인
-    const existingBox = Array.from(categoriesContainer.querySelectorAll('.category-box')).find(box => {
-      return box.dataset.category === fakeCategory;
-    });
+    // category-box 생성
+    const box = document.createElement('div');
+    box.className = 'category-box';
 
-if (existingBox) {
-  let count = parseInt(existingBox.dataset.count || "1", 10);
-  count += 1;
-  existingBox.dataset.count = count;
-  existingBox.querySelector('p').textContent = `${fakeCategory} ×${count}`;
+    const p = document.createElement('p');
+    p.textContent = fakeCategory;
 
-  // ✅ 직접 width/height 조절 방식
-  const baseSize = 120; // 초기 사이즈 (px)
-  const newSize = baseSize + (count - 1) * 40; // 40px씩 증가
-  existingBox.style.width = `${newSize}px`;
-  existingBox.style.height = `${newSize}px`;
-
-  // 시각적으로 확인하기 쉽게 테두리나 색 강조
-  existingBox.style.border = "2px solid #007acc";
-  console.log("Size updated:", newSize + "px");
-}
- else {
-  const box = document.createElement('div');
-box.className = 'category-box';
-box.dataset.category = fakeCategory;
-box.dataset.count = 1;
-
-const p = document.createElement('p');
-p.textContent = fakeCategory;
-
-box.appendChild(p);
-categoriesContainer.appendChild(box);
-
-// 기본 크기 설정
-box.style.width = '120px';
-box.style.height = '120px';
-
-}
+    box.appendChild(p);
+    categoriesContainer.appendChild(box);
   });
 
-  // 요약 문장으로부터 카테고리 추출 (임시 분류 기준)
+  // 임시로 요약 문장에 따라 카테고리 뽑아내는 함수
   function generateFakeCategory(summary) {
     if (summary.includes("AI") || summary.includes("인공지능")) return "AI";
     if (summary.includes("운영체제") || summary.includes("커널")) return "운영체제";
@@ -223,4 +180,15 @@ box.style.height = '120px';
     return "기타";
   }
 });
-
+*/
+/**
+ * 주석 적을때 함수에 기능, 인수, 반환값 필요/
+ * 서버 요청이면 보내는 데이터 타입, 종류, 받는 데이터 타입, 종류 작성 
+ * dom에 event 연결하는 람다 함수방식으로 contentload 안에 적을 거면 전부 다 안에 작성 필요
+ * 
+ * 해야할 일 : 세션 접속시 참여 API로 session의 옵션 확인(비밀번호, 사용자 키) -> 이후 세션 초기화 후 사용자 웹소켓 연결
+ * 세션 웹소켓 연결 후 메세지 발신 이벤트 연결 (버튼 클릭시, 에러코드 2번인 선택지는 선택 불가능 하도록 작성), 서버에서 보내는 메세지 처리 함수(메세지 수신 이후 해당 정보에 css)
+ * 카테고리 선택시 AJAX HTTP로 질문 리스트 가져오는 API 연결
+ * 
+ * 세션 관련된 api는 api/room.py 에서 찾아보기
+ */

@@ -90,6 +90,7 @@ class LLMManager:
         3. 정상 입력인 경우 error_code = 0
         """
         if len(user_input) < 2 or  len(user_input) > 500:
+            print(len(user_input))
             return False
         if is_fully_meaningless_string(user_input):
             return ERRORCODE_ABNORMAL

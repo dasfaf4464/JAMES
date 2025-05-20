@@ -14,25 +14,27 @@ def isActivated(session_code: str):
     return session_code in active_sessions
 
 class ChatManager:
-    def __init__(self, sessioncode, admin_key, temporary):
+    def __init__(self, sessioncode: str, admin_key:str, temporary:bool, open: bool):
+        self.user = list()
         self.sessioncode = sessioncode
         self.session_name = None
         self.room = None
         self.admin_key = admin_key
         self.isTemporary = True
-        self.isOpen = False
+        self.isOpen = open
         self.password = None
         self.start_time = datetime.now(timezone.utc)
 
-    def create_room(self, admin_key, set_temporary):
+    def create_room(self, admin_key, temporary: bool, open: bool):
         new_session_code = create_server_code()
         while new_session_code in active_sessions:
             new_session_code = create_server_code()
 
-        new_session = ChatManager(new_session_code, admin_key, set_temporary)
+        new_session = ChatManager(new_session_code, admin_key, temporary)
+        new_session.user.append(admin_key)
         active_sessions.update({new_session_code:new_session})
 
-    def get_text_fromuser(user_key ,text: str):
+    def get_text_fromuser(user_key ,text: str, category: dict):
         redis_manager.push_dict_to_list("user_text", {user_key:text})
 
     def push_text_touser(user_key, text_set: set):

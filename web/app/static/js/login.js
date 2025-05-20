@@ -55,3 +55,26 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error("인증 확인 실패:", error);
     });
 });
+
+function formatSessionCodeInput(value) {
+  const cleaned = value.replace(/[^a-zA-Z]/g, '').toUpperCase();
+  const limited = cleaned.substring(0, 12);
+  const groups = limited.match(/.{1,4}/g);
+  return groups ? groups.join('-') : '';
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  const sessionInput = document.getElementById('session-code');
+  if (!sessionInput) return;
+
+  let lastFormatted = '';
+
+  sessionInput.addEventListener('input', () => {
+    const raw = sessionInput.value.replace(/-/g, '');
+    const formatted = formatSessionCodeInput(raw);
+    if (formatted !== lastFormatted) {
+      sessionInput.value = formatted;
+      lastFormatted = formatted;
+    }
+  });
+});

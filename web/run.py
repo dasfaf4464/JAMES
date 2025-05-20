@@ -10,10 +10,13 @@ import threading
 import re
 from app import create_app
 from flask_socketio import SocketIO
+from app.api.room import init_socketio
 from config import CLOUDFLARE_TUNNEL_COMMAND, MARIADB_COMMAND, REDIS_COMMAND
 
 app = create_app()
-socketio = SocketIO(app, async_mode="eventlet")
+
+socketio = SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
+init_socketio(socketio=socketio)
 
 cloudflare_process = None
 cloudflare_URL = None
@@ -103,16 +106,16 @@ def run_flask():
 
 if __name__ == "__main__":
     #cloudflare_thread = threading.Thread(target=run_cloudflare, daemon=True)
-    #mariadb_thread = threading.Thread(target=run_mariadb, daemon=True)
-    #redis_thread = threading.Thread(target=run_redis, daemon=True)
+    mariadb_thread = threading.Thread(target=run_mariadb, daemon=True)
+    redis_thread = threading.Thread(target=run_redis, daemon=True)
     flask_thread = threading.Thread(target=run_flask, daemon=True)
 
-    #mariadb_thread.start()
-    #redis_thread.start()
+    mariadb_thread.start()
+    redis_thread.start()
     flask_thread.start()
     #cloudflare_thread.start()
 
     flask_thread.join()
-    #mariadb_thread.join()
-    #redis_thread.join()
+    mariadb_thread.join()
+    redis_thread.join()
     #cloudflare_thread.join()

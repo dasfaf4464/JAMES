@@ -12,7 +12,7 @@ REDIS_DBNUM = {"before-llm": 0, "after-llm": 1, "all-q&a": 2}
 def get_mariadb_connection(id: str, pw: str):
     try:
         db_connection = pymysql.connect(
-            host="localhost",
+            host="127.0.0.1",
             user=id,
             password=pw,
             database="capstone",
@@ -64,7 +64,7 @@ def disconnection_mariadb(connection: pymysql.Connection):
 def get_redis_connection(dbnum: int):
     try:
         redis_connection = redis.Redis(
-            host="localhost", port=6379, db=dbnum, decode_responses=True
+            host="127.0.0.1", port=6379, db=dbnum, decode_responses=True
         )
         print("redis 서버 연결 성공:", redis_connection.ping())  # 서버 연결 확인
         return redis_connection
@@ -73,9 +73,9 @@ def get_redis_connection(dbnum: int):
         return None
 
 
-def disconnect_redis(redis: redis.Redis):
+def disconnect_redis(redis: redis.Redis.client):
     try:
-        redis.client_kill()
+        redis.client_kill(redis)
     except ConnectionError as e:
         print("redis already disconnected")
 

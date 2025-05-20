@@ -35,9 +35,26 @@ header img {
     height: 100vh;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
 }
 
 .modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px 30px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
     background-color: #fff;
     margin: 15% auto;
     padding: 20px 30px;
@@ -56,9 +73,17 @@ header img {
     font-size: 24px;
     font-weight: bold;
     cursor: pointer;
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 .close-button:hover {
+    color: #333;
     color: #333;
 }
 
@@ -67,6 +92,7 @@ header img {
     align-items: center;
     gap: 10px;
 }
+
 .radio-group label {
     display: flex;
     align-items: center;
@@ -97,6 +123,7 @@ header img {
 }
 
 #nav-menu.active {
+    display: flex;
     display: flex;
 }
 
@@ -135,6 +162,11 @@ main {
     margin-top: 10px;
 }
 
+#sessionexplain {
+    height: 100px;
+    margin-top: 10px;
+}
+
 #toggle-panel-button {
     display: none;
     position: absolute;
@@ -149,6 +181,7 @@ main {
 
 .session-group-item {
     border-radius: 10px;
+    padding: 13px;
     padding: 13px;
 }
 
@@ -335,6 +368,8 @@ main {
     border-radius: 10px;
     padding: 10px;
     margin-top: 10px;
+    padding: 10px;
+    margin-top: 10px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
     border: 1px solid #eee;
 }
@@ -409,6 +444,7 @@ footer {
 
     header img {
         width: 30%;
+        width: 30%;
     }
 
     #nav-toggle {
@@ -427,12 +463,31 @@ footer {
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
         z-index: 1001
+        display: none;
+        flex-direction: column;
+        position: absolute;
+        top: 125px;
+        right: 20px;
+        background-color: white;
+        padding: 10px;
+        gap: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        z-index: 1001
     }
 
     #nav-buttons.active {
         display: flex;
     }
+    #nav-buttons.active {
+        display: flex;
+    }
 
+    #nav-buttons button {
+        width: 100%;
+        padding: 10px;
+        font-size: 1rem;
+    }
     #nav-buttons button {
         width: 100%;
         padding: 10px;
@@ -500,7 +555,14 @@ footer {
 
     .session-group-item {
         padding: 10px;
+        overflow-y: auto;
+        max-height: 90vh;
     }
+
+    .session-group-item {
+        padding: 10px;
+    }
+
 
 
     .session-info-box {
