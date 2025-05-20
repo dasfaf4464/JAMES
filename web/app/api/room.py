@@ -21,9 +21,28 @@ sendtoLLM_bp = Blueprint("sendtollm", __name__, url_prefix="/room")
 @createSession_bp.route("/create")
 def craete_sesison():
     """
-    session을 만드는
+    사용자가 보낸 options 에 따라 세션을 생성합니다.
+    세션은 서버에 인스턴스로 존재하고 각 옵셥을 확인하거나 사용자를 확일할 때 사용됩니다.
+    Content Type: Application/JSON
+    Request: {
+        *user_key (str): 호스트가 될 유저 키
+        session_title (str): 세션 제목
+        is_temporary (boolean): 임시 세션 또는 영구 세션
+        is_open (boolean): 공개 세션 또는 비공개 세션
+        password (str): 비공개시 사용할 비밀번호
+        *쿠키에서 가져옴
+    }
+
+    해당 옵션을 가진 세션 인스턴스를 생성합니다.
+    세션 인스턴스는 리스트에 등록됩니다.
+    
+
+    Response: {
+        is_success (boolean): 세션
+    }
     """
-    ChatManager.create_room()
+
+    ChatManager.create_room(admin_key=, set_temporary=)
     return
 
 

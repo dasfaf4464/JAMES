@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  /**
-   * 웹소켓 연결
-   */
+  //websocket link start
   const path = window.location.pathname;
   const parts = path.split('/');
   const sessionCode = parts[parts.length - 1];
@@ -12,13 +10,15 @@ document.addEventListener("DOMContentLoaded", function () {
       session_code: sessionCode
     }
   });
+  //websocket link end
+
+  //question-button start
+  const questionButton = document.getElementById('questionButton');
+  let canClick = true;
 
   /**
    * 연속 클릭 방지
    */
-  const questionButton = document.getElementById('questionButton');
-  let canClick = true;
-
   questionButton.addEventListener('click', (event) => {
     event.preventDefault();
 
@@ -78,10 +78,9 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 2000);
       });
   });
-});
+  //question-button end
 
-
-document.addEventListener('DOMContentLoaded', function () {
+  //LLM list start
   const boxes = document.querySelectorAll('.LLM-list-panel .box');
 
   boxes.forEach(box => {
@@ -90,8 +89,12 @@ document.addEventListener('DOMContentLoaded', function () {
       box.classList.add('selected');
     });
   });
+  //LLM list end
+
+
 });
 
+/*
 document.addEventListener("DOMContentLoaded", function () {
   const summaryButton = document.querySelector('.summaryButton');
   const categoriesContainer = document.querySelector('.categories');
@@ -134,7 +137,8 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 });
-
+재작성 필요
+*/
 /*
 document.addEventListener("DOMContentLoaded", function () {
   const summaryButton = document.querySelector('.summaryButton');
@@ -176,3 +180,14 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 */
+/**
+ * 주석 적을때 함수에 기능, 인수, 반환값 필요/
+ * 서버 요청이면 보내는 데이터 타입, 종류, 받는 데이터 타입, 종류 작성 
+ * dom에 event 연결하는 람다 함수방식으로 contentload 안에 적을 거면 전부 다 안에 작성 필요
+ * 
+ * 해야할 일 : 세션 접속시 참여 API로 session의 옵션 확인(비밀번호, 사용자 키) -> 이후 세션 초기화 후 사용자 웹소켓 연결
+ * 세션 웹소켓 연결 후 메세지 발신 이벤트 연결 (버튼 클릭시, 에러코드 2번인 선택지는 선택 불가능 하도록 작성), 서버에서 보내는 메세지 처리 함수(메세지 수신 이후 해당 정보에 css)
+ * 카테고리 선택시 AJAX HTTP로 질문 리스트 가져오는 API 연결
+ * 
+ * 세션 관련된 api는 api/room.py 에서 찾아보기
+ */
