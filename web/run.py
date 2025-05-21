@@ -4,8 +4,6 @@
 플라스크는 웹소켓 지원과 병렬적으로 페이지를 제공하기 위해 eventlet으로 실행됩니다.
 각 페이지는 route 모듈로 관리되며 chat:websocket 기능은 chat_manager에 등록되어있습니다.
 """
-import eventlet
-eventlet.monkey_patch()
 
 import subprocess
 import threading

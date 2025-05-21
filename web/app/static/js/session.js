@@ -95,6 +95,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /*
+
 document.addEventListener("DOMContentLoaded", function () {
   const summaryButton = document.querySelector('.summaryButton');
   const categoriesContainer = document.querySelector('.categories');
