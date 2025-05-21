@@ -5,7 +5,7 @@
 from flask import jsonify
 from flask_socketio import SocketIO, emit, rooms
 from datetime import datetime, timedelta, timezone
-from app.util.naming import create_server_code
+import random, string, re
 from app.manager.db_manager import redis_manager
 
 active_sessions = dict()
@@ -26,9 +26,9 @@ class ChatManager:
         self.start_time = datetime.now(timezone.utc)
 
     def create_room(self, admin_key, temporary: bool, open: bool):
-        new_session_code = create_server_code()
+        new_session_code = self.create_server_code()
         while new_session_code in active_sessions:
-            new_session_code = create_server_code()
+            new_session_code = self.create_server_code()
 
         new_session = ChatManager(new_session_code, admin_key, temporary)
         new_session.user.append(admin_key)
@@ -48,6 +48,15 @@ class ChatManager:
         self.isTemporary = temporary
         self.isOpen = open
         self.password = password
+
+    def create_server_code():
+        charset = string.ascii_uppercase + string.digits
+        parts = [''.join(random.choices(charset, k=4)) for _ in range(3)]
+        return '-'.join(parts)
+
+    def check_server_code_format(code:str):
+        pattern = r'^[A-Z]{4}-[A-Z]{4}-[A-Z]{4}$'
+        return bool(re.match(pattern, code))
 
 """
 redis에 저장할 때 병렬적으로 요청을 받아 redis 서버를 호출하는것보다 버퍼로 세션데이터를 모아서 한번에 넘기는게 좋다.

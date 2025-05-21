@@ -12,15 +12,38 @@ from flask import (
     Response,
     redirect,
 )
-from app.util.naming import create_user_name, create_user_key
 from app.manager.db_manager import mariadb_user_manager, mariadb_admin_manager
 from datetime import datetime, timedelta, timezone
+import random
+import string
 
 userChecking_bp = Blueprint("check_key", __name__, url_prefix="/auth")
 login_bp = Blueprint("login", __name__, url_prefix="/auth")
 logout_bp = Blueprint("logout", __name__, url_prefix="/auth")
 makename_bp = Blueprint("make_name", __name__, url_prefix="/auth")
 signup_bp = Blueprint("signup", __name__, url_prefix="/auth")
+
+NAME_ADJ = [
+    "Curious", "Wise", "Smart","Kind","Friendly","Clever","Thoughtful","Cheerful","Bright",
+    "Honest","Logical","Noble","Insightful","Creative","Calm","Gentle","Patient","Witty","Brilliant",
+    "Reliable","Helpful","Eloquent","Focused","Polite","Rational"
+]
+
+NAME_NOUN = [
+    "Lantern","Library","Notebook","Compass","Quill","Clock","Mirror","Tablet","Candle","Vessel",
+    "Scroll","Key","Circuit","Anchor","Helmet","Feather","Stone","Book","Map","Bridge",
+    "Tower","Coin","Globe","Ink","Signal",
+]
+
+def create_user_key():
+    charset = list(string.ascii_lowercase)
+    return "".join(random.sample(charset, 12))
+
+
+def create_user_name():
+    adj = random.choice(NAME_ADJ)
+    noun = random.choice(NAME_NOUN)
+    return f"{adj} {noun}"
 
 
 @userChecking_bp.before_app_request
