@@ -244,3 +244,13 @@ class RedisManager:
 mariadb_admin_manager = MariadbManager(DB_ADMIN.get("id"), DB_ADMIN.get("pw"))
 mariadb_user_manager = MariadbManager(DB_USER.get("id"), DB_USER.get("pw"))
 redis_manager = RedisManager(0)
+
+def tmp_session_cleaner():
+    import time
+    from datetime import datetime, timezone, timedelta
+    while True:
+        expire_time = datetime.now(timezone.utc) + timedelta(hours=9) + timedelta(hours=3)
+        print(expire_time)
+        SQL = "DELETE FROM sessioninfo WHERE is_temporary = 1 AND create_at > %s"
+        mariadb_admin_manager.put_sql(SQL=SQL, params = (expire_time, ))
+        time.sleep(1800)

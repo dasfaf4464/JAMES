@@ -1,3 +1,7 @@
+/**
+ * 화면 텍스트 변경
+ */
+
 const actions = ["Unmute를 만난 지 ", "열심히 공부한 지", "질문을 생각한 지", "강연자와 소통한 지",
     "자신감을 얻은 지", "성공을 꿈꾼 지", "성장을 느낀 지", "문제를 해결한 지", "도전을 시작한 지",
     "열정적인 사람이 된 지", "새로운 목표를 세운 지 ", "혼자가 아님을 느낀 지 ", "다시 도전할 용기를 낸 지 ",
@@ -19,6 +23,9 @@ rotateActionText();
 
 setInterval(rotateActionText, 10000);
 
+/**
+ * 메뉴 메인화면 이동 버튼
+ */
 document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('home-button').addEventListener('click', (event) => {
         event.preventDefault();
@@ -26,6 +33,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+/**
+ * 레이아웃 변경
+ */
 document.addEventListener("DOMContentLoaded", function () {
     const layoutButton = document.getElementById("layout-button");
     const container = document.querySelector(".myQuestionContainer");

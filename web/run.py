@@ -11,6 +11,7 @@ import re
 from app import create_app
 from flask_socketio import SocketIO
 from app.api.room import init_socketio
+from app.manager.db_manager import tmp_session_cleaner
 from config import CLOUDFLARE_TUNNEL_COMMAND, MARIADB_COMMAND, REDIS_COMMAND
 
 app = create_app()
@@ -109,11 +110,13 @@ if __name__ == "__main__":
     mariadb_thread = threading.Thread(target=run_mariadb, daemon=True)
     redis_thread = threading.Thread(target=run_redis, daemon=True)
     flask_thread = threading.Thread(target=run_flask, daemon=True)
+    sesison_cleaner_thread = threading.Thread(target=tmp_session_cleaner, daemon=True)
 
     mariadb_thread.start()
     redis_thread.start()
     flask_thread.start()
     #cloudflare_thread.start()
+    sesison_cleaner_thread.start()
 
     flask_thread.join()
     mariadb_thread.join()

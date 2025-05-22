@@ -1,4 +1,36 @@
-document.addEventListener("DOMContentLoaded", function () {
+/**
+ * 사용자 쿠키 확인 : 임시 키 발급 없으면 인덱스로 가게
+ */
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/auth/check_key')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('서버 응답 오류');
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log("사용자 인증 응답:", data);
+
+            if (data.redirect_url) {
+                if (window.location.origin != data.redirect_url) {
+                    window.location.href = data.redirect_url;
+                }
+            }
+
+            if (data.message) {
+                console.log("서버 메시지:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("인증 확인 실패:", error);
+        });
+});
+
+/**
+ * 이름 생성 요청
+ */
+document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('create-name-button').addEventListener('click', function (event) {
         event.preventDefault();
 
@@ -13,7 +45,12 @@ document.addEventListener("DOMContentLoaded", function () {
                 console.error("에러 발생: " + error);
             });
     });
+});
 
+/**
+ * 회원 정보 전달, 등록 요청
+ */
+document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('register-button').addEventListener('click', function (event) {
         event.preventDefault();
 

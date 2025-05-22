@@ -47,7 +47,7 @@ def create_user_name():
 
 
 @userChecking_bp.before_app_request
-def handle_redirection():
+def handle_user_redirection():
     """
     로그인 여부 및 임시 사용자 상태에 따라 리디렉션을 처리합니다.
     - 로그인한 사용자가 '/'로 접근하려 할 때 /home으로 리디렉션

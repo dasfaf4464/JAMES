@@ -5,40 +5,48 @@
 from flask import jsonify
 from flask_socketio import SocketIO, emit, rooms
 from datetime import datetime, timedelta, timezone
-import random, string, re
+import random, string
 from app.manager.db_manager import redis_manager
 
 active_sessions = dict()
 
+
 def isActivated(session_code: str):
     return session_code in active_sessions
 
+
 class ChatManager:
-    def __init__(self, sessioncode: str, admin_key:str, temporary:bool, open: bool):
+    def __init__(
+        self,
+        sessioncode: str,
+        admin_key: str,
+        title: str,
+        description: str,
+        is_temporary: bool,
+    ):
         self.user = list()
         self.sessioncode = sessioncode
-        self.session_name = None
-        self.room = None
+        self.session_name = title
+        self.description = description
         self.admin_key = admin_key
-        self.isTemporary = True
-        self.isOpen = open
-        self.password = None
+        self.isTemporary = is_temporary
         self.start_time = datetime.now(timezone.utc)
 
-    def create_room(self, admin_key, temporary: bool, open: bool):
-        new_session_code = self.create_server_code()
+    def create_room(admin_key: str, title: str, description: str, is_temporary: bool):
+        new_session_code = ChatManager.create_server_code()
         while new_session_code in active_sessions:
-            new_session_code = self.create_server_code()
+            new_session_code = ChatManager.create_server_code()
 
-        new_session = ChatManager(new_session_code, admin_key, temporary)
+        new_session = ChatManager(
+            sessioncode=new_session_code,
+            admin_key=admin_key,
+            title=title,
+            description=description,
+            is_temporary=is_temporary,
+        )
         new_session.user.append(admin_key)
-        active_sessions.update({new_session_code:new_session})
-
-    def get_text_fromuser(user_key ,text: str, category: dict):
-        redis_manager.push_dict_to_list("user_text", {user_key:text})
-
-    def push_text_touser(user_key, text_set: set):
-        return
+        active_sessions.update({new_session_code: new_session})
+        return new_session_code
 
     def change_admin(self, new_admin_key):
         self.admin_key = new_admin_key
@@ -51,12 +59,17 @@ class ChatManager:
 
     def create_server_code():
         charset = string.ascii_uppercase + string.digits
-        parts = [''.join(random.choices(charset, k=4)) for _ in range(3)]
-        return '-'.join(parts)
+        parts = ["".join(random.choices(charset, k=4)) for _ in range(3)]
+        return "-".join(parts)
+    
+    def user_join(self, user_key):
+        self.user.append(user_key)
+        #웹소켓 여기서 연결
+    
+    def user_leave(self, user_key):
+        self.user.pop(user_key)
+        
 
-    def check_server_code_format(code:str):
-        pattern = r'^[A-Z]{4}-[A-Z]{4}-[A-Z]{4}$'
-        return bool(re.match(pattern, code))
 
 """
 redis에 저장할 때 병렬적으로 요청을 받아 redis 서버를 호출하는것보다 버퍼로 세션데이터를 모아서 한번에 넘기는게 좋다.

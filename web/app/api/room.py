@@ -18,8 +18,8 @@ joinRoom_bp = Blueprint("join_room", __name__, url_prefix="/room")
 sendtoLLM_bp = Blueprint("sendtollm", __name__, url_prefix="/room")
 
 
-@createSession_bp.route("/create")
-def craete_sesison():
+@createSession_bp.route("/create", methods=["POST"])
+def create_sesison():
     """
     사용자가 보낸 options 에 따라 세션을 생성합니다.
     세션은 서버에 인스턴스로 존재하고 각 옵셥을 확인하거나 사용자를 확일할 때 사용됩니다.
@@ -35,15 +35,45 @@ def craete_sesison():
 
     해당 옵션을 가진 세션 인스턴스를 생성합니다.
     세션 인스턴스는 리스트에 등록됩니다.
-    
+
 
     Response: {
         is_success (boolean): 세션
     }
     """
+    request_data = request.get_json()
+    request_cookie = request.cookies
 
-    ChatManager.create_room(admin_key=, set_temporary=)
-    return
+    title = request_data.get("title")
+    description = request_data.get("description")
+    temp = request_data.get("temporary")
+    admin_key = request_cookie["user_key"]
+
+    if temp == "temporary":
+        is_temporary = 1
+    else:
+        is_temporary = 0
+
+    session_code = ChatManager.create_room(
+        admin_key=admin_key, title=title, description=description, is_temporary=is_temporary
+    )
+    if not mariadb_admin_manager.insert(
+        table="sessioninfo",
+        data={
+            "name": title,
+            "description": description,
+            "session_key": session_code,
+            "host": admin_key,
+            "is_temporary": is_temporary
+        },
+    ):
+        print(active_sessions)
+        active_sessions.pop(session_code)
+        print("세션 db저장 오류")
+        print(active_sessions)
+        return jsonify({'error': "db_error"}), 500
+
+    return jsonify({'session_code': session_code, 'error': False})
 
 
 @joinRoom_bp.route("/join", methods=["GET"])
@@ -88,7 +118,11 @@ def send_to_llm():
     response_data = {
         "count": len(combined),
         "text": [
-            {"original":request_data, "content": item["content"], "category": item["category"]}
+            {
+                "original": request_data,
+                "content": item["content"],
+                "category": item["category"],
+            }
             for item in combined
         ],
         "error": error,
@@ -117,8 +151,6 @@ def init_socketio(socketio):
     def handle_disconnect(data):
         """
         사용자의 소켓 연결이 끊겼을 때 실행됩니다.
-        어떤 방에 속해 있었는지는 이 시점에서 직접 알 수는 없지만,
-        필요하면 서버 측에서 session_code → sid 매핑을 따로 관리해둘 수 있습니다.
         """
         print(f"[DISCONNECT] {request.sid} disconnected.")
 
@@ -129,8 +161,6 @@ def init_socketio(socketio):
     @socketio.on("test")
     def test(data: str):
         print(data)
-
-
 
     @socketio.on("select_llm", namespace="/")
     def handle_select_llm(data):
@@ -150,4 +180,3 @@ def init_socketio(socketio):
         Response
         """
         data
-        session = active_sessions.get(session_code)

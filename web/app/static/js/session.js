@@ -1,5 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
-  //websocket link start
+document.addEventListener("DOMContentLoaded", () => {
   const path = window.location.pathname;
   const parts = path.split('/');
   const sessionCode = parts[parts.length - 1];
@@ -10,26 +9,43 @@ document.addEventListener("DOMContentLoaded", function () {
       session_code: sessionCode
     }
   });
-  //websocket link end
+});
 
-  //question-button start
+document.addEventListener('DOMContentLoaded', () => {
+  fetch('/auth/check_key')
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('서버 응답 오류');
+      }
+      return response.json();
+    })
+    .then(data => {
+      console.log("사용자 인증 응답:", data);
+
+      if (data.redirect_url) {
+        if (window.location.origin != data.redirect_url) {
+          window.location.href = data.redirect_url;
+        }
+      }
+
+      if (data.message) {
+        console.log("서버 메시지:", data.message);
+      }
+    })
+    .catch(error => {
+      console.error("인증 확인 실패:", error);
+    });
+});
+
+document.addEventListener("DOMContentLoaded", () => {
   const questionButton = document.getElementById('questionButton');
   let canClick = true;
 
-  /**
-   * 연속 클릭 방지
-   */
   questionButton.addEventListener('click', (event) => {
     event.preventDefault();
+    if (!canClick) return;
+    canClick = false;
 
-    if (!canClick) {
-      return;
-    }
-    canClick = false
-
-    /**
-     * http 서버에 llm 연결 요청
-     */
     const originaltext = document.getElementById('originaltext').value.trim();
 
     fetch('/room/llm', {
@@ -41,33 +57,35 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(data => {
         if (data.error == 1) {
           alert("시스템 조작을 시도하였습니다. 질문을 다시 입력하세요.");
-        } else {
-          const llmPanel = document.querySelector('.LLM-list-panel');
-          llmPanel.innerHTML = ''; // 기존 요약 박스 초기화
-
-          data.text.forEach(summary => {
-            const box = document.createElement('div');
-            box.className = 'box';
-            box.dataset.originaltext = summary.original
-            box.textContent = summary.content;
-
-            box.dataset.main = summary.category.main;
-            box.dataset.sub = summary.category.sub;
-            box.dataset.minor = summary.category.minor;
-
-            box.addEventListener('click', () => {
-              document.querySelectorAll('.LLM-list-panel .box').forEach(b => b.classList.remove('selected'));
-              box.classList.add('selected');
-
-              console.log(`Original: ${box.dataset.originaltext}`)
-              console.log(`Main: ${box.dataset.main}`);
-              console.log(`Sub: ${box.dataset.sub}`);
-              console.log(`Minor: ${box.dataset.minor}`);
-            });
-
-            llmPanel.appendChild(box);
-          });
+          return;
         }
+
+        const llmPanel = document.querySelector('.LLM-list-panel');
+        llmPanel.innerHTML = '';
+
+        data.text.forEach(summary => {
+          const box = document.createElement('div');
+          box.className = 'box';
+          box.dataset.originaltext = summary.original;
+          box.textContent = summary.content;
+
+          box.dataset.main = summary.category.main;
+          box.dataset.sub = summary.category.sub;
+          box.dataset.minor = summary.category.minor;
+
+          box.addEventListener('click', () => {
+            document.querySelectorAll('.LLM-list-panel .box')
+              .forEach(b => b.classList.remove('selected'));
+            box.classList.add('selected');
+
+            console.log(`Original: ${box.dataset.originaltext}`);
+            console.log(`Main: ${box.dataset.main}`);
+            console.log(`Sub: ${box.dataset.sub}`);
+            console.log(`Minor: ${box.dataset.minor}`);
+          });
+
+          llmPanel.appendChild(box);
+        });
       })
       .catch(err => {
         console.error('error:', err);
@@ -78,22 +96,17 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 2000);
       });
   });
-  //question-button end
+});
 
-  //LLM list start
+document.addEventListener("DOMContentLoaded", () => {
   const boxes = document.querySelectorAll('.LLM-list-panel .box');
-
   boxes.forEach(box => {
     box.addEventListener('click', () => {
       boxes.forEach(b => b.classList.remove('selected'));
       box.classList.add('selected');
     });
   });
-  //LLM list end
-
-
 });
-
 /*
 
 document.addEventListener("DOMContentLoaded", function () {
