@@ -1,16 +1,27 @@
+const session_categories = new Map();
+
+/**
+ * 소켓 연결
+ */
+const socket = null
+const path = window.location.pathname;
+const parts = path.split('/');
+const sessionCode = parts[parts.length - 1];
+
 document.addEventListener("DOMContentLoaded", () => {
-  const path = window.location.pathname;
-  const parts = path.split('/');
-  const sessionCode = parts[parts.length - 1];
   console.log(sessionCode);
 
-  const socket = io("http://localhost:5000", {
+  socket = io("http://localhost:5000", {
     query: {
       session_code: sessionCode
     }
   });
 });
 
+
+/**
+ * 사용자 쿠키 확인
+ */
 document.addEventListener('DOMContentLoaded', () => {
   fetch('/auth/check_key')
     .then(response => {
@@ -37,6 +48,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
+/**
+ * llm값 받아오고 받아온 값 출력 박스 생성
+ */
 document.addEventListener("DOMContentLoaded", () => {
   const questionButton = document.getElementById('questionButton');
   let canClick = true;
@@ -98,17 +112,31 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+/**
+ * 선택한 박스 이벤트
+ */
 document.addEventListener("DOMContentLoaded", () => {
   const boxes = document.querySelectorAll('.LLM-list-panel .box');
+  let selectedBox = null;
+
   boxes.forEach(box => {
     box.addEventListener('click', () => {
       boxes.forEach(b => b.classList.remove('selected'));
       box.classList.add('selected');
+      selectedBox = box;
     });
   });
-});
-/*
 
+  const summaryButton = document.getElementsByClassName('summaryButton')
+  summaryButton.addEventListener('click', (event) => {
+    event.preventDefault()
+    console.log(`${selectedBox.dataset.llm}`);
+    alert('sf');
+  });
+});
+
+
+/*
 document.addEventListener("DOMContentLoaded", function () {
   const summaryButton = document.querySelector('.summaryButton');
   const categoriesContainer = document.querySelector('.categories');
@@ -195,13 +223,4 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 */
 /**
- * 주석 적을때 함수에 기능, 인수, 반환값 필요/
- * 서버 요청이면 보내는 데이터 타입, 종류, 받는 데이터 타입, 종류 작성 
- * dom에 event 연결하는 람다 함수방식으로 contentload 안에 적을 거면 전부 다 안에 작성 필요
- * 
- * 해야할 일 : 세션 접속시 참여 API로 session의 옵션 확인(비밀번호, 사용자 키) -> 이후 세션 초기화 후 사용자 웹소켓 연결
- * 세션 웹소켓 연결 후 메세지 발신 이벤트 연결 (버튼 클릭시, 에러코드 2번인 선택지는 선택 불가능 하도록 작성), 서버에서 보내는 메세지 처리 함수(메세지 수신 이후 해당 정보에 css)
- * 카테고리 선택시 AJAX HTTP로 질문 리스트 가져오는 API 연결
- * 
- * 세션 관련된 api는 api/room.py 에서 찾아보기
  */

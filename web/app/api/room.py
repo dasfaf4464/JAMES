@@ -162,7 +162,7 @@ def init_socketio(socketio):
     def test(data: str):
         print(data)
 
-    @socketio.on("select_llm", namespace="/")
+    @socketio.on("send_llm", namespace="/")
     def handle_select_llm(data):
         """
         Request :

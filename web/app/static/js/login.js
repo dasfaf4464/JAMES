@@ -67,32 +67,22 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /**
- * 세션 버튼 클릭 시 세션코드 확인
+ * 세션 코드 입력후 그 코드로 이동
  */
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", () => {
   document.getElementById('into-session-button').addEventListener('click', (event) => {
     event.preventDefault();
 
-    const code = document.getElementById('session-code').value;
+    const session_code = document.getElementById('session-code').value.trim()
 
-    fetch('/room/join', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.isSuccess) {
-          window.location.href = data.redirect_url;
-        } else {
-          alert(data.message);
-        }
-      })
-      .catch(err => {
-        console.error('Login error:', err);
-      });
+    if (!session_code) {
+      alert("세션 코드를 입력해주세요");
+      return;
+    }
+
+    window.location.href = `/session/${session_code}`;
+
   });
-
 });
 
 
