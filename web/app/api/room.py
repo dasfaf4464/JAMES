@@ -55,7 +55,10 @@ def create_sesison():
         is_temporary = 0
 
     session_code = ChatManager.create_room(
-        admin_key=admin_key, title=title, description=description, is_temporary=is_temporary
+        admin_key=admin_key,
+        title=title,
+        description=description,
+        is_temporary=is_temporary,
     )
     if not mariadb_admin_manager.insert(
         table="sessioninfo",
@@ -64,16 +67,16 @@ def create_sesison():
             "description": description,
             "session_key": session_code,
             "host": admin_key,
-            "is_temporary": is_temporary
+            "is_temporary": is_temporary,
         },
     ):
         print(active_sessions)
         active_sessions.pop(session_code)
         print("세션 db저장 오류")
         print(active_sessions)
-        return jsonify({'error': "db_error"}), 500
+        return jsonify({"error": "db_error"}), 500
 
-    return jsonify({'session_code': session_code, 'error': False})
+    return jsonify({"session_code": session_code, "error": False})
 
 
 @joinRoom_bp.route("/join", methods=["GET"])

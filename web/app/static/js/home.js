@@ -183,13 +183,15 @@ document.addEventListener("DOMContentLoaded", () => {
       })
         .then(res => res.json())
         .then(data => {
-          if (data.error !== false) {
+          if (data.error == false) {
             alert("세션이 생성되었습니다.\n세션 코드 : " + data.session_code);
             window.location.href = 'session/' + data.session_code;
+          } else {
+            alert("세션 생성 중 오류가 발생했습니다.\n오류 코드: " + data.error);
           }
         })
         .catch(err => {
-          alert("세션 생성 중 오류가 발생했습니다.");
+          alert("서버와 통신 중 오류가 발생했습니다.");
           console.error(err);
         });
 
@@ -207,12 +209,12 @@ document.addEventListener("DOMContentLoaded", () => {
     event.preventDefault();
 
     const session_code = document.getElementById('session-code').value.trim()
-    
-    if(!session_code) {
+
+    if (!session_code) {
       alert("세션 코드를 입력해주세요");
       return;
     }
-    
+
     window.location.href = `/session/${session_code}`;
 
   });

@@ -247,10 +247,7 @@ redis_manager = RedisManager(0)
 
 def tmp_session_cleaner():
     import time
-    from datetime import datetime, timezone, timedelta
     while True:
-        expire_time = datetime.now(timezone.utc) + timedelta(hours=9) + timedelta(hours=3)
-        print(expire_time)
-        SQL = "DELETE FROM sessioninfo WHERE is_temporary = 1 AND create_at > %s"
-        mariadb_admin_manager.put_sql(SQL=SQL, params = (expire_time, ))
+        SQL = "DELETE FROM sessioninfo WHERE is_temporary = 1 AND create_at < NOW() - INTERVAL 3 HOUR"
+        mariadb_admin_manager.put_sql(SQL=SQL, params = ())
         time.sleep(1800)
