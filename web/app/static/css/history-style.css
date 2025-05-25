@@ -209,7 +209,7 @@ footer {
 @media (max-width: 768px) {
 
     header img {
-        width: 30%;
+        display: none;
     }
 
     main {

@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /**
- * 이거 뭔지 주석좀
+ * 사용자가 현재 참여 중인 세션을 보여주는 최대 개수 설정 (모바일:4 데스크탑:6)
  */
 document.addEventListener("DOMContentLoaded", () => {
   const sessionItems = document.querySelectorAll(".session-group-item");
@@ -287,7 +287,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  // 창 크기 변경 시 자동 업데이트 (선택사항)
   window.addEventListener("resize", () => {
     currentPage = 0;
     showPage(currentPage);
