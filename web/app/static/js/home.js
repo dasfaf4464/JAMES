@@ -82,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
             <p id="session-create-day">세션 생성일: </p>
 
             <div class="session-info-box">
-                <p id="session-discription">설명이 깁니다. 설명이 깁니다. 설명이 깁니다. 설명이 깁니다. 설명이 깁니다.</p>
+                <p id="session-description">설명이 깁니다. 설명이 깁니다. 설명이 깁니다. 설명이 깁니다. 설명이 깁니다.</p>
             </div>
 
             <div class="session-info-box">

@@ -105,12 +105,12 @@
                 <span class="close-button" id="closeModal">&times;</span>
                 <h2>새 세션 만들기</h2>
                 <input type="text" id="sessionTitleInput" class="form-control rounded" placeholder="세션 제목을 입력하세요">
-                <input type="text" id="sessionexplain" class="form-control rounded" placeholder="세션 설명을 입력하세요">
-                <br>
+                <textarea id="sessionexplain" class="form-control rounded" placeholder="세션 설명을 입력하세요" rows="4"></textarea>
                 <div class="radio-group">
                 <label><input type="radio" name="chk_info" value="temporary" checked>임시</label>
                 <label><input type="radio" name="chk_info" value="permanent">영구</label>
                 </div>
+                <input id="sessionPw" type="text" class="form-control rounded" placeholder="세션 비밀번호">
                 <button id="submitSessionBtn" class="create-session rounded">생성하기</button>
             </div>
         </div>
