@@ -207,16 +207,16 @@ main {
     margin: 10px;
 }
 
-#session-title {
+.session-title {
     flex: 3;
     color: var(--main-sessiontitle-font);
 }
 
-#session-info {
+.session-info {
     flex: 1;
 }
 
-#session-icon {
+.session-icon {
     width: auto;
     height: 50px;
 }

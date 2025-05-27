@@ -17,7 +17,10 @@
 </head>
 
 <body>
-    <header>
+    <header class="d-flex justify-content-end p-3">
+        <button type="button" id="qrbutton" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#qrModal">
+            QR
+        </button>
     </header>
     <main>
         <div class="category-panel">
@@ -42,20 +45,40 @@
             <div class="cartegory-list-panel">
             </div>
             <div class="LLM-list-panel">
+                <!--
                 <div class="box">전달받은 llm 리스트 AI</div>
                 <div class="box">전달받은 llm 리스트 운영체제</div>
                 <div class="box">전달받은 llm 리스트 네트워크</div>
                 <div class="box">전달받은 llm 리스트 프론트엔드</div>
+                -->
             </div>
             <div>
             </div>
         </div>
-    </main>
-    </div>
+        <div class="modal fade" id="qrModal" tabindex="-1" aria-labelledby="qrModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content p-4">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="qrModalLabel">QR 코드 생성</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="urlInput">URL 입력:</label>
+                        <input type="text" id="urlInput" class="form-control" placeholder="https://www.example.com"
+                            onclick="clearInput()" onkeydown="handleKeyPress(event)">
+                        <button class="btn btn-primary mt-3" onclick="generateQRCode()">생성</button>
+                        <div id="qrcode" class="d-flex justify-content-center mt-3" style="display: block;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
     <footer>
     </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
     <script src="../static/js/session.js"></script>
+    <script src="../static/js/qr.js"></script>
 </body>
 
 </html>

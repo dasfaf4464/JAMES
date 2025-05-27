@@ -14,13 +14,6 @@ header {
     display: flex;
 }
 
-header img {
-    height: 8%;
-    width: 8%;
-    height: auto;
-    object-fit: contain;
-}
-
 main {
     flex: 1;
     display: grid;

@@ -340,7 +340,11 @@ def handle_create_category(data):
     }, broadcast=True)
 */
 
-// 📌 요약을 바탕으로 카테고리 생성 및 카운팅
+
+/**
+ * test 코드
+ */
+/*
 document.addEventListener("DOMContentLoaded", function () {
   const summaryButton = document.querySelector('.summaryButton');
   const categoriesContainer = document.querySelector('.categories');
@@ -357,7 +361,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const selectedSummary = selectedBox.textContent;
     const fakeCategory = generateFakeCategory(selectedSummary);
 
-    // 기존 카테고리 박스가 있는지 확인
     const existingBox = Array.from(categoriesContainer.querySelectorAll('.category-box')).find(box => {
       return box.dataset.category === fakeCategory;
     });
@@ -366,7 +369,7 @@ document.addEventListener("DOMContentLoaded", function () {
       let count = parseInt(existingBox.dataset.count || "1", 10);
       count += 1;
       existingBox.dataset.count = count;
-      existingBox.querySelector('p').textContent = `${fakeCategory} ×${count}`;
+      existingBox.querySelector('p').textContent = `${fakeCategory}`;
 
       const baseSize = 120;
       const newSize = baseSize + (count - 1) * 40;
@@ -387,25 +390,50 @@ document.addEventListener("DOMContentLoaded", function () {
       box.style.width = '120px';
       box.style.height = '120px';
 
-      // ✅ 여기서 클릭 이벤트 연결
+
       box.addEventListener('click', () => {
         const listPanel = document.querySelector('.cartegory-list-panel');
         listPanel.innerHTML = `<div class="category-title">#${fakeCategory}</div>`;
 
-        // 📌 임시 질문 리스트
         const dummyQuestions = generateDummyQuestions(fakeCategory);
 
-        dummyQuestions.forEach(q => {
-          const div = document.createElement('div');
-          div.className = 'box';
-          div.textContent = q;
-          listPanel.appendChild(div);
+        dummyQuestions.forEach((q, index) => {
+          const wrapper = document.createElement('div');
+          wrapper.className = 'question-box';
+
+          const questionDiv = document.createElement('div');
+          questionDiv.className = 'box';
+          questionDiv.textContent = q;
+
+          const memo = document.createElement('textarea');
+          memo.className = 'memo';
+          memo.placeholder = '메모를 입력하세요...';
+
+          const memoKey = `memo-${fakeCategory}-${index}`;
+          const savedMemo = localStorage.getItem(memoKey);
+          if (savedMemo) memo.value = savedMemo;
+
+          memo.addEventListener('input', () => {
+            localStorage.setItem(memoKey, memo.value);
+          });
+
+          wrapper.appendChild(questionDiv);
+          wrapper.appendChild(memo);
+          listPanel.appendChild(wrapper);
         });
+
+
       });
     }
+    const sorted = Array.from(categoriesContainer.children)
+      .sort((a, b) => parseInt(b.dataset.count) - parseInt(a.dataset.count));
+
+    sorted.forEach(box => {
+      categoriesContainer.appendChild(box);
+    });
+
   });
 
-  // 요약 문장으로부터 카테고리 추출
   function generateFakeCategory(summary) {
     if (summary.includes("AI") || summary.includes("인공지능")) return "AI";
     if (summary.includes("운영체제") || summary.includes("커널")) return "운영체제";
@@ -414,7 +442,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return "기타";
   }
 
-  // 카테고리별 임시 질문 생성기
   function generateDummyQuestions(category) {
     switch (category) {
       case "AI":
@@ -430,3 +457,4 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 });
+*/

@@ -62,71 +62,6 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 });
 
-/**
- * 세션 설명 사이드 패널 생성
- */
-document.addEventListener("DOMContentLoaded", () => {
-  const panel = document.getElementsByClassName("side-panel")[0];
-  const myPanel = panel.innerHTML;
-
-  const returnMyPanel = () => {
-    panel.innerHTML = myPanel;
-  };
-
-  const sessionPanel = () => {
-    panel.innerHTML = `
-        <div class="session-panel-wrapper">
-            <button id="exit-button" onclick="returnMyPanel()"><img src="../static/image/cancle.svg"></button>
-            <br><br><h3>session title</h3>
-
-            <p id="session-create-day">세션 생성일: </p>
-
-            <div class="session-info-box">
-                <p id="session-description">설명이 깁니다. 설명이 깁니다. 설명이 깁니다. 설명이 깁니다. 설명이 깁니다.</p>
-            </div>
-
-            <div class="session-info-box">
-                <p>현재 참여 인원수 : </p>
-            </div>
-
-            <div class="session-info-box">
-                <p>올라온 질문 수 : </p>
-            </div>
-
-            <button id="join-session">세션 입장하기</button>
-            <button id="exit-session">세션 나가기</button>
-
-            <div class="session-info-box">
-                <p>세션 입장 시간 : </p>
-            </div>
-                        <div class="session-info-box">
-                <p>세션 생성 시간 : </p>
-            </div>
-        </div>
-    `;
-
-    document.getElementById('exit-button').addEventListener('click', returnMyPanel);
-  };
-
-  document.querySelectorAll('.session-list ul li').forEach(sessionItem => {
-    sessionItem.addEventListener('click', () => {
-      sessionPanel();
-    });
-  });
-});
-
-var sessionList = document.querySelectorAll('.session-list ul li');
-
-for (var i = 0; i < sessionList.length; i++) {
-  sessionList[i].addEventListener('click', function () {
-    sessionPanel();
-  });
-}
-
-function returnMyPanel() {
-  panel.innerHTML = myPanel;
-}
-
 document.getElementById("toggle-panel-button").addEventListener("click", function () {
   document.querySelector(".side-panel").classList.toggle("active");
 });
@@ -245,50 +180,127 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 /**
- * 사용자가 현재 참여 중인 세션을 보여주는 최대 개수 설정 (모바일:4 데스크탑:6)
+ * 사용자가 현재 참여 중인 세션을 보여주는 최대 개수 설정(모바일:4 데스크탑:6) 
+ * 참여 중인 세션 방 리스트 정보를 받아와서 보여줌
  */
 document.addEventListener("DOMContentLoaded", () => {
-  const sessionItems = document.querySelectorAll(".session-group-item");
+  let currentPage = 0;
 
-  // 화면 크기에 따라 한 페이지에 보여줄 개수를 설정
   function getItemsPerPage() {
     return window.matchMedia("(max-width: 768px)").matches ? 4 : 6;
   }
 
-  let itemsPerPage = getItemsPerPage();
-  let currentPage = 0;
+  function fetchSessions(page, size) {
+    setInterval(() => {
 
-  function showPage(page) {
-    itemsPerPage = getItemsPerPage(); // 현재 화면 크기에 따라 업데이트
-    const start = page * itemsPerPage;
-    const end = start + itemsPerPage;
+    fetch(`/search/my_session?page=${page}&size=${size}`)
+      .then(res => res.json())
+      .then(data => {
+        const sessionGroup = document.querySelector('.session-group');
+        sessionGroup.innerHTML = '';
 
-    sessionItems.forEach((item, index) => {
-      item.style.display = (index >= start && index < end) ? "flex" : "none";
-    });
+        data.forEach(session => {
+          const li = document.createElement('li');
+          li.className = 'session-group-item';
 
-    document.getElementById("frontB").disabled = (page === 0);
-    document.getElementById("backB").disabled = (end >= sessionItems.length);
+          li.innerHTML = `
+            <p class="session-title">${session.title}</p>
+            <p class="session-info">현재 입장 인원: ${session.people} <br>질문 수: ${session.questions}</p>
+            <p class="session-period">${session.type}</p>
+            <img class="session-icon" src="../static/image/computer.svg">
+          `;
+
+        // 세션 상세 정보 요청 → 패널 표시
+        li.addEventListener('click', () => {
+          fetch(`/search/session_detail?session_code=${session.code}`)
+            .then(res => res.json())
+            .then(detail => {
+              // 받아온 상세 정보를 sessionPanel()에 넘김
+              sessionPanel(detail);
+            })
+            .catch(err => {
+              console.error('세션 상세 정보 불러오기 실패:', err);
+            });
+        });
+
+        sessionGroup.appendChild(li);
+      });
+        document.getElementById("frontB").disabled = (page === 0);
+        document.getElementById("backB").disabled = data.length < size;
+      })
+      .catch(error => {
+        console.error("세션 불러오기 실패:", error);
+      });
+      }, 5000);
   }
 
-  showPage(currentPage);
+  fetchSessions(currentPage, getItemsPerPage());
 
   document.getElementById("frontB").addEventListener("click", () => {
     if (currentPage > 0) {
       currentPage--;
-      showPage(currentPage);
+      fetchSessions(currentPage, getItemsPerPage());
     }
   });
 
   document.getElementById("backB").addEventListener("click", () => {
-    if ((currentPage + 1) * getItemsPerPage() < sessionItems.length) {
-      currentPage++;
-      showPage(currentPage);
-    }
+    currentPage++;
+    fetchSessions(currentPage, getItemsPerPage());
   });
 
   window.addEventListener("resize", () => {
     currentPage = 0;
-    showPage(currentPage);
+    fetchSessions(currentPage, getItemsPerPage());
   });
 });
+
+/**
+ * sessionPanel 생성 함수 구현
+ */
+function sessionPanel(session) {
+  const panel = document.querySelector(".side-panel");
+  const myPanel = panel.innerHTML;
+
+  const returnMyPanel = () => {
+    panel.innerHTML = myPanel;
+  };
+
+  panel.innerHTML = `
+    <div class="session-panel-wrapper">
+      <button id="exit-button"><img src="../static/image/cancle.svg"></button>
+      <br><br><h3>${session.title}</h3>
+
+      <p id="session-create-day">세션 생성일: ${session.created_at || "-"}</p>
+
+      <div class="session-info-box">
+        <p id="session-description">${session.description || "설명 없음"}</p>
+      </div>
+
+      <div class="session-info-box">
+        <p>현재 참여 인원수 : ${session.people}</p>
+      </div>
+
+      <div class="session-info-box">
+        <p>올라온 질문 수 : ${session.questions}</p>
+      </div>
+
+      <button id="join-session">세션 입장하기</button>
+      <button id="exit-session">세션 나가기</button>
+
+      <div class="session-info-box">
+        <p>세션 입장 시간 : ${session.entered_at || "-"}</p>
+      </div>
+      <div class="session-info-box">
+        <p>세션 생성 시간 : ${session.created_at || "-"}</p>
+      </div>
+    </div>
+  `;
+
+  document.getElementById('exit-button').addEventListener('click', returnMyPanel);
+}
+
+/**
+ * 서버에서 page=0/size=6(정보를 6개씩 나눠서 받아오기 위함), title, people, questions, type 보내주는 코드 구현 필요
+ * 세션 코드에 따라 {title, created_at, description, people, questions, entered_at, created_at} 를 보내주는 부분 구현 필요
+ */
+
