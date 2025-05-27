@@ -83,11 +83,19 @@ document.addEventListener("DOMContentLoaded", () => {
 
           box.dataset.index = index;
           box.dataset.originaltext = summary.original;
-          box.textContent = summary.content;
 
           box.dataset.main = summary.category.main;
           box.dataset.sub = summary.category.sub;
           box.dataset.minor = summary.category.minor;
+
+          box.innerHTML = `
+          <div class="summary-text">${summary.content}</div>
+          <div class="category-info">
+          <span class="main">main: ${summary.category.main}</span> /
+          <span class="sub">sub: ${summary.category.sub}</span> /
+          <span class="minor">minor: ${summary.category.minor}</span>
+          </div>
+          `;
 
           box.addEventListener('click', () => {
             document.querySelectorAll('.LLM-list-panel .box')
