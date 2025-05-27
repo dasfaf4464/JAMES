@@ -68,8 +68,67 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /**
- * 세션 생성 코드 필요
+ * 세션 생성 모달 생성 및 api 연결
  */
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("sessionModal");
+  const openBtn = document.getElementById("create-session-button");
+  const closeBtn = document.getElementById("closeModal");
+
+  openBtn.addEventListener("click", function (event) {
+    event.preventDefault();
+    modal.style.display = "block";
+  });
+
+  closeBtn.addEventListener("click", function () {
+    modal.style.display = "none";
+  });
+
+  window.addEventListener("click", function (event) {
+    if (event.target === modal) {
+      modal.style.display = "none";
+    }
+  });
+
+  document.getElementById("submitSessionBtn").addEventListener("click", (event) => {
+    event.preventDefault();
+
+    const title = document.getElementById("sessionTitleInput").value.trim();
+    const description = document.getElementById("sessionexplain").value;
+    const temporaryInput = document.querySelector('input[name="chk_info"]:checked');
+
+    if (!temporaryInput) {
+      alert("임시 여부를 선택해주세요.");
+      return;
+    }
+
+    const temporary = temporaryInput.value;
+
+    if (title) {
+      modal.style.display = "none";
+
+      fetch('/room/create', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title, description, temporary })
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error !== false) {
+            alert("세션이 생성되었습니다.\n세션 코드 : " + data.session_code);
+            window.location.href = 'session/' + data.session_code;
+          }
+        })
+        .catch(err => {
+          alert("세션 생성 중 오류가 발생했습니다.");
+          console.error(err);
+        });
+
+      document.getElementById("sessionTitleInput").value = "";
+      document.getElementById("sessionexplain").value = "";
+    }
+  });
+});
 
 
 /**

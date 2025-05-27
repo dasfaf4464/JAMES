@@ -91,12 +91,21 @@ header img {
     display: flex;
     align-items: center;
     gap: 10px;
+    margin-top: 5px;
 }
 
 .radio-group label {
     display: flex;
     align-items: center;
     gap: 4px;
+}
+
+#sessionexplain {
+    margin-top: 5px;
+}
+
+#sessionPw {
+    margin-top: 5px;
 }
 
 .create-session {
@@ -157,16 +166,6 @@ main {
     background-color: var(--main-theme-background);
 }
 
-#sessionexplain {
-    height: 100px;
-    margin-top: 10px;
-}
-
-#sessionexplain {
-    height: 100px;
-    margin-top: 10px;
-}
-
 #toggle-panel-button {
     display: none;
     position: absolute;
@@ -208,16 +207,16 @@ main {
     margin: 10px;
 }
 
-#session-title {
+.session-title {
     flex: 3;
     color: var(--main-sessiontitle-font);
 }
 
-#session-info {
+.session-info {
     flex: 1;
 }
 
-#session-icon {
+.session-icon {
     width: auto;
     height: 50px;
 }
@@ -462,7 +461,7 @@ footer {
         gap: 8px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         border-radius: 8px;
-        z-index: 1001
+        z-index: 1001;
         display: none;
         flex-direction: column;
         position: absolute;

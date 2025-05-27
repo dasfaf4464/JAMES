@@ -14,13 +14,6 @@ header {
     display: flex;
 }
 
-header img {
-    height: 8%;
-    width: 8%;
-    height: auto;
-    object-fit: contain;
-}
-
 main {
     flex: 1;
     display: grid;
@@ -39,8 +32,8 @@ main {
     margin: 0;
     border-radius: 10px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-    justify-content: space-between; /* 하단으로 chat-form 밀기 */
-    align-items: center;            /* 중앙 정렬 */
+    justify-content: space-between;
+    align-items: center;
 }
 
 .categories {
@@ -73,7 +66,6 @@ main {
   transition: width 0.3s ease, height 0.3s ease;
   overflow: hidden;
 }
-
 
 .category-box {
     animation: bounce-in-bottom 1.1s both; 
@@ -110,6 +102,22 @@ main {
     max-height: 45vh;
     overflow-y: auto;  
     -ms-overflow-style: none;    
+}
+
+.question-box {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.memo {
+  width: 100%;
+  height: 60px;
+  resize: vertical;
+  font-size: 0.9rem;
+  padding: 6px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 }
 
 .LLM-list-panel {
