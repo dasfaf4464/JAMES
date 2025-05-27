@@ -22,6 +22,8 @@ REDIS_DBNUM = {"sessions": 0}
 """
 maria db class foundation fuctions
 """
+
+
 def get_mariadb_connection(id: str, pw: str):
     try:
         db_connection = pymysql.connect(
@@ -183,11 +185,13 @@ class MariadbManager:
 """
 redis manager foundation functions
 """
+
+
 def get_redis_connection(dbnum: int = 0):
     """Redis 3 호환: Redis에 연결하고 성공 여부 확인"""
     try:
         client = redis.StrictRedis(
-            host="127.0.0.1", port=6379, db=dbnum, decode_responses=True
+            host="127.0.0.1", port=6379, db=dbnum, decode_responses=True, client_name="Unmute"
         )
         client.ping()
         print("Redis 서버 연결 성공")
@@ -201,7 +205,30 @@ class RedisManager:
     def __init__(self, redis_db_num: int = 0):
         self.redis_client = get_redis_connection(redis_db_num)
 
-    def set_json(self, key: str, data: dict) -> bool:
+    def put_set(self, key: str, data: list):
+        """
+        set 자료형에 저장합니다.
+        key : "activated_session",
+        """
+        self.redis_client.sadd(key, *data)
+
+    def is_in_set(self, key: str, values: list):
+        """
+        set 자료형에서 값이 존재함을 확인합니다.
+        """
+        return self.redis_client.smismember(key, values)
+
+    def put_hash(self, key: str, data: dict):
+        """
+        hash 자료형에 저장합니다.
+        key: "activated_user:key",
+        """
+        return self.redis_client.hset(mapping=data)
+
+    def get_hash(self, name):
+        return self.redis_client.hset
+
+    def put_json(self, key: str, data: dict) -> bool:
         """
         JSON 형태의 데이터를 Redis에 저장합니다.
 
@@ -241,13 +268,16 @@ class RedisManager:
             print(f"Error getting JSON data: {e}")
             return None
 
+
 mariadb_admin_manager = MariadbManager(DB_ADMIN.get("id"), DB_ADMIN.get("pw"))
 mariadb_user_manager = MariadbManager(DB_USER.get("id"), DB_USER.get("pw"))
 redis_manager = RedisManager(0)
 
+
 def tmp_session_cleaner():
     import time
+
     while True:
         SQL = "DELETE FROM sessioninfo WHERE is_temporary = 1 AND create_at < NOW() - INTERVAL 3 HOUR"
-        mariadb_admin_manager.put_sql(SQL=SQL, params = ())
+        mariadb_admin_manager.put_sql(SQL=SQL, params=())
         time.sleep(1800)

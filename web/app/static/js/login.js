@@ -66,6 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+
+/**
+ * 세션 생성 코드 필요
+ */
+
+
 /**
  * 세션 코드 입력후 그 코드로 이동
  */
@@ -80,7 +86,19 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    window.location.href = `/session/${session_code}`;
+    fetch('room/join', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_code: session_code })
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success == true) {
+          window.location.href = `/session/${session_code}`
+        } else {
+          alert("세션에 참여하지 못했습니다.")
+        }
+      })
 
   });
 });

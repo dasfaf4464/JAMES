@@ -2,7 +2,7 @@
 세션에 대한 api를 관리하는 모듈입니다.
 """
 
-from flask import Blueprint, request, make_response, jsonify
+from flask import Blueprint, request, jsonify, redirect
 from flask_socketio import SocketIO, join_room, leave_room, emit
 import json
 from app.manager.db_manager import (
@@ -10,11 +10,11 @@ from app.manager.db_manager import (
     mariadb_admin_manager,
     redis_manager,
 )
-from app.manager.chat_manager import ChatManager, active_sessions
+from app.manager.chat_manager import ChatManager
 from app.manager.llm_manager import llmManager
 
 createSession_bp = Blueprint("create_session", __name__, url_prefix="/room")
-joinRoom_bp = Blueprint("join_room", __name__, url_prefix="/room")
+joinSession_bp = Blueprint("join_session", __name__, url_prefix="/room")
 sendtoLLM_bp = Blueprint("sendtollm", __name__, url_prefix="/room")
 
 
@@ -54,39 +54,30 @@ def create_sesison():
     else:
         is_temporary = 0
 
-    session_code = ChatManager.create_room(
+    session = tuple()
+    session = ChatManager.create_room(
         admin_key=admin_key,
         title=title,
         description=description,
         is_temporary=is_temporary,
     )
-    if not mariadb_admin_manager.insert(
-        table="sessioninfo",
-        data={
-            "name": title,
-            "description": description,
-            "session_key": session_code,
-            "host": admin_key,
-            "is_temporary": is_temporary,
-        },
-    ):
-        print(active_sessions)
-        active_sessions.pop(session_code)
-        print("세션 db저장 오류")
-        print(active_sessions)
-        return jsonify({"error": "db_error"}), 500
 
-    return jsonify({"session_code": session_code, "error": False})
+    if session:  # 세션 생성 성공
+        return jsonify({"session_code": session, "error": False})
+
+    return jsonify({"error": "db_error"}), 500
 
 
-@joinRoom_bp.route("/join", methods=["GET"])
-def user_join_room():
-    """
-    session 페이지 진입시 사용자 정보를 보내고 웹소켓을 연결합니다.
-    """
+@joinSession_bp.route("/join", methods=["POST"])
+def join_session():
+    request_data = request.get_json()
+    request_cookie = request.cookies
+    user_key = request_cookie.get("user_key")
 
-    data = request.get_json()
-    return
+    if ChatManager.user_join(request_data.get("session_code"), user_key):
+        return jsonify({"success": True})
+    else:
+        return jsonify({"success": False})
 
 
 @sendtoLLM_bp.route("/llm", methods=["POST", "GET"])
@@ -152,18 +143,16 @@ def init_socketio(socketio):
 
     @socketio.on("disconnect")
     def handle_disconnect(data):
-        """
-        사용자의 소켓 연결이 끊겼을 때 실행됩니다.
-        """
+        user_key = request.cookies.get("user_key")
+        session_code = request.args.get("session_code")
         print(f"[DISCONNECT] {request.sid} disconnected.")
+        ChatManager.user_leave(session_code, user_key)
+        leave_room(session_code)
 
     @socketio.on("error")
     def handle_error(data):
-        """ """
-
-    @socketio.on("test")
-    def test(data: str):
-        print(data)
+        """
+        """
 
     @socketio.on("send_llm", namespace="/")
     def handle_select_llm(data):
