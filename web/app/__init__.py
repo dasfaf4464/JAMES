@@ -5,7 +5,7 @@ from app.views.home import home_bp
 from app.views.history import history_bp
 from app.views.session import session_bp
 from app.api.authorize import userChecking_bp, login_bp, logout_bp, makename_bp, signup_bp
-from app.api.search import mySession_bp, myQuestion_bp, myAnswer_bp, myPick_bp
+from app.api.search import mySession_bp, myQuestion_bp
 from app.api.room import createSession_bp, joinSession_bp, sendtoLLM_bp
 
 def create_app():
@@ -25,8 +25,6 @@ def create_app():
     #search
     app.register_blueprint(mySession_bp)
     app.register_blueprint(myQuestion_bp)
-    app.register_blueprint(myAnswer_bp)
-    app.register_blueprint(myPick_bp)
     #session
     app.register_blueprint(createSession_bp)
     app.register_blueprint(joinSession_bp)

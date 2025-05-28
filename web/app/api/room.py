@@ -127,19 +127,10 @@ def send_to_llm():
 def init_socketio(socketio):
     @socketio.on("connect")
     def handle_connect(data):
-        session_code = request.args.get("session_code")
-
-        if session_code:
-            join_room(session_code)
-            print(f"{request.sid} joined room: {session_code}")
-            emit(
-                "system_message",
-                f"자동으로 세션 {session_code} 방에 입장하였습니다.",
-                room=request.sid,
-            )
-        else:
-            print(f"{request.sid} tried to connect without a session_code.")
-            emit("error", "세션 코드가 제공되지 않았습니다.", room=request.sid)
+        """
+        연결 테스트
+        """
+        print(request.sid + "on" + request.args.get("session_code"))
 
     @socketio.on("disconnect")
     def handle_disconnect(data):
@@ -172,3 +163,29 @@ def init_socketio(socketio):
         Response
         """
         data
+
+    @socketio.on("session", namespace='/')
+    def handle_join_session(data):
+        """
+        세션에 입장해서 카테고리 정보 주기
+        """
+        session_code = request.args.get("session_code")
+
+        if session_code:
+            join_room(session_code)
+            print(f"{request.sid} joined room: {session_code}")
+        else:
+            print(f"{request.sid} tried to connect without a session_code.")
+
+    @socketio.on("join_category", namespace='/')
+    def handle_join_category(data):
+        """
+        유저가 선택한 카테고리를 받았을 때 카테고리 정보를 전송
+        """
+        categorie = request.args.get("session_code")
+
+    @socketio.on("disconnect_category", namespace='/')
+    def handle_disconnect_category(data):
+        """
+        유저가 다른 카테고리를 선택했을 때 연결 종료 - 이후 새로운 카테고리에 연결
+        """
