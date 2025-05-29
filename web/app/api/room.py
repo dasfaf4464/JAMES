@@ -92,8 +92,9 @@ def send_to_llm():
     response:
         JSON { "count": int, "text": str or null, "error": int }
     """
-    request_data = request.get_data(as_text=True)
-    from_llm = llmManager[0]._request_llm(request_data)
+    request_data = request.get_json()
+    request_cookie = request.cookies
+    from_llm = llmManager[0]._request_llm(request_cookie.get("user_key"), request_data.get("session_code"), request_data.get("content"))
 
     if from_llm is False:
         return jsonify({"error_content": "length error"}), 400

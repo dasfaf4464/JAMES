@@ -61,11 +61,14 @@ document.addEventListener("DOMContentLoaded", () => {
     canClick = false;
 
     const originaltext = document.getElementById('originaltext').value.trim();
+    const path = window.location.pathname;
+    const parts = path.split('/');
+    const sessionCode = parts[2];
 
     fetch('/room/llm', {
       method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: originaltext
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content: originaltext, session_code: sessionCode })
     })
       .then(res => res.json())
       .then(data => {
