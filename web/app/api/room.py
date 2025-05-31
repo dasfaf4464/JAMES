@@ -2,9 +2,8 @@
 세션에 대한 api를 관리하는 모듈입니다.
 """
 
-from flask import Blueprint, request, jsonify, redirect
+from flask import Blueprint, request, jsonify
 from flask_socketio import SocketIO, join_room, leave_room, emit
-import json
 from app.manager.db_manager import (
     mariadb_user_manager,
     mariadb_admin_manager,
@@ -94,34 +93,28 @@ def send_to_llm():
     """
     request_data = request.get_json()
     request_cookie = request.cookies
-    from_llm = llmManager[0]._request_llm(request_cookie.get("user_key"), request_data.get("session_code"), request_data.get("content"))
+    from_llm = llmManager[0]._request_llm(
+        request_cookie.get("user_key"),
+        request_data.get("session_code"),
+        request_data.get("content"),
+    )
 
     if from_llm is False:
         return jsonify({"error_content": "length error"}), 400
 
-    success_list, fail_list, warn_list = from_llm
-    error = 0
-
-    combined = success_list + warn_list
-
-    if len(warn_list) > 0:
-        error = 2
-    if len(fail_list) > 0:
-        combined = []
-        error = 1
-
     response_data = {
-        "count": len(combined),
+        "count": 3,
         "text": [
             {
-                "original": request_data,
-                "content": item["content"],
+                "content": item["llm"],
                 "category": item["category"],
+                "key": item["key"],
+                "error": item["error"],
             }
-            for item in combined
+            for item in from_llm
         ],
-        "error": error,
     }
+
     return jsonify(response_data), 200
 
 
@@ -131,7 +124,7 @@ def init_socketio(socketio):
         """
         연결 테스트
         """
-        print(request.sid + "on" + request.args.get("session_code"))
+        print(request.sid + "   on   " + request.args.get("session_code"))
 
     @socketio.on("disconnect")
     def handle_disconnect(data):
@@ -143,34 +136,36 @@ def init_socketio(socketio):
 
     @socketio.on("error")
     def handle_error(data):
-        """
-        """
+        """ """
 
     @socketio.on("send_llm", namespace="/")
     def handle_select_llm(data):
-        """
-        Request :
-            session_code (str):
-            user_key (str):
-            original_text (str):
-            selected_text (str):
-            category : {
-                main (str):
-                sub (str):
-                minor (str):
-            }
-            with_origianl (bool):
+        mariadb_admin_manager.put_sql(
+            "UPDATE fromllm set selected = 1 WHERE `key` = %s;", (data.get("key"),)
+        )
+        select = mariadb_user_manager.select(
+            "selected_llm_responses", {"`key`": data.get("key")}
+        )
+        select = select[0]
+        i = 0
+        with redis_manager.redis_client.lock(f"session:{select.get('session')}:category", blocking_timeout=5):
+            test = redis_manager.get_hash(name=f"session:{select.get('session')}:category", key=select.get("main") + "/" + select.get("sub"))
+            if test == None:
+                i = 1
+            else:
+                i = int(test)+1
+            redis_manager.put_hash(
+                name=f"session:{select.get('session')}:category",
+                data={select.get("main") + "/" + select.get("sub"):i,},
+            )
+            emit("update", {"test": "내용"})
 
-        Response
-        """
-        data
-
-    @socketio.on("session", namespace='/')
+    @socketio.on("session", namespace="/")
     def handle_join_session(data):
         """
         세션에 입장해서 카테고리 정보 주기
         """
-        session_code = request.args.get("session_code")
+        session_code = data
 
         if session_code:
             join_room(session_code)
@@ -178,14 +173,14 @@ def init_socketio(socketio):
         else:
             print(f"{request.sid} tried to connect without a session_code.")
 
-    @socketio.on("join_category", namespace='/')
+    @socketio.on("join_category", namespace="/")
     def handle_join_category(data):
         """
         유저가 선택한 카테고리를 받았을 때 카테고리 정보를 전송
         """
         categorie = request.args.get("session_code")
 
-    @socketio.on("disconnect_category", namespace='/')
+    @socketio.on("disconnect_category", namespace="/")
     def handle_disconnect_category(data):
         """
         유저가 다른 카테고리를 선택했을 때 연결 종료 - 이후 새로운 카테고리에 연결

@@ -186,13 +186,12 @@ class LLMManager:
                         "sub": row["sub"],
                         "minor": row["minor"],
                     },
+                    "error": row["error"],
                 }
                 for row in latest_llm
             ]
 
-            print(client_data)
-
-            return llm_json
+            return client_data
         except Exception as e:
             print(f"오류 발생: {e}")
 

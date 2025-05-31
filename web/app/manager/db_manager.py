@@ -191,7 +191,11 @@ def get_redis_connection(dbnum: int = 0):
     """Redis 3 호환: Redis에 연결하고 성공 여부 확인"""
     try:
         client = redis.StrictRedis(
-            host="127.0.0.1", port=6379, db=dbnum, decode_responses=True, client_name="Unmute"
+            host="127.0.0.1",
+            port=6379,
+            db=dbnum,
+            decode_responses=True,
+            client_name="Unmute",
         )
         client.ping()
         print("Redis 서버 연결 성공")
@@ -218,15 +222,15 @@ class RedisManager:
         """
         return self.redis_client.smismember(key, values)
 
-    def put_hash(self, key: str, data: dict):
+    def put_hash(self, name: str, data: dict):
         """
         hash 자료형에 저장합니다.
         key: "activated_user:key",
         """
-        return self.redis_client.hset(mapping=data)
+        return self.redis_client.hset(name=name, mapping=data)
 
-    def get_hash(self, name):
-        return self.redis_client.hset
+    def get_hash(self, name, key):
+        return self.redis_client.hget(name=name, key=key)
 
     def put_json(self, key: str, data: dict) -> bool:
         """
