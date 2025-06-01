@@ -148,17 +148,23 @@ def init_socketio(socketio):
         )
         select = select[0]
         i = 0
-        with redis_manager.redis_client.lock(f"session:{select.get('session')}:category", blocking_timeout=5):
-            test = redis_manager.get_hash(name=f"session:{select.get('session')}:category", key=select.get("main") + "/" + select.get("sub"))
+        with redis_manager.redis_client.lock(
+            f"session:{select.get('session')}:category:lock", blocking_timeout=5
+        ):
+            test = redis_manager.get_hash(
+                name=f"session:{select.get('session')}:category",
+                key=select.get("main") + "/" + select.get("sub"),
+            )
             if test == None:
                 i = 1
             else:
-                i = int(test)+1
+                i = int(test) + 1
+                print(i)
             redis_manager.put_hash(
                 name=f"session:{select.get('session')}:category",
-                data={select.get("main") + "/" + select.get("sub"):i,},
+                data={select.get("main") + "/" + select.get("sub"): i},
             )
-            emit("update", {"test": "내용"})
+            emit("update", {"category": select.get("main") + "/" + select.get("sub")})
 
     @socketio.on("session", namespace="/")
     def handle_join_session(data):

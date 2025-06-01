@@ -20,7 +20,12 @@ document.addEventListener("DOMContentLoaded", () => {
   socket.emit("session", sessionCode)
 
   socket.on("update", (data) => {
-    alert("카테고리 변화를 감지했습니다. ", data.test)
+    let is_in = session_categories.get(data.category)
+    if(!is_in) {
+      session_categories.set(data.category, 1);
+    } else {
+      session_categories.set(data.category, is_in+1);
+    }
   })
 });
 

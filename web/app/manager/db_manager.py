@@ -229,7 +229,7 @@ class RedisManager:
         """
         return self.redis_client.hset(name=name, mapping=data)
 
-    def get_hash(self, name, key):
+    def get_hash(self, name: str, key: str):
         return self.redis_client.hget(name=name, key=key)
 
     def put_json(self, key: str, data: dict) -> bool:
