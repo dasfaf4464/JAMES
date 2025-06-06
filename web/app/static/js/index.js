@@ -1,53 +1,24 @@
 /**
- * 사용자 쿠키확인 및 발급
- */
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('/auth/check_key')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('서버 응답 오류');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log("사용자 인증 응답:", data);
-
-      if (data.redirect_url) {
-        if (window.location.origin != data.redirect_url) {
-          window.location.href = data.redirect_url;
-        }
-      }
-
-      if (data.message) {
-        console.log("서버 메시지:", data.message);
-      }
-    })
-    .catch(error => {
-      console.error("인증 확인 실패:", error);
-    });
-});
-
-/**
  * 로그인 버튼 클릭시 id, pw 를 auth/login으로 전달
  */
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('login-button').addEventListener('click', (event) => {
     event.preventDefault();
 
-    const username = document.getElementById('username').value;
-    const password = document.getElementById('password').value;
+    const id = document.getElementById('username').value;
+    const pw = document.getElementById('password').value;
 
-    fetch('/auth/login', {
+    fetch('/api/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username, password })
+      body: JSON.stringify({ id, pw })
     })
       .then(res => res.json())
       .then(data => {
-        if (data.isSuccess) {
-          window.location.href = data.redirect_url;
+        if (data.login_result) {
+          window.location.href = '/home';
         } else {
-          alert(data.message);
+          alert(data.login_message);
         }
       })
       .catch(err => {
@@ -55,6 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 });
+
 
 /**
  * 회원가입 버튼 클릭시 회원가입 페이지로 이동
@@ -95,12 +67,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const title = document.getElementById("sessionTitleInput").value.trim();
     const description = document.getElementById("sessionexplain").value;
-    const temporaryInput = document.querySelector('input[name="chk_info"]:checked');
-
-    if (!temporaryInput) {
-      alert("임시 여부를 선택해주세요.");
-      return;
-    }
 
     const temporary = temporaryInput.value;
 
@@ -144,21 +110,7 @@ document.addEventListener("DOMContentLoaded", () => {
       alert("세션 코드를 입력해주세요");
       return;
     }
-
-    fetch('room/join', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ session_code: session_code })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (data.success == true) {
-          window.location.href = `/session/${session_code}`
-        } else {
-          alert("세션에 참여하지 못했습니다.")
-        }
-      })
-
+    window.location.href = 'session/' + data.session_code
   });
 });
 

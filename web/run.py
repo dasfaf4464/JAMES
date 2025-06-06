@@ -7,11 +7,10 @@
 
 import subprocess
 import threading
-import re
-from app import create_app
+from app.routes import create_app
 from flask_socketio import SocketIO
-from app.api.room import init_socketio
-from app.manager.db_manager import tmp_session_cleaner
+from app.del_api.room import init_socketio
+from app.util.db_manager import tmp_session_cleaner
 from config import CLOUDFLARE_TUNNEL_COMMAND, MARIADB_COMMAND, REDIS_COMMAND
 
 app = create_app()
@@ -25,6 +24,7 @@ mariadb_process = None
 redis_process = None
 
 def start_cloudflare():
+    import re
     global cloudflare_process
     global cloudflare_URL
     try:

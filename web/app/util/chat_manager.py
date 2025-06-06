@@ -6,16 +6,11 @@ from flask import jsonify
 from flask_socketio import SocketIO, emit, rooms
 from datetime import datetime, timedelta, timezone
 import random, string
-from app.manager.db_manager import (
+from app.util.db_manager import (
     redis_manager,
     mariadb_admin_manager,
     mariadb_user_manager,
 )
-
-"""
-redis | session:<session_code> = set{user}
-"""
-
 
 class ChatManager:
     def __init__(
@@ -119,3 +114,4 @@ class ChatManager:
         charset = string.ascii_uppercase + string.digits
         parts = ["".join(random.choices(charset, k=4)) for _ in range(3)]
         return "-".join(parts)
+ 

@@ -12,7 +12,7 @@ from flask import (
     Response,
     redirect,
 )
-from app.manager.db_manager import mariadb_user_manager, mariadb_admin_manager
+from app.util.db_manager import mariadb_user_manager, mariadb_admin_manager
 from datetime import datetime, timedelta, timezone
 import random
 import string

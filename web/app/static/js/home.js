@@ -1,39 +1,10 @@
 /**
- * 쿠키 확인 및 갱신
- */
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('/auth/check_key')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('서버 응답 오류');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log("사용자 인증 응답:", data);
-
-      if (data.redirect_url) {
-        if (window.location.origin != data.redirect_url) {
-          window.location.href = data.redirect_url;
-        }
-      }
-
-      if (data.message) {
-        console.log("서버 메시지:", data.message);
-      }
-    })
-    .catch(error => {
-      console.error("인증 확인 실패:", error);
-    });
-});
-
-/**
  * 메뉴 - 프로필로 이동
  */
 document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('history-button').addEventListener('click', (event) => {
     event.preventDefault();
-    window.location.href = '/history';
+    window.location.href = '/profile';
   });
 });
 
@@ -44,14 +15,14 @@ document.addEventListener("DOMContentLoaded", function () {
   document.getElementById('logout-button').addEventListener('click', (event) => {
     event.preventDefault();
 
-    fetch('/auth/logout', {
+    fetch('/api/user/logout', {
       method: 'POST'
     })
       .then(res => res.json())
       .then(data => {
-        if (data.isSuccess) {
-          alert(data.message)
-          window.location.href = data.redirect_url;
+        if (data.logout_result) {
+          alert(data.logout_message)
+          window.location.href = '/';
         } else {
           alert(data.message);
         }

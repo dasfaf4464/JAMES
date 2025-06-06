@@ -6,7 +6,7 @@ LLMManager의 인트턴스는 agent와 1:1로 대응됩니다.
 
 from mistralai import Mistral
 from config import API_KEY, AGENT_ID
-from app.manager.db_manager import mariadb_admin_manager
+from app.util.db_manager import mariadb_admin_manager
 import re
 import json
 

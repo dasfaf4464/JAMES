@@ -21,11 +21,50 @@ document.addEventListener("DOMContentLoaded", () => {
 
   socket.on("update", (data) => {
     let is_in = session_categories.get(data.category)
-    if(!is_in) {
+    if (!is_in) {
       session_categories.set(data.category, 1);
     } else {
-      session_categories.set(data.category, is_in+1);
+      session_categories.set(data.category, is_in + 1);
     }
+
+    const existingBox = Array.from(categoriesContainer.querySelectorAll('.category-box'))
+      .find(b => b.dataset.category === category);
+
+    if (existingBox) {
+      existingBox.dataset.count = is_in;
+
+      existingBox.querySelector('p').textContent = `${category}`;
+
+      const baseSize = 120;
+      const newSize = baseSize + (count - 1) * 40;
+
+      existingBox.style.width = `${newSize}px`;
+      existingBox.style.height = `${newSize}px`;
+    } else {
+
+      const catBox = document.createElement('div');
+      catBox.className = 'category-box';
+      catBox.dataset.category = category;
+      catBox.dataset.count = count;
+
+      const p = document.createElement('p');
+      p.textContent = `${category}`;
+      catBox.appendChild(p);
+
+      categoriesContainer.appendChild(catBox);
+
+      catBox.style.width = '120px';
+      catBox.style.height = '120px';
+
+      catBox.addEventListener('click', () => {
+        paginationState.currentCategory = category;
+        paginationState.currentSummary = summary;
+        paginationState.currentPage = 0;
+
+        fetch('/')
+      });
+    }
+
   })
 });
 

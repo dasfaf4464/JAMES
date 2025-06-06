@@ -4,13 +4,13 @@
 
 from flask import Blueprint, request, jsonify
 from flask_socketio import SocketIO, join_room, leave_room, emit
-from app.manager.db_manager import (
+from app.util.db_manager import (
     mariadb_user_manager,
     mariadb_admin_manager,
     redis_manager,
 )
-from app.manager.chat_manager import ChatManager
-from app.manager.llm_manager import llmManager
+from app.util.chat_manager import ChatManager
+from app.util.llm_manager import llmManager
 
 createSession_bp = Blueprint("create_session", __name__, url_prefix="/room")
 joinSession_bp = Blueprint("join_session", __name__, url_prefix="/room")
@@ -159,7 +159,7 @@ def init_socketio(socketio):
                 i = 1
             else:
                 i = int(test) + 1
-                print(i)
+                
             redis_manager.put_hash(
                 name=f"session:{select.get('session')}:category",
                 data={select.get("main") + "/" + select.get("sub"): i},
