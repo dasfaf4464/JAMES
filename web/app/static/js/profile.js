@@ -20,7 +20,6 @@ function rotateActionText() {
 }
 
 rotateActionText();
-
 setInterval(rotateActionText, 10000);
 
 /**
@@ -34,24 +33,76 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /**
- * 레이아웃 변경
+ * 레이아웃 변경 (3단계: list-view, grid-view, card-view)
  */
 document.addEventListener("DOMContentLoaded", function () {
     const layoutButton = document.getElementById("layout-button");
-    const container = document.querySelector(".myQuestionContainer");
+    const containerDiv = document.querySelector(".myQuestionContainer");
 
-
-    container.classList.add("list-view");
+    // 초기 상태: list-view 적용, 버튼 텍스트 초기화
+    containerDiv.classList.add("list-view");
+    layoutButton.textContent = "그리드 레이아웃";
 
     layoutButton.addEventListener("click", () => {
-        if (container.classList.contains("list-view")) {
-            container.classList.remove("list-view");
-            container.classList.add("grid-view");
+        if (containerDiv.classList.contains("list-view")) {
+            containerDiv.classList.remove("list-view");
+            containerDiv.classList.add("grid-view");
+            layoutButton.textContent = "카드 레이아웃";
+        } else if (containerDiv.classList.contains("grid-view")) {
+            containerDiv.classList.remove("grid-view");
+            containerDiv.classList.add("card-view");
             layoutButton.textContent = "리스트 레이아웃";
-        } else {
-            container.classList.remove("grid-view");
-            container.classList.add("list-view");
+        } else if (containerDiv.classList.contains("card-view")) {
+            containerDiv.classList.remove("card-view");
+            containerDiv.classList.add("list-view");
             layoutButton.textContent = "그리드 레이아웃";
         }
     });
+});
+
+/**
+ * 사용자 질문 불러오기 및 표시
+ */
+document.addEventListener("DOMContentLoaded", function () {
+    const container = document.querySelector(".myQuestionContainer ul");
+    const questionCountLi = document.createElement("li"); // 질문 개수 표시용 li
+    container.prepend(questionCountLi);
+
+    function loadMyQuestions() {
+        fetch('/api/user/get/my_questions', { method: 'GET', credentials: 'include' })
+            .then(response => {
+                if (!response.ok) throw new Error("네트워크 오류");
+                return response.json();
+            })
+            .then(posts => {
+                container.innerHTML = ''; // 기존 내용 초기화
+                container.appendChild(questionCountLi);
+
+                questionCountLi.textContent = `질문 개수 : ${posts.length}`;
+
+                if (posts.length === 0) {
+                    const li = document.createElement("li");
+                    li.textContent = "질문이 없습니다.";
+                    container.appendChild(li);
+                    return;
+                }
+
+                posts.forEach(post => {
+                    const li = document.createElement("li");
+                    li.innerHTML = `
+                        <strong>원본 질문:</strong> ${post.original} <br>
+                        <strong>LLM 질문:</strong> ${post.llm} <br>
+                        <strong>카테고리:</strong> ${post.main} / ${post.sub} / ${post.minor} <br>
+                        <small>작성일: ${post.create_at}</small>
+                    `;
+                    container.appendChild(li);
+                });
+            })
+            .catch(error => {
+                console.error(error);
+                container.innerHTML = '<li>질문을 불러오는 데 실패했습니다.</li>';
+            });
+    }
+
+    loadMyQuestions();
 });

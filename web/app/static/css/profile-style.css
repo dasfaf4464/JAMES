@@ -67,6 +67,7 @@ main {
     width: 140px;
 }
 
+/* 리스트 레이아웃 */
 .myQuestionContainer.list-view ul {
     display: block;
 }
@@ -74,8 +75,15 @@ main {
 .myQuestionContainer.list-view li {
     display: block;
     margin-bottom: 8px;
+    background-color: #f0f0f0;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    border: 1px solid #ccc;
+    color: #333;
 }
 
+/* 그리드 레이아웃 */
 .myQuestionContainer.grid-view ul {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
@@ -87,71 +95,44 @@ main {
     padding: 10px;
     border-radius: 8px;
     background-color: #f0f0f0;
+    font-size: 0.9rem;
+    color: #333;
 }
 
-.status-bar {
+/* 카드 레이아웃 추가 */
+.myQuestionContainer.card-view ul {
     display: flex;
-    flex: 0 0 auto;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 10px;
-    font-size: large;
-}
-
-.status-bar button {
-    background-color: var(--main-button-normal);
-    border: none;
-    padding: 10px 22px;
-    font-size: 16px;
-    border-radius: 5px;
-    color: white;
-}
-
-#check-myquestion {
-    padding: 0px;
-    margin-left: 10px;
-    font-size: 20px;
-}
-
-#layout-button {
-    background-color: var(--main-button-normal);
-    border: none;
+    flex-wrap: wrap;
+    gap: 20px;
     padding: 10px;
     margin: 10px;
-    font-size: 16px;
-    border-radius: 5px;
-    color: white;
-    width: 140px;
+    list-style: none;
+    justify-content: flex-start;
 }
 
-.myQuestionContainer.list-view ul {
-    display: block;
+.myQuestionContainer.card-view li {
+    background: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    padding: 20px;
+    width: 320px;
+    font-size: 0.95rem;
+    color: #222;
+    border: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
 }
 
-.myQuestionContainer.list-view li {
-    display: block;
-    margin-bottom: 8px;
+.myQuestionContainer.card-view li:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
-.myQuestionContainer.grid-view ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(520px, 1fr));
-    gap: 12px;
-}
-
-.myQuestionContainer.grid-view li {
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 8px;
-    background-color: #f0f0f0;
-}
-
+/* 공통 스타일 */
 .myQuestionContainer {
     display: flex;
     flex-direction: column;
     width: 100%;
-    padding: 0px;
     padding: 0px;
     box-sizing: border-box;
     overflow-y: auto;
@@ -161,17 +142,10 @@ main {
 
 .myQuestionContainer::-webkit-scrollbar {
     display: none;
-    overflow-y: auto;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
 }
 
-.myQuestionContainer::-webkit-scrollbar {
-    display: none;
-}
-
+/* ul 기본 스타일 (각 레이아웃에서 덮어씌움) */
 .myQuestionContainer ul {
-    flex: 1;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -181,17 +155,6 @@ main {
     gap: 8px;
     border-radius: 10px;
     box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
-}
-
-.myQuestionContainer li {
-    background-color: #f0f0f0;
-    padding: 15px 20px;
-    padding: 15px 20px;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    border: 1px solid #ccc;
-    border: 1px solid #ccc;
-    color: #333;
 }
 
 .myQuestionContainer ul::-webkit-scrollbar {
@@ -206,6 +169,7 @@ footer {
     padding: 1rem;
     font-size: 0.9rem;
 }
+
 @media (max-width: 768px) {
 
     header img {
@@ -214,19 +178,24 @@ footer {
 
     main {
         flex-direction: column;
+        height: 100vh;
     }
 
-    footer {
+    .status-bar {
         flex-direction: column;
-        font-size: 0.8rem;
-        align-items: center;
-        text-align: center;
+        font-size: small;
     }
 
-.myQuestionContainer.grid-view ul {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 12px;
-}
+    .status-bar button {
+        width: 100%;
+        margin-bottom: 8px;
+    }
 
+    #check-myquestion {
+        font-size: 18px;
+    }
+
+    .myQuestionContainer.card-view li {
+        width: 100%;
+    }
 }
