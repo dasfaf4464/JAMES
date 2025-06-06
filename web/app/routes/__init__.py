@@ -15,6 +15,8 @@ from app.routes.home import (
     home_bp,
     logout_bp,
     get_my_session_bp,
+    get_session_detail_bp,
+    exit_session_bp,
     create_session_at_home_bp,
 )
 from app.routes.profile import profile_bp, get_my_question_bp
@@ -29,7 +31,7 @@ from app.routes.session import (
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder="../templates", static_folder="../static")
 
     app.register_blueprint(check_cookie_bp)
     app.register_blueprint(set_cookie_bp)
@@ -46,6 +48,8 @@ def create_app():
     app.register_blueprint(home_bp)
     app.register_blueprint(logout_bp)
     app.register_blueprint(get_my_session_bp)
+    app.register_blueprint(get_session_detail_bp)
+    app.register_blueprint(exit_session_bp)
     app.register_blueprint(create_session_at_home_bp)
 
     app.register_blueprint(profile_bp)

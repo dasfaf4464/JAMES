@@ -21,8 +21,8 @@ ws
 """
 from flask import Blueprint, request, render_template, jsonify
 
-import web.app.models.session_read_services as session_read_services
-import web.app.models.post_services as post_services
+import app.models.session_read_services as session_read_services
+import app.models.post_services as post_services
 
 import re
 
@@ -48,7 +48,8 @@ def session(sessioncode):
         HTML:
             - session.html
     """
-    if re.fullmatch(rf'[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}', sessioncode):
+    
+    if re.fullmatch(r'[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}', sessioncode):
         return render_template("session.html")
     else:
         return render_template("session_error.html")

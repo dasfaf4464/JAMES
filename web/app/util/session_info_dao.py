@@ -2,7 +2,7 @@
 Maria DB session_info table을 관리하는 클래스입니다.
 """
 
-from mariadb_clients import mariaDBPool, MariaDBPooledConnection
+from app.util.mariadb_clients import mariaDBPool, MariaDBPooledConnection
 
 
 class SessionInfoDAO:
@@ -36,7 +36,7 @@ class SessionInfoDAO:
         conn = self.pool.get_connection()
         try:
             with conn.cursor() as cursor:
-                sql = "INSERT INTO session_info (name, description, session_key, pw, host_key, is_temporary) VALUES (%s, %s, %s, %s, %s, %s)"
+                sql = "INSERT INTO session_info (name, description, session_key, pw, host, is_temporary) VALUES (%s, %s, %s, %s, %s, %s)"
                 cursor.execute(
                     sql, (name, description, session_key, pw, host_key, temporary)
                 )

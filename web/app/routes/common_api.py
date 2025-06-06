@@ -9,7 +9,7 @@ router
 """
 from flask import Blueprint, request, g, redirect, url_for
 
-import web.app.models.user_services as user_services
+import app.models.user_services as user_services
 
 from datetime import datetime, timezone, timedelta
 
@@ -26,28 +26,35 @@ def ensure_cookie():
     cookie = request.cookies
     if cookie.get("user_key") is None:
         g.need_set_cookie = True
-    
+
 
 @set_cookie_bp.after_app_request#checked
 def set_cookie(response):
     """
     사용자 쿠키를 확인하고 관리합니다.
     """
+    if request.path =="/api/user/login" or request.path =="/api/user/logout":
+        return response
+
     MAXAGE = 10800
 
     cookie = request.cookies
 
     if getattr(g, "need_set_cookie", False):
+        user_name = user_services.create_name()
+        user_key = user_services.create_key()
+        user_services.register(name=user_name, user_key=user_key, temporary=True)
+
         response.set_cookie(
             key="user_name",
-            value=user_services.create_name(),
+            value=user_name,
             max_age=MAXAGE,
             path='/',
             samesite="Lax",
         )
         response.set_cookie(
             key="user_key",
-            value=user_services.create_key(),
+            value=user_key,
             max_age=MAXAGE,
             httponly=True,
             path='/',
@@ -55,7 +62,7 @@ def set_cookie(response):
         )
         response.set_cookie(
             key="temporary",
-            value=True,
+            value="True",
             max_age=MAXAGE,
             httponly=True,
             path='/',
@@ -81,7 +88,7 @@ def set_cookie(response):
         )
         response.set_cookie(
             key="temporary",
-            value=True,
+            value="True",
             max_age=MAXAGE,
             httponly=True,
             path="/",
@@ -108,7 +115,7 @@ def set_cookie(response):
         )
         response.set_cookie(
             key="temporary",
-            value=False,
+            value="False",
             expires=expire_time,
             httponly=True,
             path="/",
@@ -125,10 +132,15 @@ def authorize():
     CANNOTACCESS_MEMBER = ("index", "register")
 
     cookie = request.cookies
-    
-    if cookie.get("temporary") == True:
+
+    if cookie.get("temporary") == "True":
         if request.blueprint in CANNOTACCESS_NONMEMBER:
             return redirect(url_for("index.index"))
-    else:
+
+    elif cookie.get("temporary") == "False":
         if request.blueprint in CANNOTACCESS_MEMBER:
             return redirect(url_for("home.home"))
+
+    else:
+        if request.blueprint in CANNOTACCESS_NONMEMBER:
+            return redirect(url_for("index.index"))

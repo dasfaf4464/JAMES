@@ -11,7 +11,8 @@ router
 
 from flask import Blueprint, request, render_template, jsonify
 
-import web.app.models.user_services as user_services
+import app.models.user_services as user_services
+import app.models.post_services as post_services
 
 profile_bp = Blueprint("profile", __name__)
 get_my_question_bp = Blueprint("get_my_question", __name__, url_prefix="/api/user")
@@ -41,7 +42,7 @@ def profile():
     content["name"] = cookie.get("user_name")
     content["day"] = user_services.get_from_create_day(cookie.get("user_key"))
 
-    return render_template("history.html", **content)
+    return render_template("profile.html", **content)
 
 
 @get_my_question_bp.route("/get/my_questions", methods=["GET"])
@@ -64,5 +65,7 @@ def get_my_question():
             - category (dict): 카테고리 입니다.
             - memo (str): 작성된 메모입니다.
     """
-    data = request.get_json()
     cookie = request.cookies
+    
+    posts = post_services.get_all_posts(cookie.get("user_key"))
+    return jsonify(posts)

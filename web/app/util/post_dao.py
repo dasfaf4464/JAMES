@@ -2,18 +2,18 @@
 Maria DB post table과 selected_llm_responses view를 관리하는 클래스입니다.
 """
 
-from mariadb_clients import mariaDBPool, MariaDBPooledConnection
+from app.util.mariadb_clients import mariaDBPool, MariaDBPooledConnection
 
 
 class PostDAO:
     def __init__(self, connection_pool: MariaDBPooledConnection):
         self.pool = connection_pool
 
-    def get_by_key(self, post_key):
+    def get_by_postkey(self, post_key):
         conn = self.pool.get_connection()
         try:
             with conn.cursor() as cursor:
-                sql = "SELECT * FROM post WHERE key=%s"
+                sql = "SELECT * FROM post WHERE post_key=%s"
                 cursor.execute(sql, (post_key,))
                 return cursor.fetchone()
         finally:
@@ -35,6 +35,16 @@ class PostDAO:
             with conn.cursor() as cursor:
                 sql = "SELECT * FROM selected_post WHERE user_key=%s"
                 cursor.execute(sql, (user_key,))
+                return cursor.fetchall()
+        finally:
+            self.pool.release_connection(conn)
+    
+    def get_all_select_by_session_key(self, session_key:str):
+        conn = self.pool.get_connection()
+        try:
+            with conn.cursor() as cursor:
+                sql = "SELECT * FROM selected_post WHERE session=%s"
+                cursor.execute(sql, (session_key,))
                 return cursor.fetchall()
         finally:
             self.pool.release_connection(conn)

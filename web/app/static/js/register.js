@@ -1,49 +1,20 @@
 /**
- * 사용자 쿠키 확인 : 임시 키 발급 없으면 인덱스로 가게
- */
-document.addEventListener('DOMContentLoaded', () => {
-    fetch('/auth/check_key')
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('서버 응답 오류');
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log("사용자 인증 응답:", data);
-
-            if (data.redirect_url) {
-                if (window.location.origin != data.redirect_url) {
-                    window.location.href = data.redirect_url;
-                }
-            }
-
-            if (data.message) {
-                console.log("서버 메시지:", data.message);
-            }
-        })
-        .catch(error => {
-            console.error("인증 확인 실패:", error);
-        });
-});
-
-/**
  * 이름 생성 요청
  */
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('create-name-button').addEventListener('click', function (event) {
         event.preventDefault();
 
-        fetch('/auth/generate_name', {
+        fetch('/api/user/name', {
             method: 'GET',
         })
-            .then(response => response.text())
-            .then(name => {
-                document.getElementById('name-input').value = name;
-            })
-            .catch(error => {
-                console.error("에러 발생: " + error);
-            });
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('name-input').value = data.name;
+        })
+        .catch(error => {
+            console.error("에러 발생: " + error);
+        });
     });
 });
 
@@ -82,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
             name: name
         };
 
-        fetch('/auth/signup', {
+        fetch('/api/user/signup', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -91,9 +62,9 @@ document.addEventListener("DOMContentLoaded", function () {
         })
             .then(response => response.json())
             .then(data => {
-                alert(data.message);
-                if (data.isSuccess) {
-                    window.location.href = data.redirect_url;
+                alert(data.register_message);
+                if (data.register_result) {
+                    window.location.href = '/';
                 }
             })
             .catch(error => {

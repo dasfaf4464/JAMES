@@ -8,15 +8,14 @@
 import subprocess
 import threading
 from app.routes import create_app
+from app.routes.session import register_socket
 from flask_socketio import SocketIO
-from app.del_api.room import init_socketio
-from app.util.db_manager import tmp_session_cleaner
 from config import CLOUDFLARE_TUNNEL_COMMAND, MARIADB_COMMAND, REDIS_COMMAND
 
 app = create_app()
 
 socketio = SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
-init_socketio(socketio=socketio)
+register_socket(socketio)
 
 cloudflare_process = None
 cloudflare_URL = None
@@ -109,14 +108,14 @@ if __name__ == "__main__":
     #cloudflare_thread = threading.Thread(target=run_cloudflare, daemon=True)
     mariadb_thread = threading.Thread(target=run_mariadb, daemon=True)
     redis_thread = threading.Thread(target=run_redis, daemon=True)
-    flask_thread = threading.Thread(target=run_flask, daemon=True)
-    sesison_cleaner_thread = threading.Thread(target=tmp_session_cleaner, daemon=True)
+    flask_thread = threading.Thread(target=run_flask, daemon=True) 
+    #sesison_cleaner_thread = threading.Thread(target=tmp_session_cleaner, daemon=True)
 
     mariadb_thread.start()
     redis_thread.start()
     flask_thread.start()
     #cloudflare_thread.start()
-    sesison_cleaner_thread.start()
+    #sesison_cleaner_thread.start()
 
     flask_thread.join()
     mariadb_thread.join()

@@ -11,7 +11,7 @@ router
 """
 
 from flask import Blueprint, render_template, request, jsonify
-import web.app.models.user_services as user_services
+import app.models.user_services as user_services
 
 register_bp = Blueprint("register", __name__)
 create_name_bp = Blueprint("create_name", __name__, url_prefix="/api/user")
@@ -78,9 +78,10 @@ def sign_up():
         data.get("name"),
         data.get("email"),
         cookie.get("user_key"),
+        temporary=False
     )
 
-    if register == True:
+    if register == "ok":
         register_message = "회원가입에 성공했습니다."
         return jsonify({"register_result": True, "register_message": register_message})
     elif register == "id":

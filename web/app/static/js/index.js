@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const id = document.getElementById('username').value;
     const pw = document.getElementById('password').value;
 
-    fetch('/api/login', {
+    fetch('/api/user/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id, pw })
@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
       .then(res => res.json())
       .then(data => {
         if (data.login_result) {
+          alert(data.login_message)
           window.location.href = '/home';
         } else {
           alert(data.login_message);
@@ -67,21 +68,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const title = document.getElementById("sessionTitleInput").value.trim();
     const description = document.getElementById("sessionexplain").value;
-
-    const temporary = temporaryInput.value;
+    const pw = document.getElementById("sessionPw").value;
 
     if (title) {
       modal.style.display = "none";
 
-      fetch('/room/create', {
+      fetch('/api/session/create/index', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description, temporary })
+        body: JSON.stringify({ title, description, pw })
       })
         .then(res => res.json())
         .then(data => {
-          if (data.error !== false) {
-            alert("세션이 생성되었습니다.\n세션 코드 : " + data.session_code);
+          if (data.session_result) {
+            alert(data.session_create_message + data.session_code);
             window.location.href = 'session/' + data.session_code;
           }
         })
@@ -92,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       document.getElementById("sessionTitleInput").value = "";
       document.getElementById("sessionexplain").value = "";
+      document.getElementById("sessionPw").value = "";
     }
   });
 });
@@ -104,13 +105,13 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById('into-session-button').addEventListener('click', (event) => {
     event.preventDefault();
 
-    const session_code = document.getElementById('session-code').value.trim()
+    const session_code = document.getElementById('session-code').value.trim();
 
     if (!session_code) {
       alert("세션 코드를 입력해주세요");
       return;
     }
-    window.location.href = 'session/' + data.session_code
+    window.location.href = 'session/' + session_code;
   });
 });
 
