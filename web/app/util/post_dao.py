@@ -12,6 +12,7 @@ class PostDAO:
     def get_by_postkey(self, post_key):
         conn = self.pool.get_connection()
         try:
+            conn.commit()  # 혹은 conn.rollback()
             with conn.cursor() as cursor:
                 sql = "SELECT * FROM post WHERE post_key=%s"
                 cursor.execute(sql, (post_key,))
@@ -24,7 +25,13 @@ class PostDAO:
         try:
             with conn.cursor() as cursor:
                 sql = "SELECT * FROM post WHERE user_key=%s ORDER BY post_key DESC LIMIT %s"
-                cursor.execute(sql, (user_key, count,))
+                cursor.execute(
+                    sql,
+                    (
+                        user_key,
+                        count,
+                    ),
+                )
                 return cursor.fetchall()
         finally:
             self.pool.release_connection(conn)
@@ -38,8 +45,8 @@ class PostDAO:
                 return cursor.fetchall()
         finally:
             self.pool.release_connection(conn)
-    
-    def get_all_select_by_session_key(self, session_key:str):
+
+    def get_all_select_by_session_key(self, session_key: str):
         conn = self.pool.get_connection()
         try:
             with conn.cursor() as cursor:
@@ -79,7 +86,7 @@ class PostDAO:
                 return cursor.lastrowid
         finally:
             self.pool.release_connection(conn)
-    
+
     def add_post_multiple(self, posts: list[tuple]):
         """
         posts: list of tuples like
@@ -91,13 +98,72 @@ class PostDAO:
                 sql = """
                     INSERT INTO post (user_key, llm, original, main, sub, minor, error, session)
                     VALUES (%s, %s, %s, %s, %s, %s, %s, %s)
-                    RETURNING post_key
                 """
                 cursor.executemany(sql, posts)
-                post_keys = cursor.fetchall()
                 conn.commit()
-                return [row[0] for row in post_keys]
+
+                n = len(posts)
+                if n == 0:
+                    return []
+
+                user_key = posts[0][0]
+                original = posts[0][2]
+                session_key = posts[0][7]
+
+                cursor.execute(
+                    f"""
+                    SELECT post_key FROM post
+                    WHERE user_key = %s AND original = %s AND session = %s
+                    ORDER BY post_key DESC
+                    LIMIT {n}
+                """,
+                    (user_key, original, session_key),
+                )
+
+                rows = cursor.fetchall()
+                post_keys = [row["post_key"] for row in reversed(rows)]
+                return post_keys
         finally:
             self.pool.release_connection(conn)
+
+    def update_post_selected(self, post_key):
+        from pymysql.err import MySQLError
+
+        conn = self.pool.get_connection()
+        try:
+            conn.autocommit(False)  # autocommit 해제
+            with conn.cursor() as cursor:
+                cursor.execute(
+                    "SET SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;"
+                )
+                conn.begin()
+
+                cursor.execute(
+                    "SELECT selected FROM post WHERE post_key = %s FOR UPDATE;",
+                    (post_key,),
+                )
+                row = cursor.fetchone()
+                if row is None:
+                    conn.rollback()
+                    return 0
+
+                selected = row["selected"]
+                if selected == 1:
+                    conn.rollback()
+                    return 0
+
+                cursor.execute(
+                    "UPDATE post SET selected = 1 WHERE post_key = %s AND selected = 0;",
+                    (post_key,),
+                )
+                conn.commit()
+                return cursor.rowcount
+
+        except MySQLError as e:
+            conn.rollback()
+            raise e
+        finally:
+            self.pool.release_connection(conn)
+
 
 post_DAO = PostDAO(mariaDBPool)

@@ -46,20 +46,23 @@ def get_session_info(session_key: str):
     세션에 대한 정보를 가져옵니다.
     """
     session = session_info_DAO.get_by_session_key(session_key)
-    session = session[0]
-    create_datetime = session.get("create_at")
-    create_date = create_datetime.strftime("%Y-%m-%d")
-    create_time = create_datetime.strftime("%H:%M:%S")
-    people_count = redis_DAO.get_activated_users_count(session_key)
-    questions = len(post_DAO.get_all_select_by_session_key(session_key))
+    if session:
+        session = session[0]
+        create_datetime = session.get("create_at")
+        create_date = create_datetime.strftime("%Y-%m-%d")
+        create_time = create_datetime.strftime("%H:%M:%S")
+        people_count = redis_DAO.get_activated_users_count(session_key)
+        questions = len(post_DAO.get_all_select_by_session_key(session_key))
 
-    session.update(
-        {
-            "people": people_count,
-            "questions": questions,
-            "created_date": create_date,
-            "created_time": create_time,
-            "entered_at": "NULL",
-        }
-    )
-    return session
+        session.update(
+            {
+                "people": people_count,
+                "questions": questions,
+                "created_date": create_date,
+                "created_time": create_time,
+                "entered_at": "NULL",
+            }
+        )
+        return session
+    else:
+        return None

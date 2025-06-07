@@ -19,26 +19,36 @@ ws
 
 작성자 : 조해천
 """
+
 from flask import Blueprint, request, render_template, jsonify
+from flask_socketio import join_room, leave_room, emit, send
 
 import app.models.session_read_services as session_read_services
+import app.models.session_write_services as session_write_services
+import app.models.session_activity_services as session_activity_services
 import app.models.post_services as post_services
 
 import re
 
 session_bp = Blueprint("session", __name__)
 get_session_info_bp = Blueprint("get_session_info", __name__, url_prefix="/api/session")
-pass_session_lock_bp = Blueprint("pass_session_lock", __name__, url_prefix="/api/session")
-get_previous_category_bp = Blueprint("get_privious_category", __name__, url_prefix="/api/post")
+pass_session_lock_bp = Blueprint(
+    "pass_session_lock", __name__, url_prefix="/api/session"
+)
+get_previous_category_bp = Blueprint(
+    "get_privious_category", __name__, url_prefix="/api/post"
+)
 refine_text_bp = Blueprint("refine_text", __name__, url_prefix="/api/post")
-get_category_questions_bp = Blueprint("get_category_questions", __name__, url_prefix="/api/post")
+get_category_questions_bp = Blueprint(
+    "get_category_questions", __name__, url_prefix="/api/post"
+)
 
 
 @session_bp.route("/session/<sessioncode>", methods=["GET"])
 def session(sessioncode):
     """
     session 페이지를 반환하는 API입니다.
-    
+
     Request:
         Path: "/session/<session_code>" (GET)
         Path Params:
@@ -48,8 +58,8 @@ def session(sessioncode):
         HTML:
             - session.html
     """
-    
-    if re.fullmatch(r'[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}', sessioncode):
+
+    if re.fullmatch(r"[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}", sessioncode):
         return render_template("session.html")
     else:
         return render_template("session_error.html")
@@ -64,28 +74,49 @@ def get_session_info(sessioncode):
         Path: "/api/session/<sessioncode>/get/info" (GET)
         Path Params:
             - sessioncode (str): 세션의 고유 코드.
-    
+
     Response:
-        is_create_result (bool):
-        is_create_message (str):
     """
-    
+    session_info = session_read_services.get_session_info(sessioncode)
+    if session_info:
+        session_exits = True
+        if session_info.get("pw") == None:
+            session_locked = False
+        else:
+            session_locked = True
+    else:
+        session_exits = False
+        return jsonify({"session_exits": session_exits})
+
+    return jsonify({"session_exist": session_exits, "session_lock": session_locked})
+
+
 @pass_session_lock_bp.route("/<sessioncode>/pass", methods=["POST"])
 def pass_session_lock(sessioncode):
     """
-    세션에 비밀번호를 확인하는 API입니다.
+    세션 비밀번호 확인 API
 
-    Request
-        Path: "/api/session/<sessioncode>/pass" (POST)
-        Path Params:
-            - sessioncode (str): 세션의 고유 코드.
-        Body(JSON):
-            - password (str): 세션 비밀번호입니다.
-    
+    Request:
+        POST /api/session/<sessioncode>/pass
+        Body(JSON): { password: str }
+
     Response:
-        is_lock_result (bool):
-        is_lock_message (str):
+        JSON: { valid: bool }
     """
+    data = request.get_json()
+
+    session_info = session_read_services.get_session_info(sessioncode)
+    if not session_info:
+        return jsonify({"valid": False}), 404
+
+    correct_password = session_info.get("pw")
+    input_password = data.get("password")
+
+    if correct_password == input_password:
+        return jsonify({"valid": True})
+    else:
+        return jsonify({"valid": False})
+
 
 @get_previous_category_bp.route("/<sessioncode>/get/previous_category", methods=["GET"])
 def get_previous_category(sessioncode):
@@ -96,12 +127,14 @@ def get_previous_category(sessioncode):
         Path: "/api/post/<sessioncode>/get/previous_category" (GET)
         Path Params:
             - sessioncode (str): 세션의 고유 코드.
-    
+
     Response:
         JSON(List):
             - category (str): 대분류/중분류
             - count (int): 카테고리 개수
     """
+    post_services.get_all_posts()
+    # 사용 안함
 
 
 @refine_text_bp.route("/<sessioncode>/refine_text", methods=["POST"])
@@ -119,25 +152,46 @@ def refine_text(sessioncode):
         Body (JSON):
             - text (str): 텍스트
             - category (str): 카테고리
-    
+
     Response:
         JSON:
             refined_text (str): 정제된 텍스트
             category (str): 카테고리 정보
             number (int): 저장된 index번호
     """
+    data = request.get_json()
+    cookie = request.cookies
+
+    post_nums = post_services.send_llm(
+        cookie.get("user_key"), sessioncode, data.get("content")
+    )
+    post_list = post_services.get_post_by_keys(post_nums)
+    response_list = []
+    for post in post_list:
+        res = {
+            "content": post.get("llm"),
+            "category": {
+                "main": post.get("main"),
+                "sub": post.get("sub"),
+                "minor": post.get("minor"),
+            },
+            "key": post.get("post_key"),
+            "error": post.get("error"),
+        }
+        response_list.append(res)
+    return jsonify(response_list)
 
 
 @get_category_questions_bp.route("/<sessioncode>/get/questions", methods=["GET"])
 def get_categort_questions(sessioncode):
     """
     해당 카테고리의 게시된 질문을 가져옵니다.
-    
+
     Request:
         Path: "/api/post/<sessioncode>/get/questions"
         Path Params:
             - sessioncode (str): 세션의 고유 코드
-    
+
     Query Params:
         - category (str): 받아올 카테고리(메이저/서브)
         - start (int): 시작 인덱스
@@ -155,6 +209,27 @@ def get_categort_questions(sessioncode):
 def register_socket(socketio):
     @socketio.on("connect")
     def connect():
-        """
-        """
-    
+        cookie = request.cookies
+        session_code = request.args.get("session_code")
+        session_activity_services.join_session(cookie.get("user_key"), session_code)
+
+        category_count = post_services.get_session_category(session_code)
+        emit("init_categories", category_count)
+
+        join_room(session_code)
+
+    @socketio.on("disconnect")
+    def disconnect():
+        cookie = request.cookies
+        session_activity_services.leave_session(
+            cookie.get("user_key"), request.args.get("session_code")
+        )
+        leave_room(request.args.get("session_code"))
+
+    @socketio.on("select")
+    def select(data):
+        print(data)
+        post_services.select_post(data.get("session_code"), data.get("key"))
+        post = post_services.get_post_by_keys([data.get("key")])
+        category = post[0].get("main") + "/" + post[0].get("sub")
+        emit("update", {"category":category}, room=data.get("session_code"))

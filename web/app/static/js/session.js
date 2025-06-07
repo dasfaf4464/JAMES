@@ -1,25 +1,74 @@
-const session_categories = new Map();
-
-/**
- * 소켓 연결
- */
-let socket = null
-const path = window.location.pathname;
-const parts = path.split('/');
-const sessionCode = parts[parts.length - 1];
+const sessionCode = window.location.pathname.split('/').pop();
+let socket = null;
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log(sessionCode);
+  fetch(`/api/session/${sessionCode}/get/info`)
+    .then(res => res.json())
+    .then(data => {
+      if (!data.session_exist) {
+        showInvalidSessionModal();
+      } else if (data.session_lock) {
+        showPasswordModal();
+      } else {
+        initializeApp();
+      }
+    });
+});
 
-  socket = io("http://localhost:5000", {
+function showInvalidSessionModal() {
+  document.getElementById("invalidSessionModal").style.display = 'flex';
+}
+
+function showPasswordModal() {
+  const modal = document.getElementById("passwordModal");
+  const button = document.getElementById("enterSessionBtn");
+  const errorText = document.getElementById("passwordError");
+
+  modal.style.display = 'flex';
+
+  button.addEventListener("click", () => {
+    const pw = document.getElementById("sessionPassword").value;
+
+    fetch(`/api/session/${sessionCode}/pass`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw })
+    })
+      .then(res => res.json())
+      .then(result => {
+        if (result.valid) {
+          modal.style.display = 'none';
+          initializeApp();
+        } else {
+          errorText.style.display = 'block';
+        }
+      });
+  });
+}
+
+// 소켓 생성
+function init_socket() {
+  socket = io({
     query: {
       session_code: sessionCode
     }
   });
+  return socket;
+}
 
-  socket.emit("session", sessionCode)
+// 웹소켓 이벤트 등록
+function register_socket_event(socket, category_memory) {
+  socket.on("init_categories", (data) => {
+    Object.entries(data).forEach(([key, value]) => {
+      category_memory.set(key, value);
+    });
+
+    //TODO: 여기서 처음 입장했을때 기존에 존재하는 카테고리 보여주기
+    console.log("Initialized categories:", category_memory);
+  });
 
   socket.on("update", (data) => {
+    console.log("update categories:", category_memory);
     let is_in = session_categories.get(data.category)
     if (!is_in) {
       session_categories.set(data.category, 1);
@@ -66,41 +115,14 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
   })
-});
+}
 
-/**
- * 사용자 쿠키 확인
- */
-document.addEventListener('DOMContentLoaded', () => {
-  fetch('/auth/check_key')
-    .then(response => {
-      if (!response.ok) {
-        throw new Error('서버 응답 오류');
-      }
-      return response.json();
-    })
-    .then(data => {
-      console.log("사용자 인증 응답:", data);
+// 모든 초기화
+function initializeApp() {
+  const session_categories = new Map();
+  let socket = init_socket();
+  register_socket_event(socket, session_categories);
 
-      if (data.redirect_url) {
-        if (window.location.origin != data.redirect_url) {
-          window.location.href = data.redirect_url;
-        }
-      }
-
-      if (data.message) {
-        console.log("서버 메시지:", data.message);
-      }
-    })
-    .catch(error => {
-      console.error("인증 확인 실패:", error);
-    });
-});
-
-/**
- * llm값 받아오고 받아온 값 출력 박스 생성
- */
-document.addEventListener("DOMContentLoaded", () => {
   const questionButton = document.getElementById('questionButton');
   let canClick = true;
 
@@ -110,29 +132,25 @@ document.addEventListener("DOMContentLoaded", () => {
     canClick = false;
 
     const originaltext = document.getElementById('originaltext').value.trim();
-    const path = window.location.pathname;
-    const parts = path.split('/');
-    const sessionCode = parts[2];
 
-    fetch('/room/llm', {
+    fetch(`/api/post/${sessionCode}/refine_text`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ content: originaltext, session_code: sessionCode })
+      body: JSON.stringify({ content: originaltext })
     })
       .then(res => res.json())
       .then(data => {
-        if (data.error == 1) {
-          alert("시스템 조작을 시도하였습니다. 질문을 다시 입력하세요.");
+        if (data.length > 0 && data[0].error === 1) {
+          alert("허용되지 않는 입력입니다. 질문을 다시 입력하세요.");
           return;
         }
 
         const llmPanel = document.querySelector('.LLM-list-panel');
         llmPanel.innerHTML = '';
 
-        data.text.forEach(summary => {
+        data.forEach(summary => {
           const box = document.createElement('div');
           box.className = 'box';
-          box.textContent = summary.content;
           box.dataset.main = summary.category.main;
           box.dataset.sub = summary.category.sub;
           box.dataset.minor = summary.category.minor;
@@ -142,11 +160,11 @@ document.addEventListener("DOMContentLoaded", () => {
           box.innerHTML = `
           <div class="summary-text">${summary.content}</div>
           <div class="category-info">
-          <span class="main">( ${summary.category.main}</span> /
-          <span class="sub"> ${summary.category.sub}</span> /
-          <span class="minor"> ${summary.category.minor} )</span>
+            <span class="main">( ${summary.category.main}</span> /
+            <span class="sub"> ${summary.category.sub}</span> /
+            <span class="minor"> ${summary.category.minor} )</span>
           </div>
-          `;
+        `;
 
           box.addEventListener('click', () => {
             document.querySelectorAll('.LLM-list-panel .box')
@@ -173,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 2000);
       });
   });
-});
+}
 
 /**
  * 선택한 박스 이벤트
@@ -211,6 +229,14 @@ document.addEventListener("DOMContentLoaded", () => {
       key: selectedBox.dataset.key,
     };
 
-    socket.emit("send_llm", data)
+    socket.emit("select", data)
   });
+
+  clearListPanel();
 });
+
+function clearListPanel() {
+  const llmPanel = document.querySelector('.LLM-list-panel');
+  llmPanel.innerHTML = '';
+  selectedBox = null;
+}
