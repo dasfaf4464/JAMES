@@ -7,17 +7,16 @@
 
 import subprocess
 import threading
-import re
-from app import create_app
+from app.routes import create_app
+from app.routes.session import register_socket
+from app.util.mariadb_clients import delete_expired_temporary_users
 from flask_socketio import SocketIO
-from app.api.room import init_socketio
-from app.manager.db_manager import tmp_session_cleaner
 from config import CLOUDFLARE_TUNNEL_COMMAND, MARIADB_COMMAND, REDIS_COMMAND
 
 app = create_app()
 
 socketio = SocketIO(app, async_mode="eventlet", cors_allowed_origins="*")
-init_socketio(socketio=socketio)
+register_socket(socketio)
 
 cloudflare_process = None
 cloudflare_URL = None
@@ -25,6 +24,7 @@ mariadb_process = None
 redis_process = None
 
 def start_cloudflare():
+    import re
     global cloudflare_process
     global cloudflare_URL
     try:
@@ -109,8 +109,8 @@ if __name__ == "__main__":
     #cloudflare_thread = threading.Thread(target=run_cloudflare, daemon=True)
     mariadb_thread = threading.Thread(target=run_mariadb, daemon=True)
     redis_thread = threading.Thread(target=run_redis, daemon=True)
-    flask_thread = threading.Thread(target=run_flask, daemon=True)
-    sesison_cleaner_thread = threading.Thread(target=tmp_session_cleaner, daemon=True)
+    flask_thread = threading.Thread(target=run_flask, daemon=True) 
+    sesison_cleaner_thread = threading.Thread(target=delete_expired_temporary_users, daemon=True)
 
     mariadb_thread.start()
     redis_thread.start()

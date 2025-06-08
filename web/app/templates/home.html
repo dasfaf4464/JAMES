@@ -26,54 +26,7 @@
         <div class="session-list">
             <button id="toggle-panel-button">☰</button>
             <ul class="session-group">
-                <li class="session-group-item">
-                    <p id="session-title">세션 제목</p>
-                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
-                    <p id="session-period">임시</p>
-                    <img id="session-icon" src="../static/image/computer.svg">
-                </li>
-                <li class="session-group-item">
-                    <p id="session-title">세션 제목</p>
-                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
-                    <p id="session-period">영구</p>
-                    <img id="session-icon" src="../static/image/computer.svg">
-                </li>
-                <li class="session-group-item">
-                    <p id="session-title">세션 제목</p>
-                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
-                    <p id="session-period">임시</p>
-                    <img id="session-icon" src="../static/image/computer.svg">
-                </li>
-                <li class="session-group-item">
-                    <p id="session-title">세션 제목</p>
-                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
-                    <p id="session-period">영구</p>
-                    <img id="session-icon" src="../static/image/computer.svg">
-                </li>
-                <li class="session-group-item">
-                    <p id="session-title">세션 제목</p>
-                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
-                    <p id="session-period">임시</p>
-                    <img id="session-icon" src="../static/image/computer.svg">
-                </li>
-                <li class="session-group-item">
-                    <p id="session-title">세션 제목</p>
-                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
-                    <p id="session-period">영구</p>
-                    <img id="session-icon" src="../static/image/computer.svg">
-                </li>
-                                <li class="session-group-item">
-                    <p id="session-title">세션 제목</p>
-                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
-                    <p id="session-period">임시</p>
-                    <img id="session-icon" src="../static/image/computer.svg">
-                </li>
-                <li class="session-group-item">
-                    <p id="session-title">세션 제목</p>
-                    <p id="session-info">현재 입장 인원: <br>질문 수:</p>
-                    <p id="session-period">영구</p>
-                    <img id="session-icon" src="../static/image/computer.svg">
-                </li>
+
             </ul>
             <div class="page-num">
                 <button id="frontB">◀</button>
@@ -97,7 +50,8 @@
                 <button id="create-session-button">세션 만들기</button>
                 <label>새로운 세션에 참여하세요</label>
                 <button id="into-session-button">코드로 세션 입장</button>
-                <input id="session-code" class="form-control rounded" type="text" maxlength="14" required placeholder="세션 코드 입력">
+                <input id="session-code" class="form-control rounded" type="text" maxlength="14" required
+                    placeholder="세션 코드 입력">
             </form>
         </div>
         <div id="sessionModal" class="modal">
@@ -105,12 +59,13 @@
                 <span class="close-button" id="closeModal">&times;</span>
                 <h2>새 세션 만들기</h2>
                 <input type="text" id="sessionTitleInput" class="form-control rounded" placeholder="세션 제목을 입력하세요">
-                <input type="text" id="sessionexplain" class="form-control rounded" placeholder="세션 설명을 입력하세요">
-                <br>
+                <textarea id="sessionexplain" class="form-control rounded" placeholder="세션 설명을 입력하세요"
+                    rows="4"></textarea>
                 <div class="radio-group">
-                <label><input type="radio" name="chk_info" value="temporary" checked>임시</label>
-                <label><input type="radio" name="chk_info" value="permanent">영구</label>
+                    <label><input type="radio" name="chk_info" value="temporary" checked>임시</label>
+                    <label><input type="radio" name="chk_info" value="permanent">영구</label>
                 </div>
+                <input id="sessionPw" type="text" class="form-control rounded" placeholder="세션 비밀번호">
                 <button id="submitSessionBtn" class="create-session rounded">생성하기</button>
             </div>
         </div>
