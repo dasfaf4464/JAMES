@@ -29,6 +29,7 @@ from app.routes.session import (
     get_category_questions_bp,
 )
 
+import time
 
 def create_app():
     app = Flask(__name__, template_folder="../templates", static_folder="../static")
@@ -61,5 +62,9 @@ def create_app():
     app.register_blueprint(get_previous_category_bp)
     app.register_blueprint(refine_text_bp)
     app.register_blueprint(get_category_questions_bp)
+
+    @app.before_request
+    def app_delay_before_request():
+        time.sleep(0.15)
 
     return app

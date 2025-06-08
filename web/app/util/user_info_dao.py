@@ -29,41 +29,49 @@ class UserInfoDAO:
         finally:
             self.pool.release_connection(conn)
 
-    def add_user_info(
-        self,
-        user_name: str,
-        id: str | None,
-        pw: str | None,
-        email: str | None,
-        user_key: str,
-        temporary: bool,
-    ):
-        if temporary:
-            temp = 1
-        else:
-            temp = 0
+    def insert_user(self, user_name, user_key, temporary=True):
+        """
+        임시회원 등록용 함수
+        id, pw, email은 None으로 저장
+        """
         conn = self.pool.get_connection()
         try:
             with conn.cursor() as cursor:
-                sql = "INSERT INTO user_info (user_name, id, pw, email, user_key, temporary) VALUES (%s, %s, %s, %s, %s, %s)"
-                cursor.execute(sql, (user_name, id, pw, email, user_key, temp))
+                sql = """
+                    INSERT INTO user_info (user_name, id, pw, email, user_key, temporary)
+                    VALUES (%s, NULL, NULL, NULL, %s, %s)
+                """
+                cursor.execute(sql, (user_name, user_key, int(temporary)))
                 conn.commit()
                 return cursor.lastrowid
         finally:
             self.pool.release_connection(conn)
 
-    def update_by_user_key(self, user_key: str, user_name:str, id:str, pw: str, email: str, temporary:bool):
+    def update_by_user_key(self, user_key, user_name, id, pw, email, temporary):
         conn = self.pool.get_connection()
-        if temporary:
-            temp = 1
-        else:
-            temp = 0
         try:
             with conn.cursor() as cursor:
-                sql = "UPDATE user_info SET user_name=%s, id=%s,pw=%s, email=%s, temporary=%s WHERE user_key=%s"
-                cursor.execute(sql, (user_name, id, pw, email, temp, user_key))
+                # user_name이 None이면 컬럼 업데이트에서 제외
+                if user_name is None:
+                    sql = """
+                        UPDATE user_info
+                        SET id=%s, pw=%s, email=%s, temporary=%s
+                        WHERE user_key=%s
+                    """
+                    cursor.execute(sql, (id, pw, email, int(temporary), user_key))
+                else:
+                    sql = """
+                        UPDATE user_info
+                        SET user_name=%s, id=%s, pw=%s, email=%s, temporary=%s
+                        WHERE user_key=%s
+                    """
+                    cursor.execute(sql, (user_name, id, pw, email, int(temporary), user_key))
+
+                if cursor.rowcount == 0:
+                    raise Exception("해당 user_key에 해당하는 유저 정보가 없습니다.")
+
                 conn.commit()
-                return cursor.lastrowid
+                return True
         finally:
             self.pool.release_connection(conn)
 

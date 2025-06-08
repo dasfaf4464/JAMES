@@ -47,7 +47,7 @@ def get_post_by_category_in_session(session_key: str, main: str, sub: str):
                 "minor": post.get("minor"),
             }
             post_list.append(view)
-    return post
+    return post_list
 
 
 def get_session_category(session_key):

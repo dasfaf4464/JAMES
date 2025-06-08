@@ -37,7 +37,7 @@ class MySessionDAO:
                 sql_check = "SELECT COUNT(*) FROM my_session WHERE user_key=%s AND session_key=%s"
                 cursor.execute(sql_check, (user_key, session_key))
                 count = cursor.fetchone()
-                if count == 0:
+                if count.get('COUNT(*)') == 0:
                     sql_insert = "INSERT INTO my_session(user_key, session_key) VALUES(%s, %s)"
                     cursor.execute(sql_insert, (user_key, session_key))
                     conn.commit()

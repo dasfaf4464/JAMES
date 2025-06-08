@@ -63,16 +63,37 @@ function init_socket() {
 }
 
 function register_socket_event(socket, category_memory) {
-  const categoriesContainer = document.querySelector('.categories-container');
+  const categoriesContainer = document.querySelector('.categories');
 
   socket.on("init_categories", (data) => {
+    const categoriesContainer = document.querySelector('.categories');
+
     Object.entries(data).forEach(([key, value]) => {
       category_memory.set(key, value);
+
+      const existingBox = Array.from(categoriesContainer.querySelectorAll('.category-box'))
+        .find(b => b.dataset.category === key);
+
+      if (!existingBox) {
+        const catBox = document.createElement('div');
+        catBox.className = 'category-box';
+        catBox.dataset.category = key;
+        catBox.dataset.count = value;
+
+        const p = document.createElement('p');
+        p.textContent = `${key}`;
+        catBox.appendChild(p);
+
+        categoriesContainer.appendChild(catBox);
+
+        const baseSize = 120;
+        const newSize = baseSize + (value - 1) * 40;
+        catBox.style.width = `${newSize}px`;
+        catBox.style.height = `${newSize}px`;
+      }
     });
-    /*---------------------------- */
-    /* 여기에 처음에 category_memory의 정보를 보여주는 박스 생성*/
-    /*---------------------------- */
-    console.log("Initialized categories:", category_memory);//f12 콘솔 로그로 확인 가능
+
+    console.log("Initialized categories:", category_memory);
   });
 
   socket.on("update", (data) => {
@@ -108,14 +129,6 @@ function register_socket_event(socket, category_memory) {
 
       catBox.style.width = '120px';
       catBox.style.height = '120px';
-
-      catBox.addEventListener('click', () => {
-        paginationState.currentCategory = category;
-        paginationState.currentSummary = summary;
-        paginationState.currentPage = 0;
-
-        fetch('/');
-      });
     }
   });
 }
@@ -188,12 +201,46 @@ function initializeApp() {
       });
   });
 
-  /**
-   * 여기에 카테고리 박스 클릭시 리스트 가져오는 api get으로 연결
-   * api 주소
-   * '/api/post/${sessionCode}/get/questions?category=(ex| "언어학/의미론" 문자열 그대로 보내면 됨, )&start=0&count=20
-   * 리스트로 나온것 받아서 original, refined_text, memo, minor이것들 리스트로 보이게
-   */
+  document.querySelector('.categories').addEventListener('click', (e) => {
+    const box = e.target.closest('.category-box');
+    if (!box) return;
+
+    const categoryName = box.dataset.category;
+    const count = box.dataset.count;
+
+    fetch(`/api/post/${sessionCode}/get/questions?category=${categoryName}&start=0&count=30`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`서버 오류: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        console.log('받은 데이터:', data);
+
+        if (!Array.isArray(data)) {
+          throw new Error('데이터가 배열이 아닙니다.');
+        }
+
+        const questionsList = document.getElementById('category-list-panel');
+        if (!questionsList) {
+          console.error('질문 목록을 표시할 요소가 없습니다.');
+          return;
+        }
+
+        questionsList.innerHTML = data.map(q => `
+      <div class="question-item">
+        <p><strong>원본:</strong> ${q.original || q.original_text || ''}</p>
+        <p><strong>정제:</strong> ${q.refined_text || q.llm || ''}</p>
+        <p><strong>메모:</strong> ${q.memo || ''}</p>
+        <p><strong>카테고리:</strong> ${q.category || q.minor || ''}</p>
+      </div>
+    `).join('');
+      })
+      .catch(error => {
+        console.error('질문 목록 가져오기 실패:', error);
+      });
+  });
 
 
 }

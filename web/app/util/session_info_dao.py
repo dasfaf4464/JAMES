@@ -28,12 +28,13 @@ class SessionInfoDAO:
         host_key: str,
         is_temporary: bool,
     ):
-        if is_temporary:
+        if is_temporary == True or is_temporary == None:
             temporary = 1
         else:
             temporary = 0
 
         conn = self.pool.get_connection()
+        conn.commit()
         try:
             with conn.cursor() as cursor:
                 sql = "INSERT INTO session_info (name, description, session_key, pw, host, is_temporary) VALUES (%s, %s, %s, %s, %s, %s)"

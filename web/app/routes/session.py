@@ -85,7 +85,7 @@ def get_session_info(sessioncode):
         else:
             session_locked = True
     else:
-        session_exits = False
+        session_exists = False
         return jsonify({"session_exists": session_exists})
 
     return jsonify({"session_exists": session_exists, "session_lock": session_locked})
