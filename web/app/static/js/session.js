@@ -1,11 +1,19 @@
 const sessionCode = window.location.pathname.split('/').pop();
 let socket = null;
+let session_categories = new Map();
+let selectedBox = null;
+
+const paginationState = {
+  currentCategory: null,
+  currentSummary: null,
+  currentPage: 0,
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   fetch(`/api/session/${sessionCode}/get/info`)
     .then(res => res.json())
     .then(data => {
-      if (!data.session_exist) {
+      if (!data.session_exists) {
         showInvalidSessionModal();
       } else if (data.session_lock) {
         showPasswordModal();
@@ -13,6 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
         initializeApp();
       }
     });
+
+  clearListPanel();
+  setupSummaryButton();
 });
 
 function showInvalidSessionModal() {
@@ -46,51 +57,44 @@ function showPasswordModal() {
   });
 }
 
-// 소켓 생성
 function init_socket() {
-  socket = io({
-    query: {
-      session_code: sessionCode
-    }
-  });
+  socket = io({ query: { session_code: sessionCode } });
   return socket;
 }
 
-// 웹소켓 이벤트 등록
 function register_socket_event(socket, category_memory) {
+  const categoriesContainer = document.querySelector('.categories-container');
+
   socket.on("init_categories", (data) => {
     Object.entries(data).forEach(([key, value]) => {
       category_memory.set(key, value);
     });
-
-    //TODO: 여기서 처음 입장했을때 기존에 존재하는 카테고리 보여주기
-    console.log("Initialized categories:", category_memory);
+    /*---------------------------- */
+    /* 여기에 처음에 category_memory의 정보를 보여주는 박스 생성*/
+    /*---------------------------- */
+    console.log("Initialized categories:", category_memory);//f12 콘솔 로그로 확인 가능
   });
 
   socket.on("update", (data) => {
-    console.log("update categories:", category_memory);
-    let is_in = session_categories.get(data.category)
-    if (!is_in) {
-      session_categories.set(data.category, 1);
-    } else {
-      session_categories.set(data.category, is_in + 1);
-    }
+    const category = data.category;
+    console.log(category)
 
+    let count = category_memory.get(category) || 0;
+    count++;
+    category_memory.set(category, count);
+    console.log(category_memory)
     const existingBox = Array.from(categoriesContainer.querySelectorAll('.category-box'))
       .find(b => b.dataset.category === category);
 
     if (existingBox) {
-      existingBox.dataset.count = is_in;
-
+      existingBox.dataset.count = count;
       existingBox.querySelector('p').textContent = `${category}`;
 
       const baseSize = 120;
       const newSize = baseSize + (count - 1) * 40;
-
       existingBox.style.width = `${newSize}px`;
       existingBox.style.height = `${newSize}px`;
     } else {
-
       const catBox = document.createElement('div');
       catBox.className = 'category-box';
       catBox.dataset.category = category;
@@ -110,17 +114,14 @@ function register_socket_event(socket, category_memory) {
         paginationState.currentSummary = summary;
         paginationState.currentPage = 0;
 
-        fetch('/')
+        fetch('/');
       });
     }
-
-  })
+  });
 }
 
-// 모든 초기화
 function initializeApp() {
-  const session_categories = new Map();
-  let socket = init_socket();
+  socket = init_socket();
   register_socket_event(socket, session_categories);
 
   const questionButton = document.getElementById('questionButton');
@@ -158,25 +159,20 @@ function initializeApp() {
           box.dataset.error = summary.error;
 
           box.innerHTML = `
-          <div class="summary-text">${summary.content}</div>
-          <div class="category-info">
-            <span class="main">( ${summary.category.main}</span> /
-            <span class="sub"> ${summary.category.sub}</span> /
-            <span class="minor"> ${summary.category.minor} )</span>
-          </div>
-        `;
+            <div class="summary-text">${summary.content}</div>
+            <div class="category-info">
+              <span class="main">( ${summary.category.main}</span> /
+              <span class="sub"> ${summary.category.sub}</span> /
+              <span class="minor"> ${summary.category.minor} )</span>
+            </div>
+          `;
 
           box.addEventListener('click', () => {
             document.querySelectorAll('.LLM-list-panel .box')
               .forEach(b => b.classList.remove('selected'));
             box.classList.add('selected');
+            selectedBox = box;
 
-            console.log(`llm: ${box.textContent}`);
-            console.log(`Main: ${box.dataset.main}`);
-            console.log(`Sub: ${box.dataset.sub}`);
-            console.log(`Minor: ${box.dataset.minor}`);
-            console.log(`key: ${box.dataset.key}`);
-            console.log(`error: ${box.dataset.error}`);
           });
 
           llmPanel.appendChild(box);
@@ -191,28 +187,18 @@ function initializeApp() {
         }, 2000);
       });
   });
+
+  /**
+   * 여기에 카테고리 박스 클릭시 리스트 가져오는 api get으로 연결
+   * api 주소
+   * '/api/post/${sessionCode}/get/questions?category=(ex| "언어학/의미론" 문자열 그대로 보내면 됨, )&start=0&count=20
+   * 리스트로 나온것 받아서 original, refined_text, memo, minor이것들 리스트로 보이게
+   */
+
+
 }
 
-/**
- * 선택한 박스 이벤트
- */
-document.addEventListener("DOMContentLoaded", () => {
-  let selectedBox = null;
-
-  const llmPanel = document.querySelector('.LLM-list-panel');
-
-  llmPanel.addEventListener('click', (event) => {
-    const box = event.target.closest('.box');
-    if (!box) return;
-
-    document.querySelectorAll('.LLM-list-panel .box').forEach(b => {
-      b.classList.remove('selected');
-    });
-
-    box.classList.add('selected');
-    selectedBox = box;
-  });
-
+function setupSummaryButton() {
   const summaryButton = document.querySelector('.summaryButton');
   summaryButton.addEventListener('click', (event) => {
     event.preventDefault();
@@ -222,21 +208,33 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    console.log(`${selectedBox.dataset.key}`);
-
     const data = {
-      session_code: window.location.pathname.split('/').pop(),
+      session_code: sessionCode,
       key: selectedBox.dataset.key,
     };
 
-    socket.emit("select", data)
+    socket.emit("select", data);
   });
-
-  clearListPanel();
-});
+}
 
 function clearListPanel() {
   const llmPanel = document.querySelector('.LLM-list-panel');
-  llmPanel.innerHTML = '';
+  if (llmPanel) {
+    llmPanel.innerHTML = '';
+  }
   selectedBox = null;
 }
+
+
+/**
+ * 1.
+ * initializeApp 안에 fetch /api/post/${sessionCode}/get/questions?category="main/sub"&start=0&count=""
+ * 이걸로 생성된 카테고리박스에 이벤트 붙이고 보여주기
+ * 
+ * 2. submit 버튼 누르면 llm에서 온 정보들 전부 없애기
+ * 
+ * 3. 처음 세션 입장시 61-68번째 줄에 있는 함수들 채우기
+ *  -- 처음 세션 입장시 category_memory에 정보들 가져와진거 보여주는 함수
+ * 
+ * 4. 카테고리 박스 커지는거 테스트 못했음
+ */

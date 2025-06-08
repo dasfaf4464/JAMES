@@ -72,6 +72,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const title = document.getElementById("sessionTitleInput").value.trim();
     const description = document.getElementById("sessionexplain").value;
     const temporaryInput = document.querySelector('input[name="chk_info"]:checked');
+    console.log(temporaryInput)
+    const pw = document.getElementById("sessionPw").value
 
     if (!temporaryInput) {
       alert("임시 여부를 선택해주세요.");
@@ -83,15 +85,15 @@ document.addEventListener("DOMContentLoaded", () => {
     if (title) {
       modal.style.display = "none";
 
-      fetch('/room/create', {
+      fetch('/api/session/create/home', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ title, description, temporary })
+        body: JSON.stringify({ title, description, temporary, pw })
       })
         .then(res => res.json())
         .then(data => {
-          if (data.error !== false) {
-            alert("세션이 생성되었습니다.\n세션 코드 : " + data.session_code);
+          if (data.session_result) {
+            alert(data.session_create_message + data.session_code);
             window.location.href = 'session/' + data.session_code;
           }
         })
@@ -102,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       document.getElementById("sessionTitleInput").value = "";
       document.getElementById("sessionexplain").value = "";
+      document.getElementById("sessionPw").value = "";
     }
   });
 });

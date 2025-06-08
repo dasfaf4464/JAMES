@@ -79,16 +79,16 @@ def get_session_info(sessioncode):
     """
     session_info = session_read_services.get_session_info(sessioncode)
     if session_info:
-        session_exits = True
+        session_exists = True
         if session_info.get("pw") == None:
             session_locked = False
         else:
             session_locked = True
     else:
         session_exits = False
-        return jsonify({"session_exits": session_exits})
+        return jsonify({"session_exists": session_exists})
 
-    return jsonify({"session_exist": session_exits, "session_lock": session_locked})
+    return jsonify({"session_exists": session_exists, "session_lock": session_locked})
 
 
 @pass_session_lock_bp.route("/<sessioncode>/pass", methods=["POST"])
@@ -183,7 +183,7 @@ def refine_text(sessioncode):
 
 
 @get_category_questions_bp.route("/<sessioncode>/get/questions", methods=["GET"])
-def get_categort_questions(sessioncode):
+def get_category_questions(sessioncode):
     """
     해당 카테고리의 게시된 질문을 가져옵니다.
 
@@ -204,6 +204,20 @@ def get_categort_questions(sessioncode):
             - memo (str): 메모
             - category (str): 마이너 카테고리
     """
+    category = request.args.get("category", "")
+    try:
+        main, sub = category.split("/")
+    except ValueError:
+        return jsonify({"error": "Invalid category format. Use 'main/sub'."}), 400
+
+    try:
+        start = int(request.args.get("start", 0))
+        count = int(request.args.get("count", 10))
+    except ValueError:
+        return jsonify({"error": "Invalid start or count parameter."}), 400
+
+    post_list = post_services.get_post_by_category_in_session(sessioncode, main, sub)
+    return jsonify(post_list[start : start + count])
 
 
 def register_socket(socketio):
@@ -212,7 +226,8 @@ def register_socket(socketio):
         cookie = request.cookies
         session_code = request.args.get("session_code")
         session_activity_services.join_session(cookie.get("user_key"), session_code)
-
+        if cookie.get("temporary") == "False":
+            session_write_services.add_my_session(cookie.get("user_key"), session_code)
         category_count = post_services.get_session_category(session_code)
         emit("init_categories", category_count)
 
@@ -228,8 +243,7 @@ def register_socket(socketio):
 
     @socketio.on("select")
     def select(data):
-        print(data)
         post_services.select_post(data.get("session_code"), data.get("key"))
         post = post_services.get_post_by_keys([data.get("key")])
         category = post[0].get("main") + "/" + post[0].get("sub")
-        emit("update", {"category":category}, room=data.get("session_code"))
+        emit("update", {"category": category}, room=data.get("session_code"))

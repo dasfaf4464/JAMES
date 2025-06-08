@@ -33,6 +33,23 @@ def get_all_posts(user_key: str):
     return result
 
 
+def get_post_by_category_in_session(session_key: str, main: str, sub: str):
+    posts = post_DAO.get_all_select_by_session_key(session_key)
+
+    post_list = []
+
+    for post in posts:
+        if post.get("main") == main and post.get("sub") == sub:
+            view = {
+                "original": post.get("original"),
+                "refined_text": post.get("llm"),
+                "memo": "",
+                "minor": post.get("minor"),
+            }
+            post_list.append(view)
+    return post
+
+
 def get_session_category(session_key):
     posts = post_DAO.get_all_select_by_session_key(session_key)
 

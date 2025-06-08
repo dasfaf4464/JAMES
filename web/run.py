@@ -9,6 +9,7 @@ import subprocess
 import threading
 from app.routes import create_app
 from app.routes.session import register_socket
+from app.util.mariadb_clients import delete_expired_temporary_users
 from flask_socketio import SocketIO
 from config import CLOUDFLARE_TUNNEL_COMMAND, MARIADB_COMMAND, REDIS_COMMAND
 
@@ -109,13 +110,13 @@ if __name__ == "__main__":
     mariadb_thread = threading.Thread(target=run_mariadb, daemon=True)
     redis_thread = threading.Thread(target=run_redis, daemon=True)
     flask_thread = threading.Thread(target=run_flask, daemon=True) 
-    #sesison_cleaner_thread = threading.Thread(target=tmp_session_cleaner, daemon=True)
+    sesison_cleaner_thread = threading.Thread(target=delete_expired_temporary_users, daemon=True)
 
     mariadb_thread.start()
     redis_thread.start()
     flask_thread.start()
     #cloudflare_thread.start()
-    #sesison_cleaner_thread.start()
+    sesison_cleaner_thread.start()
 
     flask_thread.join()
     mariadb_thread.join()

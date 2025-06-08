@@ -4,12 +4,11 @@ Maria DB와 연결하는 클라이언트와 클라이언트를 관리하는 모�
 
 import pymysql
 import pymysql.cursors as cursors
-from pymysql.err import OperationalError, Error
+from pymysql.err import OperationalError
 
 import atexit
 from queue import Queue, Empty
 import threading
-import concurrent.futures
 
 
 class MariaDBPooledConnection:
@@ -40,7 +39,7 @@ class MariaDBPooledConnection:
         except Empty:
             raise OperationalError("DB connection pool exhausted.")
 
-    def release_connection(self, conn):
+    def release_connection(self, conn): 
         if conn.open:
             try:
                 self.pool.put(conn)
@@ -62,3 +61,18 @@ class MariaDBPooledConnection:
 
 
 mariaDBPool = MariaDBPooledConnection(maxsize=8)
+
+def delete_expired_temporary_users():
+    conn = mariaDBPool.get_connection()
+    try:
+        with conn.cursor() as cursor:
+            sql = """
+                DELETE FROM user_info
+                WHERE temporary = 1
+                AND create_at < NOW() - INTERVAL 1 DAY
+            """
+            cursor.execute(sql)
+            conn.commit()
+            print(f"{cursor.rowcount} temporary users deleted.")
+    finally:
+        mariaDBPool.release_connection(conn)

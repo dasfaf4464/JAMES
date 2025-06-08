@@ -35,6 +35,9 @@ def create_session(host_key:str, title:str, description:str, pw :str, temporary 
     
     return session_code
 
+def add_my_session(user_key, session_code):
+    my_session_DAO.join_session(user_key, session_code)
+
 def exit_user(session_key: str, user_key: str):
     if my_session_DAO.exit_session(user_key, session_key) == 1:
         return True
