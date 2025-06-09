@@ -106,6 +106,42 @@ def run_flask():
     socketio.run(app, host='0.0.0.0', port=5000)
 
 if __name__ == "__main__":
+    import signal
+    import sys
+
+    def shutdown_all():
+        print("\n[!] Shutting down...")
+
+        if mariadb_process and mariadb_process.poll() is None:
+            print("Terminating MariaDB...")
+            mariadb_process.terminate()
+
+        if redis_process and redis_process.poll() is None:
+            print("Terminating Redis...")
+            redis_process.terminate()
+
+        if cloudflare_process and cloudflare_process.poll() is None:
+            print("Terminating Cloudflare...")
+            cloudflare_process.terminate()
+
+        sys.exit(0)
+
+    try:
+        mariadb_thread = threading.Thread(target=run_mariadb)
+        redis_thread = threading.Thread(target=run_redis)
+        session_cleaner_thread = threading.Thread(target=delete_expired_temporary_users)
+        
+        mariadb_thread.start()
+        redis_thread.start()
+        session_cleaner_thread.start()
+
+        print("Starting Flask Server (blocking)...")
+        run_flask()  # socketio.run(app, ...) here is blocking
+
+    except KeyboardInterrupt:
+        shutdown_all()
+
+"""       
     #cloudflare_thread = threading.Thread(target=run_cloudflare, daemon=True)
     mariadb_thread = threading.Thread(target=run_mariadb, daemon=True)
     redis_thread = threading.Thread(target=run_redis, daemon=True)
@@ -122,3 +158,4 @@ if __name__ == "__main__":
     mariadb_thread.join()
     redis_thread.join()
     #cloudflare_thread.join()
+"""

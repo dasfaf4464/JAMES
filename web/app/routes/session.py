@@ -79,6 +79,7 @@ def get_session_info(sessioncode):
     """
     time.sleep(0.5)
     session_info = session_read_services.get_session_info(sessioncode)
+    print(session_info)
     if session_info:
         session_exists = True
         print(session_info.get("pw"), type(session_info.get("pw")))
@@ -224,7 +225,7 @@ def get_category_questions(sessioncode):
 
 def register_socket(socketio):
     @socketio.on("connect")
-    def connect():
+    def connect(_):
         cookie = request.cookies
         session_code = request.args.get("session_code")
         session_activity_services.join_session(cookie.get("user_key"), session_code)
