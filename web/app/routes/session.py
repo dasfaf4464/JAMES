@@ -28,7 +28,7 @@ import app.models.session_write_services as session_write_services
 import app.models.session_activity_services as session_activity_services
 import app.models.post_services as post_services
 
-import re
+import re, time
 
 session_bp = Blueprint("session", __name__)
 get_session_info_bp = Blueprint("get_session_info", __name__, url_prefix="/api/session")
@@ -77,10 +77,12 @@ def get_session_info(sessioncode):
 
     Response:
     """
+    time.sleep(0.5)
     session_info = session_read_services.get_session_info(sessioncode)
     if session_info:
         session_exists = True
-        if session_info.get("pw") == None:
+        print(session_info.get("pw"), type(session_info.get("pw")))
+        if session_info.get("pw") == "":
             session_locked = False
         else:
             session_locked = True

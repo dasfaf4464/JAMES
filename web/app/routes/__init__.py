@@ -65,6 +65,6 @@ def create_app():
 
     @app.before_request
     def app_delay_before_request():
-        time.sleep(0.15)
+        time.sleep(0.05)
 
     return app
