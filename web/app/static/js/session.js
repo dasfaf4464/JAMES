@@ -71,7 +71,7 @@ function register_socket_event(socket, category_memory) {
     Object.entries(data).forEach(([key, value]) => {
       category_memory.set(key, value);
 
-      const existingBox = Array.from(categoriesContainer.querySelectorAll('.category-box'))
+      let existingBox = Array.from(categoriesContainer.querySelectorAll('.category-box'))
         .find(b => b.dataset.category === key);
 
       if (!existingBox) {
@@ -85,12 +85,24 @@ function register_socket_event(socket, category_memory) {
         catBox.appendChild(p);
 
         categoriesContainer.appendChild(catBox);
-
-        const baseSize = 120;
-        const newSize = baseSize + (value - 1) * 40;
-        catBox.style.width = `${newSize}px`;
-        catBox.style.height = `${newSize}px`;
+        existingBox = catBox;
       }
+
+      const baseSize = 120;
+      const newSize = baseSize + (value - 1) * 40;
+      existingBox.style.width = `${newSize}px`;
+      existingBox.style.height = `${newSize}px`;
+    });
+
+    const boxes = Array.from(categoriesContainer.querySelectorAll('.category-box'));
+    boxes.sort((a, b) => {
+      const countA = parseInt(a.dataset.count || '0');
+      const countB = parseInt(b.dataset.count || '0');
+      return countB - countA;
+    });
+
+    boxes.forEach((box, index) => {
+      box.style.order = index;
     });
 
     console.log("Initialized categories:", category_memory);
@@ -130,6 +142,17 @@ function register_socket_event(socket, category_memory) {
       catBox.style.width = '120px';
       catBox.style.height = '120px';
     }
+
+    const boxes = Array.from(categoriesContainer.querySelectorAll('.category-box'));
+    boxes.sort((a, b) => {
+      const countA = parseInt(a.dataset.count || '0');
+      const countB = parseInt(b.dataset.count || '0');
+      return countB - countA;
+    });
+
+    boxes.forEach((box, index) => {
+      box.style.order = index;
+    });
   });
 }
 
@@ -238,6 +261,19 @@ function initializeApp() {
       <textarea class="memo" placeholder="메모를 입력하세요."></textarea>
       </div>
     `).join('');
+
+        const memoElements = questionsList.querySelectorAll('.memo');
+        memoElements.forEach((memoEl, i) => {
+          const key = `memo-${categoryName}-${i}`;
+          const saved = localStorage.getItem(key);
+          if (saved) {
+            memoEl.value = saved;
+          }
+
+          memoEl.addEventListener('input', () => {
+            localStorage.setItem(key, memoEl.value);
+          });
+        });
       })
       .catch(error => {
         console.error('질문 목록 가져오기 실패:', error);
@@ -282,15 +318,18 @@ const categoryPanel = document.querySelector('.cartegory-list-panel');
 const llmPanel = document.querySelector('.LLM-list-panel');
 const offsetTrigger = 1;
 
-if (window.innerWidth > 767) {
-  window.addEventListener('scroll', () => {
+window.addEventListener('scroll', () => {
+  if (window.innerWidth > 800) {
     const scrollY = window.scrollY;
     const offset = Math.max(0, scrollY - offsetTrigger);
 
     categoryPanel.style.transform = `translateY(${offset}px)`;
     llmPanel.style.transform = `translateY(${offset}px)`;
-  });
-}
+  } else {
+    categoryPanel.style.transform = '';
+    llmPanel.style.transform = '';
+  }
+});
 
 function openRightPanel() {
   document.querySelector('.right-panel').classList.add('active');
@@ -301,17 +340,3 @@ function closeRightPanel() {
   document.querySelector('.right-panel').classList.remove('active');
   document.getElementById('overlay').classList.remove('active');
 }
-
-
-/**
- * 1.
- * initializeApp 안에 fetch /api/post/${sessionCode}/get/questions?category="main/sub"&start=0&count=""
- * 이걸로 생성된 카테고리박스에 이벤트 붙이고 보여주기
- * 
- * 2. submit 버튼 누르면 llm에서 온 정보들 전부 없애기
- * 
- * 3. 처음 세션 입장시 61-68번째 줄에 있는 함수들 채우기
- *  -- 처음 세션 입장시 category_memory에 정보들 가져와진거 보여주는 함수
- * 
- * 4. 카테고리 박스 커지는거 테스트 못했음
- */

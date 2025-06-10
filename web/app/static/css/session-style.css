@@ -32,6 +32,10 @@ header {
     display: flex;
 }
 
+.mobile-only {
+  display: none;
+}
+
 main {
     flex: 1;
     display: grid;
@@ -374,6 +378,20 @@ footer {
     padding: 0.5rem;
   }
 
+  .mobile-only {
+    display: block;
+    background-color: var(--main-button-normal);
+    border: none;
+    border-radius: 30px;
+    color: white;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+  }
+
+  .mobile-only:hover {
+  background-color: var(--main-button-emphasize);
+  }
+
   .category-panel,
   .right-panel {
     width: 100%;
@@ -452,4 +470,19 @@ footer {
     transition: background-color 0.2s ease;
     margin-right: 5px;
   }
+}
+
+#enterSessionBtn {
+  background-color: var(--main-button-normal);
+  border: none;
+  border-radius: 30px;
+  color: white;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-top: 5px;
+  transition: background-color 0.2s ease;
+}
+
+#enterSessionBtn button:hover {
+  background-color: var(--main-button-emphasize);
 }
