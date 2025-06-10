@@ -43,12 +43,12 @@
 - 사용자는 자신이 한 질문과 대답, 저장한 질문과 대답, 입장한 세션을 볼 수 있다.
 
 ### 주요 화면
-||||||||
-|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
-||→ 회원 가입 →|<img src="https://github.com/user-attachments/assets/0c8177d2-e7d4-4971-aa14-541bcda3c5ec" width="auto" height="120">|||||
-|<img src="https://github.com/user-attachments/assets/076cc23a-f52a-4a93-b92b-87ac4229a904" width="auto" height="120">|→ 로그인 →|<img src="https://github.com/user-attachments/assets/f7ddfc5e-6e18-4f66-bb74-8573fd7fadd6" width="auto" height="120">|→ 기록 보기 →|<img src="https://github.com/user-attachments/assets/b10c17b8-006f-4bd7-8a35-983df62b27bb" width="auto" height="120">|→ 기록 전환 →|<img src="https://github.com/user-attachments/assets/8d1447cd-d882-4265-a0d1-092ab8cc4a22" width="auto" height="120">|
-||→ 세션 생성→|<img src="https://github.com/user-attachments/assets/6a92046e-8823-4f81-88dd-f1af91b1c24d" width="auto" height="120">|→홈에서 생성→|<img src="https://github.com/user-attachments/assets/a4d26eb7-6a5e-40c4-88ba-ea54109d68b6" width="auto" height="120">|||
-||→ 세션 입장 →|<img src="https://github.com/user-attachments/assets/c64ab907-c2b0-4737-8bac-81d127e79627" width="auto" height="120">|→ 질문하기 →|<img src="https://github.com/user-attachments/assets/4ea0ebb2-4cac-4362-8f0e-6f5192e26bd4" width="auto" height="120">||
+||||||
+|:---:|:---:|:---:|:---:|:---:|
+||→ 회원 가입 →|<img src="https://github.com/user-attachments/assets/0c8177d2-e7d4-4971-aa14-541bcda3c5ec" width="auto" height="120">|||
+|<img src="https://github.com/user-attachments/assets/076cc23a-f52a-4a93-b92b-87ac4229a904" width="auto" height="120">|→ 로그인 →|<img src="https://github.com/user-attachments/assets/f7ddfc5e-6e18-4f66-bb74-8573fd7fadd6" width="auto" height="120">|→ 기록 보기 →|<img src="https://github.com/user-attachments/assets/b10c17b8-006f-4bd7-8a35-983df62b27bb" width="auto" height="120">|
+||→ 세션 생성→|<img src="https://github.com/user-attachments/assets/6a92046e-8823-4f81-88dd-f1af91b1c24d" width="auto" height="120">|→홈에서 생성→|<img src="https://github.com/user-attachments/assets/a4d26eb7-6a5e-40c4-88ba-ea54109d68b6" width="auto" height="120">|
+||→ 세션 입장 →|<img src="https://github.com/user-attachments/assets/c64ab907-c2b0-4737-8bac-81d127e79627" width="auto" height="120">|→ 질문하기 →|<img src="https://github.com/user-attachments/assets/4ea0ebb2-4cac-4362-8f0e-6f5192e26bd4" width="auto" height="120">|
 
 ## 팀원 공간
 ### 참고 자료
