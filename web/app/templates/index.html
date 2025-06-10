@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/css/index-style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sansita&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+    <link rel="icon" href="../static/image/logo.png" type="image/png" />
+    <title>UnMute</title>
+</head>
+
+
+<body>
+    <header>
+    </header>
+    <main>
+        <div class="main-image">
+            <img src="../static/image/main.png">
+        </div>
+        <div class="interaction">
+            <img src="../static/image/logo.png">
+            <form id="login" action="/login" method="POST">
+                <input id="username" type="text" class="form-control rounded" required placeholder="아이디">
+                <input id="password" type="password" class="form-control rounded" required placeholder="비밀번호">
+                <button id="login-button" class="button-unified">로그인</button>
+            </form>
+            <div id="register">
+                <p>혹시 <span>회원</span>이 아닙니까?</p>
+                <button id="register-button" class="button-unified">회원가입</button>
+            </div>
+            <br><label class="left-align-label">로그인 없이 사용하기</label>
+            <button id='create-session-button' class="button-unified">세션 생성하기</button>
+            <form id="session" action="/session-without-login" method="POST">
+                <button id="into-session-button" class="button-unified">코드로 세션 입장</button>
+                <input id="session-code" class="form-control rounded" type="text" maxlength="14" placeholder="세션 코드 입력">
+            </form>
+        </div>
+        <div id="sessionModal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="closeModal">&times;</span>
+                <h2>새 세션 만들기</h2>
+                <input type="text" id="sessionTitleInput" class="form-control rounded" placeholder="세션 제목을 입력하세요">
+                <textarea id="sessionexplain" class="form-control rounded" placeholder="세션 설명을 입력하세요"
+                    rows="4"></textarea>
+                <input id="sessionPw" type="text" class="form-control rounded" placeholder="세션 비밀번호">
+                <button id="submitSessionBtn" class="create-session rounded">생성하기</button>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div id="menu">
+            <p><a href="">사이트 이용 정보</a></p>
+        </div>
+        <div id="mention">
+            <p>powerd by Mistral AI</p>
+            <a href="https://mistral.ai/"><img src="https://upload.wikimedia.org/wikipedia/de/1/1c/Mistral_AI_logo.svg"
+                    width="60"></a>
+        </div>
+        <div id="info">
+            <p>경기대학교 team JAMES</p>
+            <p>github @ <a href="https://www.github.com/dasfaf4464/JAMES" target="_blank">dasfaf4464/JAMES</a></p>
+        </div>
+    </footer>
+    <script src="../static/js/index.js"></script>
+</body>
+
+</html>

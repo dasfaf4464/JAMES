@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/profile-style.css">
+    <link rel="icon" href="../static/image/logo.png" type="image/png" />
+</head>
+
+<body>
+    <header>
+        <img src="../static/image/logo.png">
+    </header>
+    <main>
+        <div class="status-bar">
+            <p>{{name}}로 <span id="action-text">{{action}}</span> {{day}} 일 째</p>
+            <button id="home-button">메인화면</button>
+        </div>
+        <div id="check-myquestion"> 나의 질문 보기 <button id="layout-button">레이아웃 선택</button></div>
+        <div class="myQuestionContainer">
+            <ul>
+                <!-- 질문 리스트가 여기 동적으로 들어갑니다 -->
+            </ul>
+        </div>
+    </main>
+    <footer>
+        <div id="menu">
+            <p><a href="">사이트 이용 정보</a></p>
+        </div>
+        <div id="mention">
+            <p>powerd by Mistral AI</p>
+            <a href="https://mistral.ai/"><img src="https://upload.wikimedia.org/wikipedia/de/1/1c/Mistral_AI_logo.svg"
+                    width="60"></a>
+        </div>
+        <div id="info">
+            <p>경기대학교 team JAMES</p>
+            <p>github @ <a href="https://www.github.com/dasfaf4464/JAMES" target="_blank">dasfaf4464/JAMES</a></p>
+        </div>
+        <script src="../static/js/profile.js"></script>
+    </footer>
+</body>
+
+</html>

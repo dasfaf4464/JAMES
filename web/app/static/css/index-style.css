@@ -1,0 +1,323 @@
+@import url('colorset.css');
+
+body {
+    font-family: 'Gill Sans', sans-serif;
+    margin: 0;
+    background: var(--main-theme-background);
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    background-color: var(--main-theme-background);
+}
+
+.main-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 3;
+}
+
+.main-image img {
+    width: 100%;
+    height: auto;
+    max-width: 600px;
+}
+
+.interaction {
+    display: flex;
+    flex: 2.5;
+    flex-direction: column;
+    margin: 20px;
+    align-items: center;
+    justify-content: center;
+    transform: none;
+}
+
+.left-align-label {
+    text-align: left;
+    width: 100%;
+    max-width: 400px;
+    padding-left: 5px;
+}
+
+
+form, #register, #session {
+    width: 100%;
+    max-width: 400px;
+}
+
+#create-session-button,
+#into-session-button,
+#session-code {
+    width: 100%;
+    max-width: 400px;
+}
+
+.interaction img {
+    width: 100%;
+    height: auto;
+    max-width: 150px;
+}
+
+#login {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 400px;
+}
+
+#password {
+    margin-top: 5px;
+}
+
+#login input, button{
+    padding-left: 20px;
+}
+
+#login-button {
+    background-color: var(--main-button-normal);
+    color: white;
+    height: auto;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    padding: 8px;
+    margin-top: 5px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+#login-button:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+#register {
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+    width: 100%;
+    max-width: 400px;
+}
+
+#register span {
+    color: var(--main-theme-emphasize);
+}
+
+#register-button {
+    background-color: #ffffff;
+    color: var(--main-theme-emphasize);
+    height: auto;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    padding: 8px;
+    margin-top: 5px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    position: fixed;
+    z-index: 2000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.modal-content {
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px 30px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+    background-color: #fff;
+    margin: 15% auto;
+    padding: 20px 30px;
+    border-radius: 12px;
+    width: 80%;
+    max-width: 400px;
+    position: relative;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.close-button {
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+    color: #aaa;
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #333;
+    color: #333;
+}
+
+.radio-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 5px;
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+#sessionexplain {
+    margin-top: 5px;
+}
+
+#sessionPw {
+    margin-top: 5px;
+}
+
+.create-session {
+    margin: 10px;
+    background-color: var(--main-button-normal);
+    padding: 10px;
+    border: none;
+    color: white;
+}
+
+.create-session:hover {
+    background-color: var(--main-button-emphasize);
+}
+
+#create-session-button {
+    background-color: var(--main-button-normal);
+    color: white;
+    height: auto;
+    width: 100%;
+    border-radius: 10px;
+    border: none;
+    padding: 8px;
+    margin-top: 5px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+#create-session-button:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+#session {
+    display: flex;
+    flex-direction: column;
+}
+
+#into-session-button {
+    background-color: var(--main-button-normal);
+    color: white;
+    height: auto;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 10px;
+    border: none;
+    padding: 8px;
+    margin-top: 5px;
+    box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+#session button:active {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+    transform: translateY(2px);
+}
+
+#session input {
+    margin-top: 5px;
+    padding-left: 20px;
+}
+
+#session input::placeholder {
+    text-align: center;
+}
+
+footer {
+    flex: 0 0 10%;
+    display: flex;
+    justify-content: space-between;
+    background-color:#FFEBE0;
+    padding: 1rem;
+    font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+    main {
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        gap: 20px;
+    }
+    
+    .interaction {
+        transform: none; 
+        flex: unset;
+        width: 100%;
+        margin: 0 auto;
+        padding: 0 10px;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .interaction img {
+        width: 30%;
+    }
+
+    .main-image {
+        display: none;
+    }
+
+    form, #register, #session {
+        width: 100%;
+    }
+
+    footer {
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.8rem;
+        text-align: center;
+        gap: 10px;
+    }
+
+    #register-button, #login-button, #create-session-button, #into-session-button {
+        font-size: 0.9rem;
+    }
+}
