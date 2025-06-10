@@ -261,6 +261,10 @@ function setupSummaryButton() {
     };
 
     socket.emit("select", data);
+
+    document.querySelector('.LLM-list-panel').innerHTML = '';
+    document.getElementById('originaltext').value = '';
+    selectedBox = null;
   });
 }
 
@@ -270,6 +274,30 @@ function clearListPanel() {
     llmPanel.innerHTML = '';
   }
   selectedBox = null;
+}
+
+const categoryPanel = document.querySelector('.cartegory-list-panel');
+const llmPanel = document.querySelector('.LLM-list-panel');
+const offsetTrigger = 1;
+
+if (window.innerWidth > 767) {
+  window.addEventListener('scroll', () => {
+    const scrollY = window.scrollY;
+    const offset = Math.max(0, scrollY - offsetTrigger);
+
+    categoryPanel.style.transform = `translateY(${offset}px)`;
+    llmPanel.style.transform = `translateY(${offset}px)`;
+  });
+}
+
+function openRightPanel() {
+  document.querySelector('.right-panel').classList.add('active');
+  document.getElementById('overlay').classList.add('active');
+}
+
+function closeRightPanel() {
+  document.querySelector('.right-panel').classList.remove('active');
+  document.getElementById('overlay').classList.remove('active');
 }
 
 

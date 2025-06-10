@@ -37,6 +37,8 @@
     </div>
 
     <header class="d-flex justify-content-end p-3">
+        <div class="overlay" id="overlay" onclick="closeRightPanel()"></div>
+        <button onclick="openRightPanel()" class="open-panel-button mobile-only">summary</button>
         <button type="button" id="qrbutton" class="btn btn-outline-primary" data-bs-toggle="modal"
             data-bs-target="#qrModal">
             QR
@@ -49,28 +51,18 @@
             <!--입력창 영역 -->
             <form id="chatForm" class="chat-form" onsubmit="return false">
                 <div class="questionBar">
-                    <input type="text" id="originaltext" class="form-control rounded-pill" placeholder="질문을 입력하세요">
-                    <button class=questionButton id="questionButton" type="button">refine</button>
+                    <textarea id="originaltext" placeholder="질문을 입력하세요" rows="3"></textarea>
+                    <div class="button-group">
+                        <button class=questionButton id="questionButton" type="button">refine</button>
+                        <button class="summaryButton">select</button>
+                    </div>
                 </div>
-                <div class="summary-wrapper">
-                    <button class="summaryButton">select</button>
-                </div>
-                <!--
-                <button>입력 옵션 선택 버튼들</button>
-                <button>나가기 권한 설정 버튼</button>
-                -->
             </form>
         </div>
         <div class="right-panel">
             <div class="cartegory-list-panel" id="category-list-panel">
             </div>
             <div class="LLM-list-panel">
-                <!--
-                <div class="box">전달받은 llm 리스트 AI</div>
-                <div class="box">전달받은 llm 리스트 운영체제</div>
-                <div class="box">전달받은 llm 리스트 네트워크</div>
-                <div class="box">전달받은 llm 리스트 프론트엔드</div>
-                -->
             </div>
             <div>
             </div>
