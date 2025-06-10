@@ -85,6 +85,7 @@ class LLMClient:
 
     def request(self, prompt: str) -> str:
         try:
+            print("요청 처리중:prompt=", prompt)
             response = self.client.agents.complete(
                 agent_id=self.agent_id,
                 messages=[{"role": "user", "content": prompt}],
@@ -96,7 +97,7 @@ class LLMClient:
             return None
 
 
-mistral_client = LLMClient(API_KEY, AGENT_ID[0])
+mistral_client = LLMClient(API_KEY, AGENT_ID[1])
 
 
 def _extract_json_blocks(text):
