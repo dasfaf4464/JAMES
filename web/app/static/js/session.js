@@ -229,11 +229,13 @@ function initializeApp() {
         }
 
         questionsList.innerHTML = data.map(q => `
-      <div class="question-item">
+      <div class="category-title"> #${q.category || q.minor || ''}</div>
+      <div class="question-box">
+      <div class="box">
         <p><strong>원본:</strong> ${q.original || q.original_text || ''}</p>
         <p><strong>정제:</strong> ${q.refined_text || q.llm || ''}</p>
-        <p><strong>메모:</strong> ${q.memo || ''}</p>
-        <p><strong>카테고리:</strong> ${q.category || q.minor || ''}</p>
+      </div>
+      <textarea class="memo" placeholder="메모를 입력하세요."></textarea>
       </div>
     `).join('');
       })
